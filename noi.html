@@ -3,7 +3,7 @@
     var b = Number(prompt("请输入B"))
 
     var c = a + b;
-    alert("A+B= " + c)
+    console.log(c)
 
 </script>
 
@@ -15,7 +15,7 @@
 
     var res = (a + b) * c;
 
-    alert("(a + b) * c= " + res);
+    console.log(res);
 
 </script>
 
@@ -27,7 +27,7 @@
     
     var res = (a + b) / c;
     
-    alert("(a + b) / c= " + res);
+    console.log(Math.trunc(res));
 
 </script>
 
@@ -39,7 +39,7 @@
     var res1 = a % b
     var res2 = a / b
 
-    alert("商为 " + Math.floor(res2) + ",余数为 " + res1)
+    console.log(Math.trunc(res2) + " " + res1)
 
 
 </script>
@@ -51,7 +51,7 @@
 
     var res = a / b
 
-    alert("商为 " + (res.toFixed(9)))
+    console.log(res.toFixed(9))
 
 </script>
 
@@ -62,21 +62,22 @@
 
     var mortality = b / a * 100
 
-    alert("死亡率为 " + (mortality.toFixed(3)) + "%")
+    console.log((mortality.toFixed(3)) + "%")
 
 </script>
 
 <script id="ch0103/07" type="OK">
 
+    var x = Number(prompt("请输入X"))
     var a = Number(prompt("请输入A"))
     var b = Number(prompt("请输入B"))
     var c = Number(prompt("请输入C"))
     var d = Number(prompt("请输入D"))
-    var x = Number(prompt("请输入X"))
+    
 
     var res = a * (x ** 3) + b * (x ** 2) + c * x + d;
 
-    alert("结果为 " + (res.toFixed(7)))
+    console.log(res.toFixed(7))
 
 </script>
 
@@ -86,7 +87,7 @@
 
     var celsius = 5 * (F - 32) / 9;
 
-    alert("摄氏温度为 " + (celsius.toFixed(5)))
+    console.log(celsius.toFixed(5))
 
 </script>
 
@@ -99,7 +100,7 @@
     var Perimeter = 2 * pi * r;
     var Area = pi * (r ** 2);
 
-    alert("圆的直径为 " + Diameter.toFixed(4) + ",圆的周长为 " + Perimeter.toFixed(4) + ",圆的面积为 " + Area.toFixed(4))
+    console.log(Diameter.toFixed(4) + " " + Perimeter.toFixed(4) + " " + Area.toFixed(4))
 
 </script>
 
@@ -110,7 +111,7 @@
 
     var R = 1 / (1 / a + 1 / b)
 
-    alert("并联电阻阻值为 " + R.toFixed(2))
+    console.log(R.toFixed(2))
 
 </script>
 
@@ -121,7 +122,7 @@
 
     var c = a % b
 
-    alert("浮点数相除的余数为 " + c)
+    console.log(c.toFixed(4))
 
 </script>
 
@@ -131,7 +132,7 @@
 
     var V = (4 / 3) * 3.14 * (r ** 3)
 
-    alert("球的体积为 " + V.toFixed(2))
+    console.log(V.toFixed(2))
 
 </script>
 
@@ -140,23 +141,24 @@
     var n = Number(prompt("请输入一个三位数n"))
 
     var baiwei = n / 100;
-    var shiwei = n % 100 / 10; 
+    var shiwei = n % 100 / 10;
     var gewei  = n % 100 % 10;
     
-    alert("反向输出n为 " + Math.floor(gewei) + Math.floor(shiwei) + Math.floor(baiwei))
+    console.log("" + Math.trunc(gewei) + Math.trunc(shiwei) + Math.trunc(baiwei))
 
 </script>
 
 <script id="ch0103/14" type="OK">
 
-    var r = Number(prompt("请输入半径"))
     var h = Number(prompt("请输入高"))
+    var r = Number(prompt("请输入半径"))   
+    var Pi = 3.14159
 
-    var Capacity = (3.14159 * r * r * h) / 1000;
+    var Capacity = Pi * r * r * h / 1000;
 
     var res = 20 / Capacity
 
-    alert("需要" + Math.ceil(res) + "桶水")
+    console.log(Math.ceil(res))
 
 </script>
 
@@ -168,7 +170,7 @@
 
     var res = num - time2 / time1
 
-    alert("剩下" + parseInt(res) + "个苹果")
+    console.log(Math.ceil(res))
 
 </script>
 
@@ -184,7 +186,7 @@
 
     var res = (X ** 2 + Y ** 2) ** 0.5
 
-    alert("两线段的距离为 " + res)
+    console.log(res.toFixed(3))
 
 </script>
 
@@ -199,7 +201,7 @@
 
     var A = 1 / 2 * (Xa * (Yb - Yc) + Xb * (Yc - Ya) + Xc * (Ya - Yb))
 
-    alert("三角形的面积为 " + Math.abs(A))
+    console.log(Math.abs(A).toFixed(2))
 
 </script>
 
@@ -212,7 +214,7 @@
     var d = b - a
     var An = a + (n - 1) * d
     
-    alert("第N项的值为 " + An)
+    console.log(An)
 
 </script>
 
@@ -223,7 +225,7 @@
 
     var res = a * b
 
-    alert("A * B = " + res)
+    console.log(res)
 
 </script>
 
@@ -231,8 +233,14 @@
 
     var n = Number(prompt("请输入非负整数n"))
 
-    var res = 2 ** n
+    var res = 2 ** n // 1 << n也可以
 
-    alert("2的n次方= " + res)
+    console.log(res)
+
+</script>
+
+<script id="ch0104/01" type="">
+
+    
 
 </script>
