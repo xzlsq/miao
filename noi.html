@@ -1,0 +1,238 @@
+<script id="ch0103/01" type="OK">
+    var a = Number(prompt("请输入A"))
+    var b = Number(prompt("请输入B"))
+
+    var c = a + b;
+    alert("A+B= " + c)
+
+</script>
+
+<script id="ch0103/02" type="OK">
+
+    var a = Number(prompt("请输入A"))
+    var b = Number(prompt("请输入B"))
+    var c = Number(prompt("请输入C"))
+
+    var res = (a + b) * c;
+
+    alert("(a + b) * c= " + res);
+
+</script>
+
+<script id="ch0103/03" type="OK">
+
+    var a = Number(prompt("请输入A"))
+    var b = Number(prompt("请输入B"))
+    var c = Number(prompt("请输入C"))
+    
+    var res = (a + b) / c;
+    
+    alert("(a + b) / c= " + res);
+
+</script>
+
+<script id="ch0103/04" type="OK">
+
+    var a = Number(prompt("请输入被除数A"))
+    var b = Number(prompt("请输入除数B(除数非零)"))
+
+    var res1 = a % b
+    var res2 = a / b
+
+    alert("商为 " + Math.floor(res2) + ",余数为 " + res1)
+
+
+</script>
+
+<script id="ch0103/05" type="OK">
+
+    var a = Number(prompt("请输入被除数A"))
+    var b = Number(prompt("请输入除数B(除数非零)"))
+
+    var res = a / b
+
+    alert("商为 " + (res.toFixed(9)))
+
+</script>
+
+<script id="ch0103/06" type="OK">
+
+    var a = Number(prompt("请输入确诊数"))
+    var b = Number(prompt("请输入死亡数"))
+
+    var mortality = b / a * 100
+
+    alert("死亡率为 " + (mortality.toFixed(3)) + "%")
+
+</script>
+
+<script id="ch0103/07" type="OK">
+
+    var a = Number(prompt("请输入A"))
+    var b = Number(prompt("请输入B"))
+    var c = Number(prompt("请输入C"))
+    var d = Number(prompt("请输入D"))
+    var x = Number(prompt("请输入X"))
+
+    var res = a * (x ** 3) + b * (x ** 2) + c * x + d;
+
+    alert("结果为 " + (res.toFixed(7)))
+
+</script>
+
+<script id="ch0103/08" type="OK">
+
+    var F = Number(prompt("请输入华氏温度"))
+
+    var celsius = 5 * (F - 32) / 9;
+
+    alert("摄氏温度为 " + (celsius.toFixed(5)))
+
+</script>
+
+<script id="ch0103/09" type="OK">
+
+    var pi = 3.14159
+    var r = Number(prompt("请输入半径"))
+
+    var Diameter = 2 * r;
+    var Perimeter = 2 * pi * r;
+    var Area = pi * (r ** 2);
+
+    alert("圆的直径为 " + Diameter.toFixed(4) + ",圆的周长为 " + Perimeter.toFixed(4) + ",圆的面积为 " + Area.toFixed(4))
+
+</script>
+
+<script id="ch0103/10" type="OK">
+
+    var a = Number(prompt("请输入r1的阻值"))
+    var b = Number(prompt("请输入r2的阻值"))
+
+    var R = 1 / (1 / a + 1 / b)
+
+    alert("并联电阻阻值为 " + R.toFixed(2))
+
+</script>
+
+<script id="ch0103/11" type="OK">
+
+    var a = Number(prompt("请输入A"))
+    var b = Number(prompt("请输入B"))
+
+    var c = a % b
+
+    alert("浮点数相除的余数为 " + c)
+
+</script>
+
+<script id="ch0103/12" type="OK">
+
+    var r = Number(prompt("请输入半径"))
+
+    var V = (4 / 3) * 3.14 * (r ** 3)
+
+    alert("球的体积为 " + V.toFixed(2))
+
+</script>
+
+<script id="ch0103/13" type="OK">
+
+    var n = Number(prompt("请输入一个三位数n"))
+
+    var baiwei = n / 100;
+    var shiwei = n % 100 / 10; 
+    var gewei  = n % 100 % 10;
+    
+    alert("反向输出n为 " + Math.floor(gewei) + Math.floor(shiwei) + Math.floor(baiwei))
+
+</script>
+
+<script id="ch0103/14" type="OK">
+
+    var r = Number(prompt("请输入半径"))
+    var h = Number(prompt("请输入高"))
+
+    var Capacity = (3.14159 * r * r * h) / 1000;
+
+    var res = 20 / Capacity
+
+    alert("需要" + Math.ceil(res) + "桶水")
+
+</script>
+
+<script id="ch0103/15" type="OK">
+
+    var num = Number(prompt("请输入苹果个数"))
+    var time1 = Number(prompt("请输入吃一个苹果需要的时间"))
+    var time2 = Number(prompt("请输入等待时间"))
+
+    var res = num - time2 / time1
+
+    alert("剩下" + parseInt(res) + "个苹果")
+
+</script>
+
+<script id="ch0103/16" type="OK">
+
+    var Xa = Number(prompt("请输入Xa"))
+    var Ya = Number(prompt("请输入Ya"))
+    var Xb = Number(prompt("请输入Xb"))   
+    var Yb = Number(prompt("请输入Yb"))
+
+    var X = Xb - Xa
+    var Y = Yb - Ya
+
+    var res = (X ** 2 + Y ** 2) ** 0.5
+
+    alert("两线段的距离为 " + res)
+
+</script>
+
+<script id="ch0103/17" type="OK">
+
+    var Xa = Number(prompt("请输入Xa"))
+    var Ya = Number(prompt("请输入Ya"))
+    var Xb = Number(prompt("请输入Xb"))   
+    var Yb = Number(prompt("请输入Yb"))
+    var Xc = Number(prompt("请输入Xc"))   
+    var Yc = Number(prompt("请输入Yc"))
+
+    var A = 1 / 2 * (Xa * (Yb - Yc) + Xb * (Yc - Ya) + Xc * (Ya - Yb))
+
+    alert("三角形的面积为 " + Math.abs(A))
+
+</script>
+
+<script id="ch0103/18" type="OK">
+
+    var a = Number(prompt("请输入a"))
+    var b = Number(prompt("请输入a"))
+    var n = Number(prompt("请输入n"))   
+
+    var d = b - a
+    var An = a + (n - 1) * d
+    
+    alert("第N项的值为 " + An)
+
+</script>
+
+<script id="ch0103/19" type="OK">
+
+    var a = Number(prompt("请输入a"))
+    var b = Number(prompt("请输入a"))
+
+    var res = a * b
+
+    alert("A * B = " + res)
+
+</script>
+
+<script id="ch0103/20" type="OK">
+
+    var n = Number(prompt("请输入非负整数n"))
+
+    var res = 2 ** n
+
+    alert("2的n次方= " + res)
+
+</script>
