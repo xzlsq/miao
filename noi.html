@@ -276,9 +276,10 @@
 
 <script id="ch0104/04" type="OK">
 
-    var a = Number(prompt("请输入"))
+    var a = prompt("请输入")
+    var res = a.charCodeAt(0)
 
-    if ((a % 2) == 0) {
+    if ((res % 2) == 0) {
         console.log("NO") 
     }else{
         console.log("YES") 
@@ -361,6 +362,7 @@
         console.log("n")
     }
 
+
 </script>
 
 <script id="ch0104/10" type="OK">
@@ -368,7 +370,7 @@
     var a = Number(prompt("请输入x"))
     var b = Number(prompt("请输入x"))
 
-    if(a < 60 || b < 60){
+    if(a < 60 && b >= 60 || b < 60 && a >= 60){
         console.log(1)
     }else{
         console.log(0)
@@ -376,11 +378,39 @@
 
 </script>
 
-<script id="ch0104/11" type="OK">
+<script id="ch0104/10.5" type="OK">
 
     var a = Number(prompt("请输入x"))
+    var b = Number(prompt("请输入x"))
+    var c = Number(prompt("请输入x"))
+    var d = Number(prompt("请输入x"))
 
-    if(a == 1 || a == 3 || a == 5){
+    var res = 0
+
+    if(a < 60){
+        res++
+    }
+    if(b < 60){
+        res++
+    }
+    if(c < 60){
+        res++
+    }
+    if(d < 60){
+        res++
+    }
+
+    if(res == 2){
+        console.log(1)
+    }
+
+</script>
+
+<script id="ch0104/11" type="OK">
+
+    var day = Number(prompt("请输入"))
+
+    if(day == 1 || day == 3 || day == 5){
         console.log("NO")
     }else{
         console.log("YES")
@@ -392,8 +422,8 @@
 
     var dis = Number(prompt("请输入距离"))
 
-    var bike = 120 / 3 + 27 + 23
-    var walk = 120 / 1.2
+    var bike = dis / 3 + 27 + 23
+    var walk = dis / 1.2
 
     if(bike < walk){
         console.log("Bike")
@@ -412,37 +442,28 @@
     var y
 
     if(x < 5 && x >= 0){
-        y = (-x) + 2.5
-        console.log(y.toFixed(3))
+        y = (-x) + 2.5        
     }else if(x < 10 && x >= 5){
         y = 2 - 1.5 * (x-3) * (x-3)
-        console.log(y.toFixed(3))
     }else if(x < 20 && x >= 10){
         y = x / 2 - 1.5
-        console.log(y.toFixed(3))
     }
+
+    console.log(y.toFixed(3))
 
 </script>
 
 <script id="ch0104/14" type="OK">
 
     var x = Number(prompt("请输入x"))
-    var y = String(prompt("请输入y"))
+    var y = prompt("请输入y")
 
-    var over
+    var over = 0
+    var cost = 8
 
-    var cost = 0
-
-    if(x <= 1000 ){
-        cost = 8        
-    }else if(x > 1000){
-        over = (x - 500) / 500
-        if(((x - 500) % 500) == 0){
-            over--
-        }
-        cost = 8 + Math.trunc(over) * 4
-    }else if(x < 20 && x >= 10){
-        y = x / 2 - 1.5
+    if(x > 1000){
+        over = (x - 1000) / 500
+        cost = Math.trunc(over) * 4
     }
 
     if(y == "y"){
@@ -459,13 +480,32 @@
     var b = Number(prompt("请输入b"))
     var c = Number(prompt("请输入c"))
 
+    var max = a
+
+    if(max < b){
+        max = b
+    }
+    if(max < c){
+        max = c
+    }
+
+    console.log(max)
+
+</script>
+
+<script id="ch0104/15.5" type="OK">
+
+    var a = Number(prompt("请输入a"))
+    var b = Number(prompt("请输入b"))
+    var c = Number(prompt("请输入c"))
+
     if(a < b && c < b){
         console.log(b)
     }else if(b < a && c < a){
         console.log(a)
     }else if(a < c && b < c){
         console.log(c)
-    }   
+    }  
 
 </script>
 
@@ -518,7 +558,7 @@
 
     var x = Number(prompt("x"))
     var y = Number(prompt("y"))
-    var sign = String(prompt("y"))
+    var sign = prompt("sign")
     var res
 
 
@@ -550,19 +590,19 @@
     var b = Number(prompt("请输入b"))
     var c = Number(prompt("请输入c"))
 
+    var delta = b ** 2 - 4 * a * c
     var x1 = (-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a)
     var x2 = (-b - Math.sqrt(b * b - 4 * a * c)) / (2 * a)
 
-
-    if( (b ** 2) == (4 * a * c) ){
+    if( delta == 0 ){
         console.log("x1=x2=" + x1.toFixed(5))
-    }else if( (b ** 2) > (4 * a * c) ){
+    }else if( delta > 0 ){
         console.log("x1=" + x1.toFixed(5) + ";x2=" + x2.toFixed(5))
     }else{
         var real = -b / (2 * a)
         var fake = Math.sqrt(4 * a * c - b * b) / (2 * a)
         console.log("x1=" + real.toFixed(5) + "+" + fake.toFixed(5) + "i" + 
-        ";x2=" + real.toFixed(5) + "-" + fake.toFixed(5) + "i")
+                    ";x2=" + real.toFixed(5) + "-" + fake.toFixed(5) + "i")
     }  
 
 </script>
