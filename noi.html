@@ -463,7 +463,7 @@
 
     if(x > 1000){
         over = (x - 1000) / 500
-        cost = Math.trunc(over) * 4
+        cost = 8 + Math.ceil(over) * 4
     }
 
     if(y == "y"){
@@ -612,9 +612,703 @@
     var n = Number(prompt("n")) 
     var x = Number(prompt("x"))
     var y = Number(prompt("y"))
- 
     var res = n - y / x
 
     console.log(Math.trunc(res))
 
+</script>
+
+<script id="ch0105/01" type="OK">
+
+    var n = Number(prompt("学生人数")) 
+    var cnt = n
+    var age = 0 
+    var sum = 0
+    var res = 0
+
+    while(cnt){
+        age = Number(prompt("请输入年龄"))
+        sum += age
+        cnt--
+    }
+
+    res = sum / n
+    console.log(res.toFixed(2))
+
+</script>
+
+<script id="ch0105/02" type="OK">
+
+    var months = 0 
+    var avg = 0
+
+    while(months < 12){
+        var amount = Number(prompt("请输入第" + (months + 1) + "个月的结余"))
+        avg += amount
+        months++
+    }
+
+    avg = avg / months
+    console.log("$" + avg.toFixed(2))
+
+</script>
+
+<script id="ch0105/03" type="OK">
+
+    var n = Number(prompt("请输入样本容量")) 
+    var cnt = n
+    var datas = 0 
+    var sum = 0
+    var res = 0
+
+    while(cnt){
+        datas = Number(prompt("请输入样本数据"))
+        if(datas < 1000 && -1000 < datas){
+            sum += datas
+            cnt--
+        }else{
+            alert("绝对值超过1000,请重新输入")
+        }        
+    }
+
+    res = sum / n
+    console.log(res.toFixed(4))
+
+</script>
+
+<script id="ch0105/04" type="OK">
+
+    var n = Number(prompt("请输入样本容量")) 
+    var cnt = n
+    var datas = 0 
+    var sum = 0
+    var avg = 0
+
+    while(cnt){
+        datas = Number(prompt("请输入样本数据"))
+        if(datas <= 10000 && 1 <= datas){
+            sum += datas
+            cnt--
+        }else{
+            alert("绝对值超过1000,请重新输入")
+        }        
+    }
+
+    avg = sum / n
+    console.log(sum, avg.toFixed(5))
+
+</script>
+
+<script id="ch0105/05" type="OK">
+
+    var n = Number(prompt("请输入样本容量")) 
+    var score = 0 
+    var max = 0
+    var avg = 0
+
+    while(n){
+        score = Number(prompt("请输入样本数据")) //  score = + prompt("请输入样本数据")也可以
+        if(max < score){
+            max = score           
+        }
+        n--        
+    }
+
+    console.log(max)
+
+</script>
+
+<script id="ch0105/06" type="OK">
+
+    var n = Number(prompt("请输入样本容量")) 
+    var data = 0 
+    var max = 0
+    var min = 0
+
+    while(n){
+        data = Number(prompt("请输入样本数据"))      
+        if(max < data){
+            max = data           
+        }
+        if(min >= data){
+            min = data
+        }
+        n--        
+    }
+
+    console.log(max - min)
+
+</script>
+
+<script id="ch0105/07" type="OK">
+
+    var n = Number(prompt("请输入days")) 
+    var sumGold = 0
+    var sumSilver = 0
+    var sumCopper = 0
+    var total = 0
+
+    while(n){
+        var gold = Number(prompt("请输入样本数据Au"))  
+        var silver = Number(prompt("请输入样本数据Ag"))
+        var copper = Number(prompt("请输入样本数据Cu"))    
+        sumGold += gold
+        sumSilver += silver
+        sumCopper += copper
+        n--        
+    }
+
+    total = sumGold + sumSilver + sumCopper
+
+    //console.log(sumGold + " " + sumSilver + " " + sumCopper + " " + total)
+    console.log(sumGold, sumSilver, sumCopper, total)
+
+</script>
+
+<script id="ch0105/08" type="OK">
+
+    var n = Number(prompt("请输入n边形")) 
+    var totalAngel = (n - 2) * 180
+
+    while(n > 1){
+        angel = Number(prompt("请输入样本数据Au"))  
+        totalAngel = totalAngel - angel
+        n--        
+    }
+
+    console.log(res)
+
+</script>
+
+<script id="ch0105/09" type="OK">
+
+    var n = Number(prompt("请输入n"))
+    var m = Number(prompt("请输入m")) 
+    var sum = 0
+
+    
+    if(n % 2 == 0){
+        n + 1
+    }else{
+        
+    }
+
+    while(n <= m){
+       if(n % 2 != 0){
+        sum += n
+       }
+       n += 2
+    }
+
+    console.log(sum)
+
+</script>
+
+<script id="ch0105/09.1" type="OK">
+
+    var n = Number(prompt("请输入n"))
+    var m = Number(prompt("请输入m")) 
+    var sum = 0
+
+    
+    if(n % 2 == 0){
+        n++
+    }
+    if(m % 2 == 0){
+        m--
+    }
+
+    //经过上面2部,n和m都是奇数,且公差为2
+
+    var num = (m - n) / 2 + 1
+
+    sum = (n + m) * num / 2 //中间的值 = 左右两边值相加 / 2
+
+    console.log(sum)
+
+</script>
+
+<script id="猜数字" type="OK">
+
+    var secret = Math.random(Math.random() * 100)
+    var guess
+
+    do {
+        guess = +prompt("请输入n")
+        if (guess > secret) {
+            alert("大了")
+        } else if (guess < secret) {
+            alert("小了")
+        } else {
+            alert("恭喜你！！！")
+        }
+    } while (guess == secret)
+
+
+</script>
+
+<script id="ch0105/10" type="OK">
+
+    var n = Number(prompt("请输入n"))
+    var m = Number(prompt("请输入m")) 
+    var sum = 0
+
+    while(n <= m){
+       if(n % 17 == 0){
+        sum += n
+       }
+       n++
+    }
+
+    console.log(sum)
+
+</script>
+
+<script id="ch0105/11" type="OK">
+
+    var n = Number(prompt("请输入n"))
+    
+    var oneOccur = 0
+    var fiveOccur = 0
+    var tenOccur = 0
+
+    while(n){
+        var m = Number(prompt("请输入m")) 
+        if(m == 1){
+            oneOccur++
+        }else if(m == 5){
+            fiveOccur++
+        }else if(m == 10){
+            tenOccur++
+        }
+       n--
+    }
+
+    console.log(oneOccur + "\n" + fiveOccur + "\n" + tenOccur)
+
+</script>
+
+<script id="ch0105/12" type="OK">
+
+    var n = Number(prompt("请输入n"))
+    var cmp = Number(prompt("请输入tmp"))
+    var res = 0
+
+    while(n){
+        var m = Number(prompt("请输入m")) 
+        if(m == cmp){
+            res++
+        }
+       n--
+    }
+
+    console.log(res)
+
+</script>
+
+<script id="ch0105/13" type="OK">
+
+    var a = Number(prompt("请输入a"))
+    var n = Number(prompt("请输入n"))
+    var res = 0
+
+    res = a ** n
+
+    console.log(res)
+
+</script>
+
+<script id="ch0105/14" type="OK">
+
+    var n = Number(prompt("请输入n"))
+    var year = Number(prompt("请输入year"))
+    var tmp = 1 + 0.001
+    var sum = n
+
+    while(year){
+        sum *= tmp
+        year--
+    } 
+
+    console.log(sum.toFixed(4))
+
+</script>
+
+<script id="ch0105/15" type="OK">
+
+    var r = Number(prompt("请输入r"))
+    var m = Number(prompt("请输入m"))
+    var year = Number(prompt("请输入year"))
+    var tmp = 1 + (r / 100)
+    var sum = m
+
+    while(year){         
+        sum *= tmp
+        year--
+    } 
+
+    console.log(Math.trunc(sum))
+
+</script>
+
+<script id="ch0105/16" type="OK">
+
+    var n = Number(prompt("请输入n"))
+    var k = Number(prompt("请输入k"))
+    var amount = n
+    var price = 200
+    var tmp = 0
+    var lilu = 1 + k / 100
+    var lim = true
+    var year = 1
+
+    while(lim){
+        price *= lilu
+        n += amount
+        year++    
+        if(year == 21){
+            console.log("Impossible")
+            lim = false
+        }else if(n >= sum){
+            console.log(year)
+            lim = false
+        }
+    } 
+    
+
+</script>
+
+<script id="ch0105/17" type="OK">
+
+    var n = Number(prompt("请输入n"))
+    var i = 3
+    var n1 = 1
+    var n2 = 1
+    var ni = 0
+
+    while(i <= n){
+        ni = n1 + n2
+        n1 = n2
+        n2 = ni
+        i++
+    }
+    
+    console.log(ni)
+
+</script>
+
+<script id="ch0105/18" type="OK">
+
+    var cases = Number(prompt("请输入n"))
+    var cocktailSum = Number(prompt("请输入总人数"))
+    var cocktailCure = Number(prompt("请输入治愈人数"))
+    var CureRatio1 = cocktailCure / cocktailSum * 100
+    var CureRatio2 = 0
+    var otherCaseSum = 0
+    var otherCaseCure = 0
+    var res = 0
+
+    while(cases > 1){
+        otherCaseSum = Number(prompt("请输入总人数"))
+        otherCaseCure = Number(prompt("请输入治愈人数"))
+        CureRatio2 = otherCaseCure / otherCaseSum * 100
+        res = CureRatio1 - CureRatio2
+        if(res < 5 && res > -5){
+            console.log("same")
+        }else if( res >= 5){
+            console.log("worse")
+        }else if( res <= -5){
+            console.log("better")
+        }
+        cases--
+    }
+
+</script>
+
+<script id="ch0105/19" type="OK">
+
+    var n = Number(prompt("请输入屋顶数"))
+    var x = 0
+    var y = 0
+    var people = 0
+    var dis = 0
+    var res = 0
+
+    while(n){
+        x = Number(prompt("请输入x值"))
+        y = Number(prompt("请输入y值"))
+        people = Number(prompt("请输入人数"))
+        dis = (x ** 2 + y ** 2) ** 0.5
+        res = 2 * dis / 50 + people / 2 + people
+        n--
+        console.log(Math.ceil(res))
+    } 
+
+</script>
+
+<script id="ch0105/20" type="OK">
+
+    var height = +prompt("请输入高度")
+    var num = 10
+    var sumDis = height
+    var tenthDis = height
+
+    while(num){
+        sumDis += tenthDis / 2 * 2
+        tenthDis = tenthDis / 2
+        num-- 
+    } 
+
+    console.log(sumDis.toFixed(4) + "\n" + tenthDis.toFixed(7))
+
+</script>
+
+<script id="ch0105/21" type="OK">
+
+    var num = +prompt("一个正整数")
+    var tmp = 0
+
+
+    if (num != 1) {
+        while (1) {
+            if (num % 2 == 0) {
+                tmp = num
+                num /= 2
+                console.log(tmp + "/2=" + num)
+            }else if(num % 2 != 0){
+                tmp = num
+                num = num * 3 + 1
+                console.log(tmp + "*3+1=" + num)
+            }
+            if (num == 1){
+                console.log("End")
+                break
+            }
+        }
+    }else{
+        console.log("End")
+    }
+    
+</script>
+
+<script id="ch0105/22" type="OK">
+
+    var budget = 0
+    var yearAmount = 0
+    var money = 300
+    var remainMoney = 0
+    var lastMonth = 0
+
+    for(var i = 0; i < 12; i++){
+        budget = Number(prompt("请输入这个月预算"))
+        if(i > 0 && lastMonth != 0){
+            money += lastMonth
+        }
+        remainMoney = money - budget
+        lastMonth = remainMoney % 100
+        if(remainMoney >= 100){
+            yearAmount += remainMoney - remainMoney % 100             
+        }
+
+        money = 300
+    }
+
+    if(yearAmount > 0){
+        console.log(yearAmount * (1.2) + remainMoney % 100)
+    }
+        
+</script>
+
+<script id="ch0105/23" type="OK">
+
+    var totalMedicine = Number(prompt("请输入药品总量"))
+    var patient = Number(prompt("请输入取药的人数"))
+    var tookMedicine = 0
+    var noTookNum = 0
+
+    for(var i = 0; i < patient; i++){
+        tookMedicine = Number(prompt("请输入取走的药品数量"))
+        
+        if(totalMedicine >= tookMedicine){
+            totalMedicine -= tookMedicine
+        }else{
+            noTookNum++
+        }
+    }
+
+    console.log(noTookNum)
+        
+</script>
+
+<script id="ch0105/24" type="OK">
+
+    var times = Number(prompt("请输入若干次测量"))
+    var pressure1 = 0
+    var pressure2 = 0
+    var hour = 0
+    var ok1 = null
+    var ok2 = null
+
+    for(var i = 0; i < times; i++){
+        pressure1 = Number(prompt("请输入收缩压"))
+        pressure2 = Number(prompt("请输入舒张压"))
+
+        ok1 = pressure1 > 90 && pressure1 < 140
+        ok2 = pressure2 >= 60 && pressure2 <= 90
+
+        if(ok1 && ok2){
+            hour++
+        }
+    }
+
+    console.log(hour)
+        
+</script>
+
+<script id="ch0105/25" type="OK">
+
+    var num = Number(prompt("请输入十进制自然数"))
+    var remainder7 = 0
+    var remainder9 = 0
+    var res1 = 0
+    var res2 = 1 
+
+    var gewei1
+    var shiwei1
+    var baiwei1
+    var gewei2
+    var shiwei2
+    var baiwei2
+
+    while(1){      
+        remainder7 += num % 7 + ""  
+        res1 = num % 7
+        res2 = res1 % 7
+        if(res1 == res2){
+            break
+        }  
+    }
+    while(1){      
+        remainder9 += num % 9 + ""  
+        res1 = num % 9
+        res2 = res1 % 9
+        if(res1 == res2){
+            break
+        }  
+    } 
+
+    if(){
+        console.log(hour)
+    }       
+        
+</script>
+
+<script id="ch0105/26" type="OK">
+
+    var times = Number(prompt("请输入四位数的个数"))
+    var num = 0
+    var cnt = 0
+    var gewei = 0
+    var shiwei = 0
+    var baiwei = 0
+    var qianwei = 0
+
+    for(var i = 0; i < times; i++){
+        num = Number(prompt("请输入四位数"))
+
+        gewei = num % 10
+        shiwei = num % 100 / 10
+        baiwei = (num - num % 100) / 100 % 10
+        qianwei = (num - num % 1000) /1000
+
+        gewei -= (qianwei + baiwei + shiwei)
+
+        if(gewei > 0){
+            cnt++
+        }
+    }
+
+    console.log(cnt)
+        
+</script>
+
+<script id="ch0105/27" type="OK">
+
+    var k = Number(prompt("请输入k"))
+    var num = 1
+
+    for(var i = 1; ; i++){
+        num += i
+        if(num > k){
+            break
+        }
+    }
+
+    console.log(num)
+        
+</script>
+
+<script id="ch0105/28" type="OK">
+
+    var num = Number(prompt("请输入3位数的个数"))
+    var gewei = num % 10
+    var shiwei = (num - num % 10) % 100 / 10
+    var baiwei = (num - num % 100) / 100
+   
+    console.log(Math.trunc(gewei), Math.trunc(shiwei), Math.trunc(baiwei))
+        
+</script>
+
+<script id="ch0105/29" type="OK">
+
+    var num = Number(prompt("请输入3位数的个数"))
+    var gewei = num % 10
+    var shiwei = (num - num % 10) % 100 / 10
+    var baiwei = (num - num % 100) / 100
+    var res = 0
+
+    if(baiwei > gewei){
+        res = shiwei ** baiwei * 10 + gewei * baiwei
+    }else{
+        res = shiwei ** gewei * 10 + gewei * baiwei * 100
+    }
+   
+    console.log(-res)
+        
+</script>
+
+<script id="ch0105/30" type="OK">
+
+    var num = Number(prompt("请输入m"))
+    var k = Number(prompt("请输入k"))
+    var gewei = num % 10
+    var shiwei = (num - num % 10) % 100 / 10
+    var baiwei = (num - num % 100) / 100
+    var qianwei = (num - num % 1000) /1000
+    var wangwei = (num - num % 10000) / 10000
+    var res = 0
+
+    if(gewei == 3){
+        res++
+    }
+    if(shiwei == 3){
+        res++
+    }
+    if(baiwei == 3){
+        res++
+    }
+    if(qianwei == 3){
+        res++
+    }
+    if(wangwei == 3){
+        res++
+    }
+
+    if(res < 3 && num % 19 != 0){
+        console.log("NO")
+    }else{
+        console.log("YES")
+    }
+   
+        
 </script>
