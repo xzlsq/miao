@@ -1167,39 +1167,20 @@
 
 <script id="ch0105/25" type="OK">
 
-    var num = Number(prompt("请输入十进制自然数"))
-    var remainder7 = 0
-    var remainder9 = 0
-    var res1 = 0
-    var res2 = 1 
+    // 能表示七/九进制的三位数的最小自然数和最大自然数
+    for (var i = 49; i <= 727; i++) {
+        var a7 = i % 7 // 七进制的个位数
+        var b7 = (i - a7) / 7 % 7 // 七进制的十位数
+        var c7 = ((i - a7) / 7 - b7) / 7 // 七进制的百位数
 
-    var gewei1
-    var shiwei1
-    var baiwei1
-    var gewei2
-    var shiwei2
-    var baiwei2
+        var a9 = i % 9 // 九进制的个位数
+        var b9 =  (i - a9) / 9 % 9 // 九进制的十位数
+        var c9 = ((i - a9) / 9 - b9) / 9 // 九进制的百位数
 
-    while(1){      
-        remainder7 += num % 7 + ""  
-        res1 = num % 7
-        res2 = res1 % 7
-        if(res1 == res2){
-            break
-        }  
+        if (a7 === c9 && b7 === b9 && c7 === a9) {
+        console.log(i, a7 + b7 * 10 + c7 * 100, a9 + b9 * 10 + c9 * 100)
+        }
     }
-    while(1){      
-        remainder9 += num % 9 + ""  
-        res1 = num % 9
-        res2 = res1 % 9
-        if(res1 == res2){
-            break
-        }  
-    } 
-
-    if(){
-        console.log(hour)
-    }       
         
 </script>
 
@@ -1236,9 +1217,10 @@
 
     var k = Number(prompt("请输入k"))
     var num = 1
+    var i
 
-    for(var i = 1; ; i++){
-        num += i
+    for(i = 1; ; i++){
+        num = num + 1 / i
         if(num > k){
             break
         }
@@ -1248,67 +1230,215 @@
         
 </script>
 
+<script type="ok" id="ch0105/27">
+    debugger
+    var k = Number(prompt("请输入k"))
+    var sn = 1
+    var n = 1
+    do {
+      
+      if (sn > k) {
+        console.log(n)
+        break
+      }
+      n++
+      sn = sn + 1 / n
+    } while (true);
+  </script>
+
 <script id="ch0105/28" type="OK">
 
-    var num = Number(prompt("请输入3位数的个数"))
-    var gewei = num % 10
-    var shiwei = (num - num % 10) % 100 / 10
-    var baiwei = (num - num % 100) / 100
-   
-    console.log(Math.trunc(gewei), Math.trunc(shiwei), Math.trunc(baiwei))
+    var n = Number(prompt("请输入n"))
+    var num = n
+    var digit = 0
+
+    while (num !== 0) {
+        digit = num % 10 
+        console.log(digit)
+        num = (num - digit) / 10 
+    }
         
 </script>
 
 <script id="ch0105/29" type="OK">
 
-    var num = Number(prompt("请输入3位数的个数"))
-    var gewei = num % 10
-    var shiwei = (num - num % 10) % 100 / 10
-    var baiwei = (num - num % 100) / 100
-    var res = 0
+    var n = Number(prompt("请输入n"))
+    var num = n
+    var digit = 0 
+    var newNum = 0 
 
-    if(baiwei > gewei){
-        res = shiwei ** baiwei * 10 + gewei * baiwei
-    }else{
-        res = shiwei ** gewei * 10 + gewei * baiwei * 100
-    }
-   
-    console.log(-res)
+    do {
+        digit = num % 10 
+        newNum = newNum * 10 + digit
+        num = (num - digit) / 10 
+    } while (num !== 0);
+
+    console.log(newNum)
+        
+</script>
+
+<script id="ch0105/29.1" type="OK">
+
+    var n = Number(prompt("请输入n"))
+    var num = n
+    var digit = 0 
+    var newNum = 0 
+
+    do {
+        digit = num % 10 
+        newNum = newNum * 10 + digit 
+        num = (num - digit) / 10 
+    } while (num !== 0);
+
+    console.log(newNum)
         
 </script>
 
 <script id="ch0105/30" type="OK">
 
-    var num = Number(prompt("请输入m"))
-    var k = Number(prompt("请输入k"))
-    var gewei = num % 10
-    var shiwei = (num - num % 10) % 100 / 10
-    var baiwei = (num - num % 100) / 100
-    var qianwei = (num - num % 1000) /1000
-    var wangwei = (num - num % 10000) / 10000
+    var m = +prompt('输入一个正整数')
+    var k = +prompt('输入一个1-5的整数')
+    var counter = 0 
+    var digit = 0 
+    var num = m
+
+    if (num % 19 === 0) {
+    do {
+        digit = num % 10
+        if (digit === 3) {
+            counter++
+        }
+        num = (num - digit) / 10
+    } while (num !== 0);
+
+    if (counter === k) {
+        console.log('YES')
+    } else {
+        console.log('NO')
+    }
+    } else {
+        console.log('NO')
+    } 
+            
+</script>
+
+<script id="ch0105/31" type="OK">
+
+    var lamps = +prompt('输入盏灯数')
+    var people = +prompt('输入人数')
+    var counter 
+    var light = 1
+    var res = 1
+
+    for (counter = 2; counter <= people; counter++) {
+        if(counter ** 2 < lamps){
+            res += "," + counter ** 2
+        }
+    }
+
+    console.log(res)
+            
+</script>
+
+<script id="ch0105/32" type="OK">
+
+    var n = +prompt('输入正整数n')
+    var p = 1
+    var q = 2
+    var prevP = 0
+    var prevQ = 0
+
     var res = 0
 
-    if(gewei == 3){
-        res++
-    }
-    if(shiwei == 3){
-        res++
-    }
-    if(baiwei == 3){
-        res++
-    }
-    if(qianwei == 3){
-        res++
-    }
-    if(wangwei == 3){
-        res++
+    for (var counter = 0; counter < n; counter++) {
+        res += q / p
+
+        prevP = p
+        prevQ = q
+        p = prevQ
+        q = prevP + prevQ
     }
 
-    if(res < 3 && num % 19 != 0){
-        console.log("NO")
-    }else{
-        console.log("YES")
+    console.log(res.toFixed(4))
+            
+</script>
+
+<script id="ch0105/33" type="OK">
+
+    var n = +prompt('输入正整数n')
+    var q = 1
+    var res = 0
+
+    for (var counter = 1; counter <= n; counter++) {
+        if (counter % 2 != 0) {
+            res += 1 / q
+        }else{
+            res += -(1 / q)
+        }
+        q++
     }
-   
-        
+
+    console.log(res.toFixed(4))
+            
+</script>
+
+<script id="ch0105/34" type="OK">
+
+    var n = +prompt('输入正整数n')
+    var q = 0
+    var res = 1
+
+    for (var counter = 1; counter <= n; counter++) {
+        res *= counter
+        q += res / counter // 加上n-1!
+    }
+
+    console.log(res + q - 1)
+            
+</script>
+
+<script id="ch0105/35" type="OK">
+
+    var n = +prompt('输入正整数n')
+    var res = 0
+    var num = 1
+
+    for (var counter = 1; counter <= n; counter++) {
+        num *= counter
+        res += 1 / num       
+    }
+
+    res++
+    console.log(res.toFixed(10))
+            
+</script>
+
+<script id="ch0105/36" type="OK">
+
+    var x = +prompt('输入x')
+    var n = +prompt('输入正整数n')
+    var num = 0
+
+    while(n >= 0) {
+        num += x ** n     
+        n--  
+    }
+
+    console.log(num.toFixed(2))
+            
+</script>
+
+<script id="ch0105/37" type="OK">
+
+    var x = +prompt('输入x')
+    var n = +prompt('输入正整数n')
+    var num = 0
+
+    while(n >= 0) {
+        num += x ** n     
+        n--  
+    }
+
+    console.log(num.toFixed(2))
+            
 </script>
