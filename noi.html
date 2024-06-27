@@ -771,12 +771,12 @@
     var totalAngel = (n - 2) * 180
 
     while(n > 1){
-        angel = Number(prompt("请输入样本数据Au"))  
+        var angel = Number(prompt("请输入样本数据Au"))  
         totalAngel = totalAngel - angel
         n--        
     }
 
-    console.log(res)
+    console.log(totalAngel)
 
 </script>
 
@@ -884,7 +884,7 @@
        n--
     }
 
-    console.log(oneOccur + "\n" + fiveOccur + "\n" + tenOccur)
+    console.log(oneOccur, fiveOccur, tenOccur)
 
 </script>
 
@@ -913,6 +913,12 @@
     var res = 0
 
     res = a ** n
+    /*
+    for (var i = 0; i < n; i++) {
+        a *= a
+    }
+    console.log(a)
+    */
 
     console.log(res)
 
@@ -953,25 +959,23 @@
 
 <script id="ch0105/16" type="OK">
 
-    var n = Number(prompt("请输入n"))
+    var salary = Number(prompt("请输入n"))
     var k = Number(prompt("请输入k"))
-    var amount = n
+    var amount = salary
     var price = 200
-    var tmp = 0
-    var lilu = 1 + k / 100
-    var lim = true
+    var ratio = 1 + k / 100
     var year = 1
 
-    while(lim){
-        price *= lilu
-        n += amount
+    while (1) {
+        price *= ratio
+        amount += salary
         year++    
         if(year == 21){
             console.log("Impossible")
-            lim = false
-        }else if(n >= sum){
+            break
+        }else if(amount >= price){
             console.log(year)
-            lim = false
+            break
         }
     } 
     
