@@ -983,18 +983,22 @@
 </script>
 
 <script id="ch0105/17" type="OK">
-
+    // 第一和二项都是1
     var n = Number(prompt("请输入n"))
-    var i = 3
-    var n1 = 1
-    var n2 = 1
+    var i = 0
+    var n1 = 1 // n-2
+    var n2 = 0 // n-1
     var ni = 0
 
-    while(i <= n){
-        ni = n1 + n2
+    while (i < n) {
+        ni = n1 + n2 // 第三项为2,n = (n-1) + (n-2)
         n1 = n2
         n2 = ni
         i++
+        /*
+        n2 = n1 + n2
+        n1 = n2 - n1
+        */
     }
     
     console.log(ni)
@@ -1003,25 +1007,29 @@
 
 <script id="ch0105/18" type="OK">
 
-    var cases = Number(prompt("请输入n"))
-    var cocktailSum = Number(prompt("请输入总人数"))
-    var cocktailCure = Number(prompt("请输入治愈人数"))
-    var CureRatio1 = cocktailCure / cocktailSum * 100
-    var CureRatio2 = 0
-    var otherCaseSum = 0
-    var otherCaseCure = 0
+    var cases = Number(prompt("请输入n")) // 案例数
+
+    var cocktailSum = Number(prompt("请输入总人数"))    // 鸡尾酒疗法总人数
+    var cocktailCure = Number(prompt("请输入治愈人数")) // 鸡尾酒疗法治愈数
+    var CureRatio1 = cocktailCure / cocktailSum * 100  // 鸡尾酒疗法治愈率
+
+    var CureRatio2 = 0    // 其他疗法治愈率
+    var otherCaseSum = 0  // 其他疗法总人数
+    var otherCaseCure = 0 // 其他酒疗法总人数
     var res = 0
 
-    while(cases > 1){
-        otherCaseSum = Number(prompt("请输入总人数"))
+    while (cases > 1) {
+        otherCaseSum = Number(prompt("请输入总人数")) 
         otherCaseCure = Number(prompt("请输入治愈人数"))
+
         CureRatio2 = otherCaseCure / otherCaseSum * 100
         res = CureRatio1 - CureRatio2
-        if(res < 5 && res > -5){
+
+        if (res < 5 && res > -5) {
             console.log("same")
-        }else if( res >= 5){
+        } else if (res >= 5) {
             console.log("worse")
-        }else if( res <= -5){
+        } else if (res <= -5) {
             console.log("better")
         }
         cases--
@@ -1036,17 +1044,19 @@
     var y = 0
     var people = 0
     var dis = 0
-    var res = 0
+    var totalTime = 0
 
-    while(n){
+    while (n) {
         x = Number(prompt("请输入x值"))
         y = Number(prompt("请输入y值"))
         people = Number(prompt("请输入人数"))
+
         dis = (x ** 2 + y ** 2) ** 0.5
-        res = 2 * dis / 50 + people / 2 + people
+        totalTime = totalTime + 2 * dis / 50 + people / 2 + people
         n--
-        console.log(Math.ceil(res))
     } 
+
+    console.log(Math.ceil(totalTime))
 
 </script>
 
@@ -1054,16 +1064,36 @@
 
     var height = +prompt("请输入高度")
     var num = 10
-    var sumDis = height
+    var sumDis = 0
     var tenthDis = height
 
-    while(num){
-        sumDis += tenthDis / 2 * 2
+    while(num) {
+        sumDis += tenthDis * 2
         tenthDis = tenthDis / 2
         num-- 
     } 
 
-    console.log(sumDis.toFixed(4) + "\n" + tenthDis.toFixed(7))
+    sumDis -= height
+    console.log(sumDis.toFixed(4), tenthDis.toFixed(7))
+
+</script>
+
+<script id="ch0105/20.1" type="OK">
+
+    var height = +prompt("请输入高度")
+    var num = 10
+    var sumDis = 0
+    var tenthDis = height
+
+    while (num) {
+        sumDis = sumDis + tenthDis * 2
+        tenthDis = tenthDis / 2
+        num-- 
+    } 
+
+    sumDis -= height
+
+    console.log(sumDis.toFixed(4), tenthDis.toFixed(7))
 
 </script>
 
@@ -1073,18 +1103,18 @@
     var tmp = 0
 
 
-    if (num != 1) {
+    if (num !== 1) {
         while (1) {
             if (num % 2 == 0) {
                 tmp = num
                 num /= 2
                 console.log(tmp + "/2=" + num)
-            }else if(num % 2 != 0){
+            }else if(num % 2 != 0) {
                 tmp = num
                 num = num * 3 + 1
                 console.log(tmp + "*3+1=" + num)
             }
-            if (num == 1){
+            if (num == 1) {
                 console.log("End")
                 break
             }
@@ -1097,27 +1127,32 @@
 
 <script id="ch0105/22" type="OK">
 
-    var budget = 0
-    var yearAmount = 0
-    var money = 300
-    var remainMoney = 0
-    var lastMonth = 0
+    var budget = 0      // 每个月的预算
+    var yearAmount = 0  // 存的钱
+    var money = 300     // 每个月300零花钱
+    var remainMoney = 0 // 每个月剩余的钱
+    var lastMonth = 0   //  上个月剩余的钱
+    var unstopped = true
 
-    for(var i = 0; i < 12; i++){
-        budget = Number(prompt("请输入这个月预算"))
-        if(i > 0 && lastMonth != 0){
-            money += lastMonth
+    for (var i = 1; i <= 12; i++) {
+        money += lastMonth // 如果上个月存款后还有剩余的钱，则加到下个月的零花钱中
+        budget = Number(prompt("请输入这个月预算"))        
+
+        if (money < budget) { // 零花钱不足，则输出第几个月零花钱不足，退出循环
+            console.log(-i)
+            unstopped = false
+            break
         }
-        remainMoney = money - budget
-        lastMonth = remainMoney % 100
-        if(remainMoney >= 100){
+        remainMoney = money - budget    // 剩余的 = 零花钱 - 预算
+        lastMonth = remainMoney % 100   // 去除要存的钱
+        if (remainMoney >= 100) {   // 如果剩余的钱大于100，则存钱
             yearAmount += remainMoney - remainMoney % 100             
         }
 
         money = 300
     }
 
-    if(yearAmount > 0){
+    if(yearAmount > 0 && unstopped){
         console.log(yearAmount * (1.2) + remainMoney % 100)
     }
         
@@ -1330,11 +1365,10 @@
 
     var lamps = +prompt('输入盏灯数')
     var people = +prompt('输入人数')
-    var counter 
     var light = 1
     var res = 1
 
-    for (counter = 2; counter <= people; counter++) {
+    for (var counter = 2; counter <= people; counter++) {
         if(counter ** 2 < lamps){
             res += "," + counter ** 2
         }
