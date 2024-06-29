@@ -1143,8 +1143,10 @@
             unstopped = false
             break
         }
+
         remainMoney = money - budget    // 剩余的 = 零花钱 - 预算
         lastMonth = remainMoney % 100   // 去除要存的钱
+
         if (remainMoney >= 100) {   // 如果剩余的钱大于100，则存钱
             yearAmount += remainMoney - remainMoney % 100             
         }
@@ -1187,6 +1189,7 @@
     var hour = 0
     var ok1 = null
     var ok2 = null
+    var max
 
     for(var i = 0; i < times; i++){
         pressure1 = Number(prompt("请输入收缩压"))
@@ -1197,17 +1200,22 @@
 
         if(ok1 && ok2){
             hour++
+        }else{
+            if(hour > max){
+                max = hour
+            }
+            hour = 0
         }
     }
 
-    console.log(hour)
+    console.log(max)
         
 </script>
 
 <script id="ch0105/25" type="OK">
 
     // 能表示七/九进制的三位数的最小自然数和最大自然数
-    for (var i = 49; i <= 727; i++) {
+    for (var i = 49; i <= 342; i++) {
         var a7 = i % 7 // 七进制的个位数
         var b7 = (i - a7) / 7 % 7 // 七进制的十位数
         var c7 = ((i - a7) / 7 - b7) / 7 // 七进制的百位数
@@ -1217,7 +1225,8 @@
         var c9 = ((i - a9) / 9 - b9) / 9 // 九进制的百位数
 
         if (a7 === c9 && b7 === b9 && c7 === a9) {
-        console.log(i, a7 + b7 * 10 + c7 * 100, a9 + b9 * 10 + c9 * 100)
+            console.log(i, a7 + b7 * 10 + c7 * 100, a9 + b9 * 10 + c9 * 100)
+            break
         }
     }
         
@@ -1269,33 +1278,17 @@
         
 </script>
 
-<script type="ok" id="ch0105/27">
-    debugger
-    var k = Number(prompt("请输入k"))
-    var sn = 1
-    var n = 1
-    do {
-      
-      if (sn > k) {
-        console.log(n)
-        break
-      }
-      n++
-      sn = sn + 1 / n
-    } while (true);
-  </script>
-
 <script id="ch0105/28" type="OK">
 
     var n = Number(prompt("请输入n"))
     var num = n
     var digit = 0
 
-    while (num !== 0) {
+    do {
         digit = num % 10 
         console.log(digit)
         num = (num - digit) / 10 
-    }
+    } while (num > 0)
         
 </script>
 
@@ -1306,28 +1299,14 @@
     var digit = 0 
     var newNum = 0 
 
-    do {
+    while (1) {
+        if(num == 0){
+            break
+        }
         digit = num % 10 
         newNum = newNum * 10 + digit
-        num = (num - digit) / 10 
-    } while (num !== 0);
-
-    console.log(newNum)
-        
-</script>
-
-<script id="ch0105/29.1" type="OK">
-
-    var n = Number(prompt("请输入n"))
-    var num = n
-    var digit = 0 
-    var newNum = 0 
-
-    do {
-        digit = num % 10 
-        newNum = newNum * 10 + digit 
-        num = (num - digit) / 10 
-    } while (num !== 0);
+        num = (num - digit) / 10   
+    } 
 
     console.log(newNum)
         
@@ -1342,19 +1321,19 @@
     var num = m
 
     if (num % 19 === 0) {
-    do {
-        digit = num % 10
-        if (digit === 3) {
-            counter++
-        }
-        num = (num - digit) / 10
-    } while (num !== 0);
+        while (num > 0) {
+            digit = num % 10
+            if (digit === 3) {
+                counter++
+            }
+            num = (num - digit) / 10
+        } 
 
-    if (counter === k) {
-        console.log('YES')
-    } else {
-        console.log('NO')
-    }
+        if (counter === k) {
+            console.log('YES')
+        } else {
+            console.log('NO')
+        }
     } else {
         console.log('NO')
     } 
@@ -1365,7 +1344,6 @@
 
     var lamps = +prompt('输入盏灯数')
     var people = +prompt('输入人数')
-    var light = 1
     var res = 1
 
     for (var counter = 2; counter <= people; counter++) {
@@ -1383,18 +1361,13 @@
     var n = +prompt('输入正整数n')
     var p = 1
     var q = 2
-    var prevP = 0
-    var prevQ = 0
 
     var res = 0
 
     for (var counter = 0; counter < n; counter++) {
         res += q / p
-
-        prevP = p
-        prevQ = q
-        p = prevQ
-        q = prevP + prevQ
+        q = p + q
+        p = q - p
     }
 
     console.log(res.toFixed(4))
@@ -1420,6 +1393,21 @@
             
 </script>
 
+<script id="ch0105/33" type="OK">
+
+    var n = +prompt('输入正整数n')
+    var q = 1
+    var res = 0
+
+    for (var i = 1; i <= n; i++) {
+        res += 1 / i * q
+        q = -q
+    }
+
+    console.log(res.toFixed(4))
+            
+</script>
+
 <script id="ch0105/34" type="OK">
 
     var n = +prompt('输入正整数n')
@@ -1428,17 +1416,17 @@
 
     for (var counter = 1; counter <= n; counter++) {
         res *= counter
-        q += res / counter // 加上n-1!
+        q += res // 加上n-1!
     }
 
-    console.log(res + q - 1)
+    console.log(q)
             
 </script>
 
 <script id="ch0105/35" type="OK">
 
     var n = +prompt('输入正整数n')
-    var res = 0
+    var res = 1
     var num = 1
 
     for (var counter = 1; counter <= n; counter++) {
@@ -1446,7 +1434,6 @@
         res += 1 / num       
     }
 
-    res++
     console.log(res.toFixed(10))
             
 </script>
@@ -1468,15 +1455,230 @@
 
 <script id="ch0105/37" type="OK">
 
-    var x = +prompt('输入x')
-    var n = +prompt('输入正整数n')
-    var num = 0
+    var m = +prompt('输入体力')
+    var n = +prompt('输入战斗力')
+    var x = +prompt('输入能量元素')
+    var refresh = 0 // 恢复体力需要的能量元素
+    var finalNum = n // 最终战斗力
 
-    while(n >= 0) {
-        num += x ** n     
-        n--  
+    while (x) {
+        if (finalNum > m) { // 如果战斗力大于可连续战斗的天数，则退出训练
+            break
+        }
+        refresh = m / finalNum
+        x = x - Math.ceil(refresh)
+        finalNum += (m - m % finalNum) / finalNum //每次训练可以增加的战斗力
     }
 
-    console.log(num.toFixed(2))
+    console.log(finalNum)
             
+</script>
+
+<script id="ch0105/38" type="OK">
+
+    var n = +prompt('k') // k组数据
+    for (var i = 0; i < n; i++) {
+        var exp = +prompt('输入整数n') // 幂次数
+        for (var j = exp; j >= 0; j--) {
+            var c = +prompt('输入非负整数') // x的系数
+            if(c == 0){
+                console.log(0)
+                break
+            }
+            if(c != 0){
+                console.log(c * exp)
+            }
+        } 
+    }   
+                
+</script>
+
+<script id="ch0105/39" type="OK">
+
+    var n = +prompt('一个正整数n')
+    var geiwei = 0
+    var shiwei = 0 
+    var res = 0
+
+    for (var i = 1; i <= n; i++) {
+        geiwei = i % 10
+        shiwei = (i - geiwei) / 10
+
+        if (i % 7 == 0 || geiwei === 7 || shiwei ===7) {
+            continue
+        }
+
+        res += i * i
+    }
+
+    console.log(res)
+               
+</script>
+
+<script id="ch0105/40" type="OK">
+
+    var n = +prompt('一个正整数n')
+    var digit1 = 0 // 个位
+    var digit2 = 0 // 十位
+    var digit3 = 0 // 百位
+    var digit4 = 0 // 千位
+    var res = 0
+
+    for (var i = 1; i <= n; i++) {
+        digit1 = i % 10
+        digit2 = (i - digit1) / 10
+        if(i >= 100){
+            digit3 = (i - i % 100) / 100 % 10
+            digit4 = (i - i % 1000) / 1000
+        }
+        
+        if (digit1 == 1) {
+            res++
+        }
+        if (digit2 == 1) {
+            res++
+        }
+        if(digit3 == 1){
+            res++
+        }
+        if(digit4 == 1){
+            res++
+        }
+        if(i == 10000){
+            res++
+        }
+    }
+
+    console.log(res)
+               
+</script>
+
+<script id="ch0105/41" type="OK">
+
+    var n1 = +prompt('一个正整数n1')
+    var n2 = +prompt('一个正整数n2')
+    var geiwei = 0
+    var shiwei = 0 
+    var res = 0
+
+    for (var i = n1; i <= n2; i++) {
+        geiwei = i % 10
+        shiwei = (i - geiwei) / 10
+        if (geiwei == 2) {
+            res++
+        }
+        if (shiwei == 2) {
+            res++
+        }   
+        
+    }
+
+    console.log(res)
+               
+</script>
+
+<script id="ch0105/42" type="OK">
+
+    var n1 = +prompt('一个高')
+    var n2 = +prompt('一个宽')
+    var symbol = prompt('一个字符')
+    var char = ""
+    var flag = +prompt('0代表空心，1代表实心。')
+
+    for (var i = 1; i <= n1; i++) {
+        for (var j = 1; j <= n2; j++) {
+            if (i == 1 || i == n1) {
+                char += symbol
+            }
+            if (i != 1 && i < n1 && flag == 0) {
+                if(j == 1 || j == n2){
+                    char += symbol
+                }else{
+                    char += " "
+                }
+            }else if (i != 1 && i < n1 && flag == 1) {
+                char += symbol
+            }
+            if (j == n2) {
+                char += "\n"
+            }
+        }
+    }
+
+    console.log(char)
+               
+</script>
+
+<script id="ch0105/43" type="OK">
+
+    var n1 = +prompt('两个不同的质数的乘积')
+    var flag = 0
+    var res1 = 0
+    var res2 = 0
+
+    for (var i = 2; i < n1; i++) {
+       if (n1 % i == 0) {
+            flag++
+            if (flag % 2 != 0) {
+                res1 = i
+            }else{
+                res2 = i
+            }
+       }
+       
+    }
+
+    if(res1 > res2){
+        console.log(res1)
+    }else{
+        console.log(res2)
+    }
+        
+                
+</script>
+
+<script id="ch0105/44" type="OK">
+
+    var n1 = +prompt('两个不同的质数的乘积')
+    var flag = 0
+    var res = 0
+
+    for (var i = 2; i < 10000; i++) {
+       if (i != 2*i+4 || i != 3*i+9 || i != 5*i+25 || i != 7*i+49) {
+            flag++
+            if(flag == n1){
+                res = i
+                break
+            }
+        }     
+    }
+
+    console.log(res) 
+                
+</script>
+
+<script id="ch0105/45" type="OK">
+
+    var day = +prompt('天数')
+    var flag = 0      // 加薪值  
+    var daySum = 0    // 经过了多少天数  
+    var totalGold = 0 // 总金额
+    
+
+    for (var i = 1; i <= day; i++) {
+        flag++
+        for(var j = 1; j <= flag; j++ ){
+            totalGold += flag
+            daySum++
+            if(daySum == day){
+                break
+            }
+        }
+        if(daySum == day){
+                break
+        }                          
+    }
+
+    console.log(totalGold) 
+                
 </script>

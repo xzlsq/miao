@@ -3,21 +3,65 @@
     <head>
         <meta charset="UTF-8">
         <title>css-selector-practise</title>
+        <style>
+            #hov:hover { color: red; }
+            #hov:active { color: green; }
+            #hov:focus { color: blue; }
+
+            p > span { color: red; }
+            p > span > span:first-child { color: green; }
+            p > span > span:last-child { color: blue; }
+
+            div > a:visited { color: orange; }
+            div > a:link  {color: pink; }
+            div > a[href^="mailto" i] { color: blue; }
+            div > a[href^="tel" i] { color: yellow; }
+            div > a[href$=".pdf" i] { font-size: 30px; }
+
+            div.b li:nth-child(-n+7):nth-child(n+4) {
+                color: red;
+            }
+
+            div.b li:nth-child(-n+25):nth-child(n){
+                color: red;
+            }
+            div.b li:nth-child(n+65){
+                color: lightgreen;
+            }
+            div.b li:nth-child(n+35):nth-child(-n+50){
+                color: lightblue;
+            }
+
+            /*
+                合数是其他数的倍数
+                素数不是其他数的倍数
+                找出合数，:not(合数)就是素数
+
+                素数的n倍+n的平方
+            */
+            div.prime li:nth-child(1),
+            div.prime li:nth-child(2n+4),
+            div.prime li:nth-child(3n+9),
+            div.prime li:nth-child(5n+25),
+            div.prime li:nth-child(7n+49) {
+                color: red;
+            }
+            
+        </style>
     </head>
     <body>
         <p style="color: red;">红色</p>
 
-        <style>
-            #hov:hover { color: red;}
-            #hov:active { color: green;}
-            #hov:focus { color: blue;}
-        </style>
-        <p id="hov">鼠标悬浮时为红色，按下去时为绿色，获得焦点时为蓝色</p>
+        
+
+        <p id="hov" tabindex="1">鼠标悬浮时为红色，按下去时为绿色，获得焦点时为蓝色</p>
 
         <p>
-            <span style="color: red;">红色</span>
-            <span style="color: green;">绿色</span>
-            <span style="color: blue;">蓝色</span>
+            <span>红色
+                <span>绿色</span>
+                <span>蓝色</span>
+            </span>
+            
         </p>
 
         <div class="a">
@@ -28,13 +72,7 @@
                 播打电话的链接为黄色<br>
                 下载pdf的链接字号为30px<br> 
             </p>
-            <style>
-                a:visited { color: orange; }
-                a:link  {color: pink; }
-                a[href^="mailto" i] { color: blue; }
-                a[href^="tel" i] { color: yellow; }
-                a[href$=".pdf" i] { font-size: 30px; }
-            </style>
+
             <a  href="https://www.mi.com/">mi</a>
             <a  href="https://www.jd.com/">jd</a>
             <a  href="https://www.lksdjfwief.com/">你肯定没访问过我</a>
@@ -47,12 +85,9 @@
             <a  href="aaa.PDF">下载pdf</a>
         </div>
 
-        <div class="0-10">
-            <style>
-                .r { color: red; }
-            </style>
+        <div >
             <p>让下面的4567元素为红色</p>
-            <ul>
+            <ul class="zero-ten">
                 <li>01</li>
                 <li>02</li>
                 <li>03</li>
@@ -72,7 +107,8 @@
             <p>让25及以内的元素为红色</p>
             <p>让65及以上的元素为绿色</p>
             <p>让35-50的元素为蓝色</p>
-            <ul>
+
+            <ul class="zero-h">
               <li>01</li>
               <li>02</li>
               <li>03</li>
