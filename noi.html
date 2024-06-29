@@ -1189,23 +1189,24 @@
     var hour = 0
     var ok1 = null
     var ok2 = null
-    var max
+    var max = 0
 
     for(var i = 0; i < times; i++){
         pressure1 = Number(prompt("请输入收缩压"))
         pressure2 = Number(prompt("请输入舒张压"))
 
-        ok1 = pressure1 > 90 && pressure1 < 140
+        ok1 = pressure1 >= 90 && pressure1 <= 140
         ok2 = pressure2 >= 60 && pressure2 <= 90
 
-        if(ok1 && ok2){
+        if (ok1 && ok2) {
             hour++
-        }else{
-            if(hour > max){
-                max = hour
-            }
+        } else {
             hour = 0
         }
+        if (hour > max) {
+            max = hour
+        }
+         
     }
 
     console.log(max)
@@ -1481,12 +1482,12 @@
         var exp = +prompt('输入整数n') // 幂次数
         for (var j = exp; j >= 0; j--) {
             var c = +prompt('输入非负整数') // x的系数
-            if(c == 0){
+            if(exp == 0){
                 console.log(0)
                 break
             }
             if(c != 0){
-                console.log(c * exp)
+                console.log(c * j)
             }
         } 
     }   
@@ -1637,23 +1638,35 @@
                 
 </script>
 
-<script id="ch0105/44" type="OK">
+<script id="ch0105/44" xtype="OK">
 
-    var n1 = +prompt('两个不同的质数的乘积')
-    var flag = 0
-    var res = 0
+    var n1 = +prompt('n')
+    var cnt = 1
+    var j = 2
+    var prime = true
 
-    for (var i = 2; i < 10000; i++) {
-       if (i != 2*i+4 || i != 3*i+9 || i != 5*i+25 || i != 7*i+49) {
-            flag++
-            if(flag == n1){
-                res = i
-                break
+    if(n1 == 1){
+        console.log(2)
+    }else{
+        while (1) {
+            prime = true
+            if (j % 2 != 0) {
+                for (var i = 2; i < j; i++) {
+                    if (j % i === 0) {
+                        prime = false   // 不是质数
+                    }
+                }
+                if (prime) {
+                    cnt++
+                }
             }
-        }     
-    }
-
-    console.log(res) 
+            if (cnt == n1) {
+                    break
+            }
+            j++
+        }
+        console.log(j) 
+    }  
                 
 </script>
 
