@@ -1897,21 +1897,6 @@
          
 </script>
 
-<script id="写一个函数判断一个数是否为素数" type="OK">
-
-    var size = +prompt('size')
-    var line = ""
-    var res = ""
-
-    for (var x = 1; x <= size; x++) {
-        line += "#"
-        res += line + "\n"
-    }
-
-    console.log(res)
-               
-</script>
-
 <script id="写一个函数判断一个数是否与7无关" type="OK">
 
     var num = +prompt('一个数')
@@ -1942,7 +1927,7 @@
 
     function whetherPrime(x){
         var res = true
-        for (var i = 2; i < x; i++) {
+        for (var i = 2; i <= x / 2; i++) {
             if (x % i == 0) {
                 res = false
                 break
