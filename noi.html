@@ -601,8 +601,8 @@
     }else{
         var real = -b / (2 * a)
         var fake = Math.sqrt(4 * a * c - b * b) / (2 * a)
-        console.log("x1=" + real.toFixed(5) + "+" + fake.toFixed(5) + "x" + 
-                    ";x2=" + real.toFixed(5) + "-" + fake.toFixed(5) + "x")
+        console.log("x1=" + real.toFixed(5) + "+" + fake.toFixed(5) + "i" + 
+                    ";x2=" + real.toFixed(5) + "-" + fake.toFixed(5) + "i")
     }  
 
 </script>
@@ -1683,14 +1683,14 @@
                
 </script>
 
-<script id="ch0105/42" xtype="OK">
+<script id="ch0105/42" type="OK">
 
     var h = +prompt('一个高')
     var w = +prompt('一个宽')
     var symbol = prompt('一个字符')
     var char = ""
     var fill = +prompt('0代表空心，1代表实心。')
-    
+
     for (var x = 1; x <= h; x++) {
         for (var y = 1; y <= w; y++) {
             if (x == 1 || x == h) {
@@ -1939,7 +1939,7 @@
 <script id="写一个函数判断一个数是否为素数" type="OK">
 
     var isInteger = function (x) {
-        if (n === n - (n % 1)) { // n%它去掉小数部分
+        if (x === x - (x % 1)) { // x%它去掉小数部分
             return true // 相等为整数
         }else {
             return false
@@ -1969,4 +1969,192 @@
 
     console.log(result)
                
+</script>
+
+<script id="narcissistic" type="OK">
+    // 输入一个数，判断是否是水仙花数
+    var num = +prompt("输入一个数")
+
+    function isArmstrong (x) {
+        var n = x
+        var n2 = x
+        var cnt = 0
+        var ge = 0
+        var res = 0
+
+        while (n > 0) {
+            ge = n % 10
+            cnt++
+            n = (n - ge) / 10
+        }
+        for (var i = 0; i < cnt; i++) {
+            ge = n2 % 10
+            res += ge ** cnt
+            n2 = (n2 - ge) / 10
+        }
+
+        return res === x
+    }
+
+    console.log(isArmstrong(num))
+
+</script>
+
+<script id="narcissistics" type="OK">
+    // 输出10000以内的水仙花数
+    function isArmstrong (x) {
+        var n = x
+        var n2 = x
+        var cnt = 0
+        var ge = 0
+        var res = 0
+
+        while (n > 0) {
+            ge = n % 10
+            cnt++
+            n = (n - ge) / 10
+        }
+        for (var i = 0; i < cnt; i++) {
+            ge = n2 % 10
+            res += ge ** cnt
+            n2 = (n2 - ge) / 10
+        }
+
+        return res === x
+    }
+
+    function Armstrong10000 () {
+        for(var i = 1; i <= 10000; i++){
+            if (isArmstrong(i)) {
+                console.log(i)
+            }
+        }
+        return true
+    }
+
+    Armstrong10000()
+    //console.log(Armstrong10000())
+
+</script>
+
+<script id="palindrom" type="OK">
+    // 输入一个数，判断它数是否是回文数，如1223221
+    var num = +prompt("输入一个数")
+
+    function isPalindrom (x) {
+        var n = x
+        var n2 = 0
+        var ge = 0
+
+        while (n > 0) {
+            ge = n % 10
+            n = (n - ge) / 10
+            n2 = (n2 + ge) * 10
+        }
+
+        return n2 / 10 === x
+    }
+
+    console.log(isPalindrom(num))
+
+</script>
+
+<script id="weekday" type="OK">
+    // 输入年份与月份，输出这个月的第一天是周几（视具体设定，周一可以用1或0表示）
+    var year = Number(prompt("请输入year"))
+    var month = Number(prompt("请输入month"))
+
+    function whatDay (year,month) {
+        var h = (23 * month - 8) % 7
+        var d = 0   // 年份的最后两位数字
+        var c = 0   // 年份的前两位数字
+        var res = 0
+        var ge = 0
+        var n = year
+
+        for (var i = 0; i < 4; i++) {
+            if (i < 2) {
+                ge = n % 10
+                n = (n - ge) / 10
+                d = (d + ge) * 10 
+            } else {
+                ge = n % 10
+                n = (n - ge) / 10
+                c = (c + ge) * 10
+            } 
+        }
+
+        d /= 10
+        c /= 10
+
+        // 使用Zeller公式
+        res = (h + d + Math.floor(5 * c / 4) + Math.floor(13 * (d + 1) / 5)) % 7
+
+        switch (res) {
+            case 0:
+                return "星期1"
+            case 1:
+                return "星期2"
+            case 2:
+                return "星期3"
+            case 3:
+                return "星期4"
+            case 4:
+                return "星期5"
+            case 5:
+                return "星期6"
+            case 6:
+                return "星期7"
+            default:
+                return "error"
+        }
+    }
+
+    console.log(whatDay(year,month))
+
+</script>
+
+<script id="complete-number" type="OK">
+    // 输入一个数，判断它是否是完全数
+    var num = +prompt("输入一个数")
+
+    function isCompleteNumber (x) {
+        var res = 0
+
+        for (var i = 1; i <= x / 2; i++) {
+            if (x % i == 0) {
+                res += i
+            }
+        }
+        return res === x
+    }
+
+    console.log(isCompleteNumber(num))
+
+</script>
+
+<script id="complete-numbers" type="OK">
+    // 输出1000以内的完全数
+    
+    function isCompleteNumber (x) {
+        var res = 0
+
+        for (var i = 1; i <= x / 2; i++) {
+            if (x % i == 0) {
+                res += i
+            }
+        }
+        return res === x
+    }
+
+    function CompleteNumber1000 (x) {
+        for (var i = 1; i <= 1000; i++) {
+            if (isCompleteNumber(i)) {
+                console.log(i)
+            }
+        }
+    }
+
+    CompleteNumber1000()
+
 </script>
