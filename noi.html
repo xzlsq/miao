@@ -1545,14 +1545,25 @@
     var shiwei = 0 
     var res = 0
 
-    for (var x = 1; x <= n; x++) {
-        geiwei = x % 10
-        shiwei = (x - geiwei) / 10
+    function unRelated7(x) {
+        if (x % 7 == 0) {
+            return = true // 与7有关则返回false
+        }else {
+            while(x > 0){
+                var ge = x % 10
+                if (x % 7 == 0) {
+                    return = true // 与7有关则返回false
+                }
+                x = (x - ge) / 10
+            }
+            return false
+        }
+    }
 
-        if (x % 7 == 0 || geiwei === 7 || shiwei ===7 ) {
+    for (var x = 1; x <= n; x++) {
+        if (unRelated7(x)) {
             continue
         }
-
         res += x * x
     }
 
@@ -1672,14 +1683,14 @@
                
 </script>
 
-<script id="ch0105/42" type="OK">
+<script id="ch0105/42" xtype="OK">
 
     var h = +prompt('一个高')
     var w = +prompt('一个宽')
     var symbol = prompt('一个字符')
     var char = ""
     var fill = +prompt('0代表空心，1代表实心。')
-
+    
     for (var x = 1; x <= h; x++) {
         for (var y = 1; y <= w; y++) {
             if (x == 1 || x == h) {
@@ -1695,7 +1706,9 @@
                 char += symbol
             }
         }
-        char += "\n"
+        if(x != h){
+            char += "\n"
+        }      
     }
 
     console.log(char)
@@ -1902,19 +1915,22 @@
     var num = +prompt('一个数')
     var result
 
-    function unRelatedFor7(x) {
-        var res = true
-        var geiwei = x % 10
-        var shiwei = (x - geiwei) / 10
-
-        if (x % 7 == 0 || geiwei === 7 || shiwei ===7 ) {
-            res = false // 与7有关则返回false
+    function unRelated7(x) {
+        if (x % 7 == 0) {
+            return = true // 与7有关则返回false
+        }else {
+            while(x > 0){
+                var ge = x % 10
+                if (x % 7 == 0) {
+                    return = true // 与7有关则返回false
+                }
+                x = (x - ge) / 10
+            }
+            return false
         }
-        
-        return res
     }
 
-    result = unRelatedFor7(num)
+    result = unRelated7(num)
 
     console.log(result)
                
@@ -1922,19 +1938,31 @@
 
 <script id="写一个函数判断一个数是否为素数" type="OK">
 
+    var isInteger = function (x) {
+        if (n === n - (n % 1)) { // n%它去掉小数部分
+            return true // 相等为整数
+        }else {
+            return false
+        }
+    }
+
     var num = +prompt('一个数')
     var result
 
-    function whetherPrime(x){
-        var res = true
+    function whetherPrime (x) {
+        if (x < 0) {
+            return false
+        }
+        if (!isInteger(x)) {
+            return false
+        }
         for (var i = 2; i <= x / 2; i++) {
             if (x % i == 0) {
-                res = false
-                break
+                return false
             }
         }
         
-        return res
+        return true
     }
 
     result = whetherPrime(num)
