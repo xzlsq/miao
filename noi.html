@@ -2233,8 +2233,31 @@
 
 </script>
 
+<script id="itob" type="OK">
+    // 给定一个整数，将其转换为字符串：不能使用String等现成函数，但可以使用非此功能的其它函数
+    // 也不能利用任意运算符的自动类型转换
 
+    function whetherPrime (x) {
+        for (var i = 2; i <= x / 2; i++) {
+            if (x % i == 0) {
+                return false
+            }
+        }
+        
+        return true
+    }
 
+    var Prime100 = function (x) {
+        for (var i = 2; i <= 100; i++) {
+            if (whetherPrime(i)) {
+                console.log(i)
+            }
+        }
+    }
+
+    Prime100()
+
+</script>
 
 <script id="lcf&lcm" type="OK">
     // 输入两个数，输出它们的最大公约数和最小公倍数
