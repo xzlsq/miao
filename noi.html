@@ -1996,7 +1996,12 @@
         return res === x
     }
 
-    console.log(isArmstrong(num))
+    if (isArmstrong(num)) {
+        console.log("YES")
+    } else {
+        console.log("NO")
+    }
+    
 
 </script>
 
@@ -2024,7 +2029,7 @@
     }
 
     function Armstrong10000 () {
-        for(var i = 1; i <= 10000; i++){
+        for(var i = 10; i <= 10000; i++){
             if (isArmstrong(i)) {
                 console.log(i)
             }
@@ -2055,7 +2060,11 @@
         return n2 / 10 === x
     }
 
-    console.log(isPalindrom(num))
+    if (isPalindrom(num)) {
+        console.log("YES")
+    } else {
+        console.log("NO")
+    }
 
 </script>
 
@@ -2129,7 +2138,11 @@
         return res === x
     }
 
-    console.log(isCompleteNumber(num))
+    if (isCompleteNumber(num)) {
+        console.log("YES")
+    } else {
+        console.log("NO")
+    }
 
 </script>
 
@@ -2156,5 +2169,147 @@
     }
 
     CompleteNumber1000()
+
+</script>
+
+<script id="prime" type="OK">
+    // 输入一个数，判断它是否是素数
+    var num = +prompt("输入一个数")
+
+    var isInteger = function (x) {
+        if (x === x - (x % 1)) { // x%它去掉小数部分
+            return true // 相等为整数
+        }else {
+            return false
+        }
+    }
+
+    function whetherPrime (x) {
+        if (x < 0) {
+            return false
+        }
+        if (!isInteger(x)) {
+            return false
+        }
+        for (var i = 2; i <= x / 2; i++) {
+            if (x % i == 0) {
+                return false
+            }
+        }
+        
+        return true
+    }
+
+    if (whetherPrime(num)) {
+        console.log("YES")
+    } else {
+        console.log("NO")
+    }
+
+</script>
+
+<script id="primes" type="OK">
+    // 输出100以内的素数
+
+    function whetherPrime (x) {
+        for (var i = 2; i <= x / 2; i++) {
+            if (x % i == 0) {
+                return false
+            }
+        }
+        
+        return true
+    }
+
+    var Prime100 = function (x) {
+        for (var i = 2; i <= 100; i++) {
+            if (whetherPrime(i)) {
+                console.log(i)
+            }
+        }
+    }
+
+    Prime100()
+
+</script>
+
+
+
+
+<script id="lcf&lcm" type="OK">
+    // 输入两个数，输出它们的最大公约数和最小公倍数
+    var num = +prompt("输入一个数")
+    var num2 = +prompt("输入一个数")
+
+    function whetherPrime (x) {
+        for (var i = 2; i <= x / 2; i++) {
+            if (x % i == 0) {
+                return false
+            }
+        }
+        return true
+    }
+
+    function getDivisor (x,y) {
+        var res = 0
+        var res2 = 1
+
+        if (x > y) {
+            x = x + y
+            y = x - y
+        }
+        for (var i = 2; i <= x / 2; i++) {
+            if (x % i == 0) {
+                res = i
+            }
+            if (y % i == 0) {
+                res2 = i
+            }
+            if (res == res2) {
+                break
+            }
+        }
+        return res  
+    }
+
+    function gcd (x,y) { 
+        if (x > y) {
+            x = x + y
+            y = x - y
+        }
+        if (x % 2 == 0){
+            return (y - x)  
+        }
+        if (x % 2 != 0) {
+            if (x == y) {
+                return x
+            } else if (whetherPrime(x) && whetherPrime(y)) {
+                return 1
+            } else {
+                return getDivisor(x,y)
+            } 
+        }
+    }
+
+    function Lcm (x,y) { 
+        var lcm = 0
+        var sum = x * y
+        lcm = sum / gcd(x,y)
+        return lcm
+    }
+
+    console.log(gcd(num,num2),Lcm(num,num2))
+
+</script>
+
+<script id="sqrt" type="OK">
+    // 输入一个数，求它的平方根，精确到小数点后3位，不能使用Math.sqrt
+    var num = +prompt("输入一个数")
+
+    function getSqrt (x) { 
+        return (x ** 0.5).toFixed(3)
+    }
+
+    console.log(getSqrt(num))
 
 </script>
