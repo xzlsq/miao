@@ -1975,22 +1975,40 @@
     // 输入一个数，判断是否是水仙花数
     var num = +prompt("输入一个数")
 
-    function isArmstrong (x) {
+    // 计算10进制数的位宽(有几位数)
+    function digitWidth (x) {
         var n = x
-        var n2 = x
-        var cnt = 0
         var ge = 0
-        var res = 0
-
-        while (n > 0) {
+        var cnt = 0
+        do {
             ge = n % 10
             cnt++
             n = (n - ge) / 10
+        } while (n > 0)
+
+        return cnt
+    }
+
+    // 计算x的n次方，n只能是整数
+    function power (x, n) {
+        var res = 1
+        for (var i = 0; i < n; i++){
+            res *= x
         }
-        for (var i = 0; i < cnt; i++) {
-            ge = n2 % 10
-            res += ge ** cnt
-            n2 = (n2 - ge) / 10
+
+        return res
+    }
+
+    function isArmstrong (x) {
+        var n = x
+        var width = digitWidth(x) // num是几位数
+        var res = 0
+        var ge = 0
+
+        for (var i = 0; i < width; i++) {
+            ge = n % 10
+            res += ge ** width
+            n = (n - ge) / 10
         }
 
         return res === x
@@ -2007,29 +2025,37 @@
 
 <script id="narcissistics" type="OK">
     // 输出10000以内的水仙花数
-    function isArmstrong (x) {
-        var n = x
-        var n2 = x
-        var cnt = 0
-        var ge = 0
-        var res = 0
 
-        while (n > 0) {
+    function digitWidth (x) {
+        var n = x
+        var ge = 0
+        var cnt = 0
+        do {
             ge = n % 10
             cnt++
             n = (n - ge) / 10
-        }
-        for (var i = 0; i < cnt; i++) {
-            ge = n2 % 10
-            res += ge ** cnt
-            n2 = (n2 - ge) / 10
+        } while (n > 0)
+
+        return cnt
+    }
+
+    function isArmstrong (x) {
+        var n = x
+        var width = digitWidth(x) // num是几位数
+        var res = 0
+        var ge = 0
+
+        for (var i = 0; i < width; i++) {
+            ge = n % 10
+            res += ge ** width
+            n = (n - ge) / 10
         }
 
         return res === x
     }
 
     function Armstrong10000 () {
-        for(var i = 10; i <= 10000; i++){
+        for(var i = 1; i <= 10000; i++){
             if (isArmstrong(i)) {
                 console.log(i)
             }
@@ -2048,16 +2074,16 @@
 
     function isPalindrom (x) {
         var n = x
-        var n2 = 0
+        var reverse = 0
         var ge = 0
 
         while (n > 0) {
             ge = n % 10
             n = (n - ge) / 10
-            n2 = (n2 + ge) * 10
+            reverse = (reverse + ge) * 10
         }
 
-        return n2 / 10 === x
+        return reverse / 10 === x
     }
 
     if (isPalindrom(num)) {
@@ -2123,16 +2149,91 @@
 
 </script>
 
+<script id="weekday2" type="OK">
+    // 输入年份与月份，输出这个月的第一天是周几（视具体设定，周一可以用1或0表示）
+    var year = Number(prompt("请输入year"))
+    var month = Number(prompt("请输入month"))
+
+    function whatDay (year,month) {
+        var h = (23 * month - 8) % 7
+        var d = 0   // 年份的最后两位数字
+        var c = 0   // 年份的前两位数字
+        var res = 0
+        var ge = 0
+        var n = year
+
+        for (var i = 0; i < 4; i++) {
+            if (i < 2) {
+                ge = n % 10
+                n = (n - ge) / 10
+                d = (d + ge) * 10 
+            } else {
+                ge = n % 10
+                n = (n - ge) / 10
+                c = (c + ge) * 10
+            } 
+        }
+
+        d /= 10
+        c /= 10
+
+        // 使用Zeller公式
+        res = (h + d + Math.floor(5 * c / 4) + Math.floor(13 * (d + 1) / 5)) % 7
+
+        switch (res) {
+            case 0:
+                return "星期1"
+            case 1:
+                return "星期2"
+            case 2:
+                return "星期3"
+            case 3:
+                return "星期4"
+            case 4:
+                return "星期5"
+            case 5:
+                return "星期6"
+            case 6:
+                return "星期7"
+            default:
+                return "error"
+        }
+    }
+
+    console.log(whatDay(year,month))
+
+</script>
+
 <script id="complete-number" type="OK">
     // 输入一个数，判断它是否是完全数
     var num = +prompt("输入一个数")
 
-    function isCompleteNumber (x) {
-        var res = 0
+    // 判断n是否是x的因子
+    function isFactor (x, n) {
+        return x % n == 0
+    }
 
-        for (var i = 1; i <= x / 2; i++) {
+    function isCompleteNumber (x) {
+        var res = 1 // 1是任何整数的因子
+
+        for (var i = 2; i <= x / 2; i++) {  // 循环次数n次
             if (x % i == 0) {
                 res += i
+            }
+        }
+        return res === x
+    }
+    function isCompleteNumber2 (x) {
+        var res = 1 // 1是任何整数的因子
+        var sqrt_n = Math.sqrt(x)
+
+        if (Number.isInteger(sqrt_n)) {
+            res += sqrt_n   // 加上根号n因子
+        }
+
+        for (var i = 2; i < sqrt_n; i++) { // 循环次数根号n次
+            if (x % i == 0) {
+                res += i + x / i
             }
         }
         return res === x
@@ -2177,21 +2278,55 @@
     var num = +prompt("输入一个数")
 
     var isInteger = function (x) {
-        if (x === x - (x % 1)) { // x%它去掉小数部分
-            return true // 相等为整数
-        }else {
-            return false
-        }
+        return x === x - (x % 1)
     }
 
     function whetherPrime (x) {
-        if (x < 0) {
+        if (x < 0 || x == 1) {
             return false
         }
         if (!isInteger(x)) {
             return false
         }
         for (var i = 2; i <= x / 2; i++) {
+            if (x % i == 0) {
+                return false
+            }
+        }
+        
+        return true
+    }
+
+    // 优化版1
+    function isPrime (x) { 
+        var sqrt_n = Math.sqrt(n)
+
+        if (x < 0 || x == 1) {
+            return false
+        }
+        if (!isInteger(x)) {
+            return false
+        }
+        for (var i = 2; i <= sqrt_n; i++) {
+            if (x % i == 0) {
+                return false
+            }
+        }
+        
+        return true
+    }
+
+    / 优化版2 只需要 判断x 是否能除尽 根号x 以内的素数
+    function isPrime2 (x) { 
+        var sqrt_n = Math.sqrt(n)
+
+        if (x < 0 || x == 1) {
+            return false
+        }
+        if (!isInteger(x)) {
+            return false
+        }
+        for (var i = 2; i <= sqrt_n; i++) {
             if (x % i == 0) {
                 return false
             }
@@ -2212,6 +2347,10 @@
     // 输出100以内的素数
 
     function whetherPrime (x) {
+        if (x < 0 || x == 1) {
+            return false
+        }
+
         for (var i = 2; i <= x / 2; i++) {
             if (x % i == 0) {
                 return false
@@ -2237,30 +2376,13 @@
     // 给定一个整数，将其转换为字符串：不能使用String等现成函数，但可以使用非此功能的其它函数
     // 也不能利用任意运算符的自动类型转换
 
-    function whetherPrime (x) {
-        for (var i = 2; i <= x / 2; i++) {
-            if (x % i == 0) {
-                return false
-            }
-        }
-        
-        return true
-    }
-
-    var Prime100 = function (x) {
-        for (var i = 2; i <= 100; i++) {
-            if (whetherPrime(i)) {
-                console.log(i)
-            }
-        }
-    }
-
-    Prime100()
+    
 
 </script>
 
 <script id="lcf&lcm" type="OK">
     // 输入两个数，输出它们的最大公约数和最小公倍数
+    // 辗转相除法 辗转相减法
     var num = +prompt("输入一个数")
     var num2 = +prompt("输入一个数")
 
