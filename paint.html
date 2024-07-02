@@ -278,6 +278,7 @@
       }
       
       x++
+      
       var y1 = y
       var y2 = y - 1
       var r1 = x * x + y1 * y1
@@ -302,26 +303,24 @@
   // 画一个【大小位置都合适】的sin(x)的图像
 
   function paintSin (cx, cy, length,color = "black") {
-    for (var i = 0; i <= length; i++) {
-      dot(cx * 5, cy + Math.sin(cx) * 5,"red")
-      line2(cx * 5, cy + Math.sin(cx) * 5, (cx + 1) * 5, cy + Math.sin(cx + 1) * 5)
-      cx++
+    for (var i = 0; i <= length; i++, cx++) {
+      dot(cx + i, cy + Math.sin((cx + i) / 50) * 50,"red")
     }
   }
 
-  paintSin(5,500,25)
+  paintSin(0,500,1000)
+
 
   // 画出rgb色彩空间的某一面（尺寸要大于100x100）
   function paintRGB(cx, cy, w, h) {
     for (i = 0; i < h; i++) {
       for (j = 0; j < w; j++) {
-        dot(i + cx, j + cy, "rgb(" + i + "," + j + "," + "255)")
+        dot(i + cx, j + cy, "rgb(" + i + "," + j + ",255)")
       }
     }
   }
 
-  paintRGB(30,600,250,250)
-
+  paintRGB(30,600,256,256)
 
   /*
   * 如果做出上一题后，尝试将其每个点的坐标乘以一个矩阵（如(2,0,0,2)或(1,0.27得到新的位置，即绘制出被线性变换后的色彩空间某一面
@@ -330,30 +329,64 @@
     /*2 0 缩放
       0 2*/
   function paintRGB2(cx, cy, w, h, scale) {
-    for (i = 0; i < h; i++) {
-      for (j = 0; j < w; j++) {
-        dot((i + cx) * scale, (j + cy) * scale, "rgb(" + i + "," + j + "," + "255)")
+    for (i = 0; i < w; i++) {
+      for (j = 0; j < h; j++) {
+        dot((i + cx) * scale, (j + cy) * scale, "rgb(" + i  + ",255," + j +")")
       }
     }
   }
 
-  paintRGB2(200,50,50,50,2)
+  paintRGB2(100,50,100,100,2)
   /*------
   1  0.27 剪切
   0  1
   ------ */
-  paintRGB2(400,950,250,250,0.73)
+  function paintRGB11(cx, cy, w, h, xc, yc) {
+    for (i = 0; i < w; i++) {
+      for (j = 0; j < h; j++) {
+        dot((i + cx) * xc, i * yc + j + cy, "rgb(" + i  + ",255," + j +")")
+      }
+    }
+  }
+  paintRGB11(400,400,256,256,1,0.27)
 
   /*0.5    0.87 旋转
     -0.87  0.5 */
   function paintRGB3(cx, cy, w, h, cos, sin) {
-    for (i = 0; i < h; i++) {
-      for (j = 0; j < w; j++) {
+    for (i = 0; i < w; i++) {
+      for (j = 0; j < h; j++) {
         dot((i + cx) * cos - (j + cy) * sin, (i + cx) * sin + (j + cy) * cos, "rgb(255," + i + "," + j + ")")
       }
     }
+    
   }
-  paintRGB3(50,650,250,250, 0.5, -0.87)
+  paintRGB3(20,600,256,256, 0.5, -0.87)
+
+  function paintRGB33(cx, cy, w, h, theta) {
+    for (i = 0; i < w; i++) {
+      for (j = 0; j < h; j++) {
+        var color = "rgb(255," + i + "," + j + ")"
+        var x = i
+        var y = j
+
+        // 第一次倾斜变换
+        x = Math.round(x)
+        y = Math.round(-Math.tan(theta / 2) * y + y)
+
+        // 第二次倾斜变换
+        x = Math.round(x + Math.sin(theta))
+        y = Math.round(y)
+
+        // 第三次倾斜变换
+        x = Math.round(x)
+        y = Math.round(-Math.tan(theta / 2) * y + y)
+
+        dot(x + cx, y + cy, color)
+      }
+    }
+    
+  }
+  paintRGB33(200,400,256,256, 0.8)
   
   // 画一个二阶贝塞尔曲线（即控制点一共三个
   line2(0,800,400,400)
@@ -370,6 +403,19 @@
       }
     }
   }
+
+  function bCurves2 (x1, y1, x2, y2, x3, y3) {
+    for (var t = 0; t < 1; t += 0.001) {
+      var ax = x1 * (1-t) + x2 * t
+      var ay = y1 * (1-t) + y2 * t
+      var bx = x2 * (1-t) + x3 * t
+      var by = y2 * (1-t) + y3 * t
+      var cx = ax * (1-t) + bx * t
+      var cy = ay * (1-t) + by * t
+      dot(cx, cy)
+    }
+  }
+
 
   bCurves(0,800,400,400,1000,1000)
 

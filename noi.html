@@ -2094,7 +2094,7 @@
 
 </script>
 
-<script id="weekday" type="OK">
+<script id="weekday2" type="OK">
     // 输入年份与月份，输出这个月的第一天是周几（视具体设定，周一可以用1或0表示）
     var year = Number(prompt("请输入year"))
     var month = Number(prompt("请输入month"))
@@ -2149,58 +2149,56 @@
 
 </script>
 
-<script id="weekday2" type="OK">
+<script id="weekday" type="OK">
     // 输入年份与月份，输出这个月的第一天是周几（视具体设定，周一可以用1或0表示）
     var year = Number(prompt("请输入year"))
     var month = Number(prompt("请输入month"))
 
-    function whatDay (year,month) {
-        var h = (23 * month - 8) % 7
-        var d = 0   // 年份的最后两位数字
-        var c = 0   // 年份的前两位数字
-        var res = 0
-        var ge = 0
-        var n = year
-
-        for (var i = 0; i < 4; i++) {
-            if (i < 2) {
-                ge = n % 10
-                n = (n - ge) / 10
-                d = (d + ge) * 10 
-            } else {
-                ge = n % 10
-                n = (n - ge) / 10
-                c = (c + ge) * 10
-            } 
-        }
-
-        d /= 10
-        c /= 10
-
-        // 使用Zeller公式
-        res = (h + d + Math.floor(5 * c / 4) + Math.floor(13 * (d + 1) / 5)) % 7
-
-        switch (res) {
-            case 0:
-                return "星期1"
-            case 1:
-                return "星期2"
-            case 2:
-                return "星期3"
-            case 3:
-                return "星期4"
-            case 4:
-                return "星期5"
-            case 5:
-                return "星期6"
-            case 6:
-                return "星期7"
-            default:
-                return "error"
+    function isLeapYear (year){
+        if(!(year % 4) && (year % 100)){
+            return true
+        }else if( year % 400 ){
+            return false
+        }else{
+            return true
         }
     }
 
-    console.log(whatDay(year,month))
+    function getMonthDay(year,month) {
+        if (month % 2 == 0 && month != 8 && month != 2) {
+            return 30
+        } else if (month == 2){
+            if (isLeapYear(year)) {
+                return 29
+            } else {
+                return 28
+            }
+        } else {
+            return 31
+        }
+    }
+        
+    
+    function weekDay (year,month) {
+        var totalDays = 0 // 计算公元第一天到这一个月的的第一天总天数
+
+        // for (var y = 1; y < year; y++){
+        //     if (isLeapYear(year)) {
+        //         totalDays += 366
+        //     } else {
+        //         totalDays += 365
+        //     }
+        // }
+        totalDays += (year - 1) * 365 + Math.floor((year - 1) / 4) - Math.floor((year - 1) / 100) + Math.floor((year - 1) / 400)
+
+        for (var m = 1; m < month; m++) {
+            totalDays += getMonthDay(year,m)
+        }
+
+        return (totalDays + 1) % 7
+    }
+debugger
+    console.log(weekDay(year,month))
 
 </script>
 
@@ -2273,7 +2271,7 @@
 
 </script>
 
-<script id="prime" xtype="OK">
+<script id="prime" type="OK">
     // 输入一个数，判断它是否是素数
     var num = +prompt("输入一个数")
 
@@ -2372,11 +2370,57 @@
 
 </script>
 
-<script id="itob" type="OK">
+<script id="itob" xtype="OK">
     // 给定一个整数，将其转换为字符串：不能使用String等现成函数，但可以使用非此功能的其它函数
     // 也不能利用任意运算符的自动类型转换
+    var n = +prompt("输入一个数")
 
-    
+    function itob (n) {
+        var res = ""
+
+        do {
+            var ge = n % 10
+            res = digit2str(ge) + res
+            n = (n - ge) / 10
+        } while (n > 0)
+
+        return res
+    }
+
+    function digit2str(digit) {
+        if (digit == 0) {
+            return "0"
+        }
+        if (digit == 1) {
+            return "1"
+        }
+        if (digit == 2) {
+            return "2"
+        }
+        if (digit == 3) {
+            return "3"
+        }
+        if (digit == 4) {
+            return "4"
+        }
+        if (digit == 5) {
+            return "5"
+        }
+        if (digit == 6) {
+            return "6"
+        }
+        if (digit == 7) {
+            return "7"
+        }
+        if (digit == 8) {
+            return "8"
+        }
+        if (digit == 9) {
+            return "9"
+        }
+    }
+ debugger   
+    console.log(itob(n))
 
 </script>
 
@@ -2449,6 +2493,7 @@
 
 <script id="sqrt" type="OK">
     // 输入一个数，求它的平方根，精确到小数点后3位，不能使用Math.sqrt
+    // 用牛顿法
     var num = +prompt("输入一个数")
 
     function getSqrt (x) { 
