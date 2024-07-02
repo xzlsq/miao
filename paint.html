@@ -153,24 +153,21 @@
   }
 
   // 绘制x1,y1到x2,y2的直线（只能用在第一象限）
-  function line3(x1, y1, x2, y2) {
-    var k = (y2 - y1) / (x2 - x1)
+  function line3(x1, y1, x2, y2, color = 'black') {
+    // 对于条水平跨度大于垂直跨度的线来说
 
-    if (k <= 0.5) {
-      var dx = x2 - x1  // x方向的跨度
-      var dy = y2 - y1  // y方向的跨度
-      var y0 = 0
-      for (var x = x1, y = y1; x < x2; x++){
-        dot(x,y)
-        y0 += dy
-        if (y0 > dx) {
-          y++
-          y0 -= dx
-        }
-      }
-    } else {
-      for (var y = y1, x = x1; y < y2; y++, x += 1 / k){
-        dot(x,y)
+    var dx = x2 - x1
+    var dy = y2 - y1
+
+    var y = y1
+    var ty = 0
+
+    for (var x = x1; x <= x2; x++) {
+      dot(x, y, color)
+      ty += dy // 把ty的变化放大了dx倍
+      if (ty >= dx) {
+        y++
+        ty -= dx
       }
     }
   }
@@ -314,21 +311,67 @@
 
   paintSin(5,500,25)
 
-  /* 画出rgb色彩空间的某一面（尺寸要大于100x100）
+  // 画出rgb色彩空间的某一面（尺寸要大于100x100）
+  function paintRGB(cx, cy, w, h) {
+    for (i = 0; i < h; i++) {
+      for (j = 0; j < w; j++) {
+        dot(i + cx, j + cy, "rgb(" + i + "," + j + "," + "255)")
+      }
+    }
+  }
+
+  paintRGB(30,600,250,250)
+
+
+  /*
   * 如果做出上一题后，尝试将其每个点的坐标乘以一个矩阵（如(2,0,0,2)或(1,0.27得到新的位置，即绘制出被线性变换后的色彩空间某一面
-    可以考虑如下几种矩阵：
-     2 0
-     0 2
-     ------
-     1  0.27
-     0  1
-     ------
-     0.5    0.87
-     -0.87  0.5
-  * 画一个二阶贝塞尔曲线（即控制点一共三个）*/
+    可以考虑如下几种矩阵：*/
+     
+    /*2 0 缩放
+      0 2*/
+  function paintRGB2(cx, cy, w, h, scale) {
+    for (i = 0; i < h; i++) {
+      for (j = 0; j < w; j++) {
+        dot((i + cx) * scale, (j + cy) * scale, "rgb(" + i + "," + j + "," + "255)")
+      }
+    }
+  }
 
+  paintRGB2(200,50,50,50,2)
+  /*------
+  1  0.27 剪切
+  0  1
+  ------ */
+  paintRGB2(400,950,250,250,0.73)
 
+  /*0.5    0.87 旋转
+    -0.87  0.5 */
+  function paintRGB3(cx, cy, w, h, cos, sin) {
+    for (i = 0; i < h; i++) {
+      for (j = 0; j < w; j++) {
+        dot((i + cx) * cos - (j + cy) * sin, (i + cx) * sin + (j + cy) * cos, "rgb(255," + i + "," + j + ")")
+      }
+    }
+  }
+  paintRGB3(50,650,250,250, 0.5, -0.87)
+  
+  // 画一个二阶贝塞尔曲线（即控制点一共三个
+  line2(0,800,400,400)
+  line2(400,400,1000,1000)
 
+  function bCurves (x1, y1, x2, y2, x3, y3) {
+    for (var t = 0, i = 0, j = 0; t < 1; t += 0.001, i++, j++) {
+      var x = (1 - t) ** 2 * x1 + 2 * (1 - t) * t * x2 + t * t * x3
+      var y = (1 - t) ** 2 * y1 + 2 * (1 - t) * t * y2 + t * t * y3
+      dot(x, y,"rgb(255," + i + "," + j + ")")
+      if (i == 255 || j == 255) {
+        i = 0
+        j = 0
+      }
+    }
+  }
+
+  bCurves(0,800,400,400,1000,1000)
 
 </script>
 </html>
