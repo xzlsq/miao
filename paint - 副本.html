@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>画图</title>
+  <style>
+    canvas {
+      border: 2px solid #f0f;
+      display: block;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas width="1000" height="1000"></canvas>
+</body>
+<script>
+  var canvas = document.querySelector('canvas')
+  canvas.style.imageRendering = 'pixelated' //放大时的插帧方式：不插帧，直接放大像素
+  var ctx = canvas.getContext('2d')
+
+  function dot(x, y, color = 'black') {
+    x = Math.round(x)
+    y = Math.round(y)
+    ctx.fillStyle = color
+    ctx.fillRect(x, y, 1, 1)
+  }
+  /**
+   * 你的任务：通过调用dot函数，实现：
+   * 需要注意，dot函数不能接收浮点数，如果参数为浮点数，会被转换为整数后绘制
+      * 在 坐标 (42, 42) 画出一个点
+      * 画一条水平实线，粗细为一个像素
+      * 画一条垂直实线，粗细为一个像素
+      * 画一条一个实点一个空点的虚线
+      * 画一条两个实点两个空点的虚线
+      * 画一条三个实点两个空点的虚线
+      * 画一条45度的斜线
+      * 画一条30度的斜线（与x轴的夹角呈30度）
+      * 画一条60度的斜线（与x轴的夹角呈60度）
+      * 画一条跨越画布左上角和右下角的对角线
+      * 画一个空心矩形
+      * 画一个实心矩形
+      * 画两个空心的圆，圆心在画布中心：
+        * 一个半径为50像素
+        * 一个半径为200像素
+      * 画一个实心的圆，半径至少为100像素
+      * 画一个【大小位置都合适】的sin(x)的图像
+
+      * 画出rgb色彩空间的某一面（尺寸要大于100x100）
+      * 如果做出上一题后，尝试将其每个点的坐标乘以一个矩阵（如(2,0,0,2)或(1,0.27得到新的位置，即绘制出被线性变换后的色彩空间某一面
+        可以考虑如下几种矩阵：
+           2 0
+           0 2
+           ------
+           1  0.27
+           0  1
+           ------
+           0.5    0.87
+           -0.87  0.5
+
+   */
+</script>
+<script>
+  // 不可更改上面的代码
+  // 你的代码写在这里
+
+  // * 在 坐标 (42, 42) 画出一个点
+  dot(42, 42, 'red')
+  // * 画一条水平实线，粗细为一个像素
+  for (var x = 50; x < 200; x++) {
+    dot(x, 50)
+  }
+  // * 画一条垂直实线，粗细为一个像素
+  for (var y = 50; y < 200; y++) {
+    dot(50, y)
+  }
+  // * 画一条一个实点一个空点的虚线
+
+  for (var x = 50; x < 200; x += 2) {
+    dot(x, 55)
+  }
+  // * 画一条两个实点两个空点的虚线
+  for (var x = 50; x < 200; x += 4) {
+    dot(x, 60)
+    dot(x + 1, 60)
+  }
+  // * 画一条三个实点两个空点的虚线
+
+  for (var x = 58; x < 200; x += 5) {
+    dot(x, 65)
+    dot(x + 1, 65)
+    dot(x + 2, 65)
+  }
+
+  for (var x = 55; x < 200; x++) {
+    if (x % 5 < 3) {
+      dot(x, 70)
+    }
+  }
+  // * 画一条45度的斜线
+  for (var t = 50; t < 200; t++) {
+    dot(t, t, 'red')
+  }
+  // * 画一条30度的斜线（与x轴的夹角呈30度）
+  for (var x = 0; x < 100; x++) {
+    var y = 0.4 * x
+    dot(x, y, 'pink')
+  }
+  // * 画一条60度的斜线（与x轴的夹角呈60度）
+
+  for (var y = 0; y < 100; y++) {
+    var x = 0.66 * y
+    dot(x, y, 'pink')
+  }
+
+
+  function line(x1, y1, x2, y2, color) {
+    // debugger
+    // var x1 = 10
+    // var y1 = 20
+    // var x2 = 100
+    // var y2 = 45
+
+    // 对于条水平跨度大于垂直跨度的线来说
+
+    var dx = x2 - x1
+    var dy = y2 - y1
+    var stepy = dy / dx
+
+    var y = y1
+
+    for (var x = x1; x <= x2; x++) {
+      dot(x, y, 'aqua')
+      y += stepy
+    }
+  }
+
+  line(10, 20, 100, 10)
+
+  function line2(x1, y1, x2, y2, color) {
+    // debugger
+    // var x1 = 10
+    // var y1 = 20
+    // var x2 = 100
+    // var y2 = 45
+
+    // 对于条水平跨度大于垂直跨度的线来说
+
+    var dx = x2 - x1
+    var dy = y2 - y1
+    var stepy = dy / dx
+
+    var y = y1
+    var ty = 0
+
+    for (var x = x1; x <= x2; x++) {
+      dot(x, y, color)
+      ty += stepy
+      if (ty >= 1) {
+        y++
+        ty -= 1
+      }
+    }
+  }
+
+  function line3(x1, y1, x2, y2, color = 'black') {
+    // 对于条水平跨度大于垂直跨度的线来说
+
+    var dx = x2 - x1
+    var dy = y2 - y1
+
+    var y = y1
+    var ty = 0
+
+    for (var x = x1; x <= x2; x++) {
+      dot(x, y, color)
+      ty += dy // 把ty的变化放大了dx倍
+      if (ty >= dx) {
+        y++
+        ty -= dx
+      }
+    }
+  }
+
+
+
+  // * 画一条跨越画布左上角和右下角的对角线
+  // * 画一个空心矩形
+
+  // * 画一个实心矩形
+  for (var y = 120; y < 150; y++) {
+    line3(80, y, 130, y)
+  }
+  // * 画两个空心的圆，圆心在画布中心：
+  //   * 一个半径为50像素
+
+  function circle(cx, cy, r, color) {
+    var start = Math.ceil(r * Math.SQRT1_2)
+    for (var x = -start; x <= start; x++) {
+      var y = Math.sqrt(r * r - x * x)
+      dot(x + cx, y + cy)
+      dot(x + cx, -y + cy)
+    }
+    for (var y = -start; y <= start; y++) {
+      var x = Math.sqrt(r * r - y * y)
+      dot(x + cx, y + cy)
+      dot(-x + cx, y + cy)
+    }
+  }
+
+  function circle2(cx, cy, r, color) {
+    for (var theta = 0; theta <= 2 * Math.PI; theta += 0.01) {
+      var x = r * Math.cos(theta)
+      var y = r * Math.sin(theta)
+      dot(x + cx, y + cy, color)
+    }
+  }
+
+  function circle3(cx, cy, r, color) {
+    var start = Math.ceil(r * Math.SQRT1_2)
+    for (var x = 0; x <= start; x++) {
+      var y = Math.sqrt(r * r - x * x)
+      dot(x + cx, y + cy)
+      dot(x + cx, -y + cy)
+      dot(-x + cx, -y + cy)
+      dot(-x + cx, y + cy)
+      dot(y + cx, x + cy)
+      dot(y + cx, -x + cy)
+      dot(-y + cx, -x + cy)
+      dot(-y + cx, x + cy)
+    }
+  }
+
+
+  function circle4(cx, cy, r, color) {
+    var x = 0
+    var y = r
+
+    while(x <= y) {
+      dot(x + cx, y + cy, color)
+      dot(x + cx, -y + cy, color)
+      dot(-x + cx, y + cy, color)
+      dot(-x + cx, -y + cy, color)
+      dot(y + cx, x + cy, color)
+      dot(y + cx, -x + cy, color)
+      dot(-y + cx, x + cy, color)
+      dot(-y + cx, -x + cy, color)
+
+      var x1 = x + 1
+      var y1 = y
+      var x2 = x + 1
+      var y2 = y - 1
+
+      var d1 = x1 * x1 + y1 * y1
+      var d2 = x2 * x2 + y2 * y2
+
+      if (Math.abs(d1 - r * r) < Math.abs(d2 - r * r)) {
+        x = x1
+        y = y1
+      } else {
+        x = x2
+        y = y2
+      }
+    }
+  }
+  //   * 一个半径为200像素
+  // * 画一个实心的圆，半径至少为100像素
+  // * 画一个【大小位置都合适】的sin(x)的图像
+
+  for(var x = 0; x < 200; x++) {
+    var y = Math.sin(x / 20) * 20
+    dot(x, y + 20, 'lime')
+  }
+
+
+  // * 画出rgb色彩空间的某一面（尺寸要大于100x100）
+    for (var x = 0; x < 256; x++) {
+      for (var y = 0; y < 256; y++) {
+        dot(x + 100, y + 100, 'rgb(' + x + ', ' + y + ', 255)')
+      }
+    }
+
+  // * 如果做出上一题后，尝试将其每个点的坐标乘以一个矩阵（如(2,0,0,2)或(1,0.27得到新的位置，即绘制出被线性变换后的色彩空间某一面
+  //   可以考虑如下几种矩阵：
+  //       2 0
+  //       0 2
+  //       ------
+  //       1  0.27
+  //       0  1
+  //       ------
+  //       0.5    0.87
+  //       -0.87  0.5
+
+
+  // for (var x = 0; x < 256; x++) {
+  //   for (var y = 0; y < 256; y++) {
+  //     var x1 = 2 * x
+  //     var y1 = 2 * y
+  //     dot(x1 + 400, y1 + 400, 'rgb(' + x + ', ' + y + ', 255)')
+  //   }
+  // }
+
+  for (var x = 0; x < 256; x++) {
+    for (var y = 0; y < 256; y++) {
+      var x1 = x
+      var y1 = y + 0.27 * x
+      dot(x1 + 400, y1 + 400, 'rgb(' + x + ', ' + y + ', 255)')
+    }
+  }
+
+  for (var x = 0; x < 256; x++) {
+    for (var y = 0; y < 256; y++) {
+      var x1 = 0.5 * x - 0.87 * y
+      var y1 = 0.87 * x + 0.5 * y
+      dot(x1 + 200, y1 + 400, 'rgb(' + x + ', ' + y + ', 255)')
+    }
+  }
+
+
+  var theta = Math.PI / 6 // 旋转角度
+
+  var lastT = 0
+
+  for (var x = 0; x < 256; x++) {
+    for (var y = 0; y < 256; y++) {
+      var x1 = x
+      var y1 = Math.floor(y -Math.tan(theta / 2) * x)
+
+      var x2 = Math.floor(x1 + Math.sin(theta) * y1)
+      var y2 = y1
+
+      var x3 = x2
+      var y3 = Math.floor(y2 -Math.tan(theta / 2) * x2)
+
+      dot(x3 + 200, y3 + 400, 'rgb(' + x + ', ' + y + ', 255)')
+    }
+  }
+
+
+  // 绘制二阶贝塞尔曲线
+  var ax = 500
+  var ay = 100
+  var bx = 630
+  var by = 350
+  var cx = 950
+  var cy = 50
+
+  for (var t = 0; t <= 1; t += 0.002) {
+    var x = ax * (1 - t) * (1 - t) + 2 * bx * t * (1 - t) + cx * t * t
+    var y = ay * (1 - t) * (1 - t) + 2 * by * t * (1 - t) + cy * t * t
+    dot(x, y)
+  }
+
+  dot(bx,by)
+</script>
+</html>
