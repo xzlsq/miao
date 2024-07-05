@@ -17,25 +17,33 @@
     .b {
       margin-left: auto;
       margin-right: auto;
+      box-sizing: border-box;
       width: 600px;
       height: 246px;
       border: 2px solid black;
+      margin-bottom: 20px;
     }
     .b p {
       margin: 16px 10px;
       overflow: auto;
-      height: 64px;
+      height: 64px; /*三个字的高度*/
     }
     .b-second {
       margin: 16px 10px;
-      background-color: magenta;
+      background-color: violet;
       height: 50px;
     }
-    .c {
+    .b-second:hover {
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+    .triangle {
       margin: auto;
       border: 50px solid orange;
       border-color: rgba(0,0,0,0) transparent orange transparent;
       width: 0px;
+      height: 0px;
+      margin-top: 16px;
     }
   </style>
 </head>
@@ -44,13 +52,13 @@
      <div>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Incidunt at, ea natus cupiditate assumenda deserunt ex maxime dignissimos. Soluta laudantium id architecto fugit labore fuga consequatur placeat laboriosam dolorum! Incidunt!</div>
   </div>
   
-  <div class="b">
+  <main class="b">
     <p class="b-first">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae sapiente voluptas officiis, praesentium, nemo iure cumque nihil, facere hic asperiores dicta commodi magni, voluptates eaque esse atque nesciunt! Cupiditate, modi.</p>
     <div class="b-second"></div>
     <p class="b-third">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos modi accusantium deleniti consequuntur, enim nulla voluptatum qui ducimus esse rem eius eligendi consequatur sint. Sunt ut, est iusto neque numquam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam animi perspiciatis eos, molestias provident, quae ullam! Obcaecati suscipit optio labore iusto veniam facere, amet officiis, eveniet voluptatibus molestiae, dignissimos dolor!</p>
-  </div>
+  </main>
   
-  <section class="c"></section>
+  <section class="triangle"></section>
   
 </body>
 </html>
