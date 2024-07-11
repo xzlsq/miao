@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>css-block-layout</title>
+    <style>
+        /* * {
+            box-shadow: 0 0 5px inset red;
+        } */
+        body {
+            margin: 0px;
+        }
+        header {
+            background-color: black;
+        }
+        .p1 {
+            margin-top: 0px;
+            margin-left: auto;
+            margin-right: auto;
+            color: white;
+            width: 600px;
+        }
+        .p2 {
+            margin-top: 0px;
+            margin-left: auto;
+            margin-right: auto;
+            color: black;
+            width: 600px;
+        }
+        #d1 {
+            margin-left: auto;
+            margin-right: auto;
+            width: 600px;
+            margin-bottom: 15px;
+            font-size: 0px;
+        }
+        #d1 span {
+            display: inline-block;
+            border: 3px solid;
+            width: 174px;
+            height: 34px;
+            text-align: center;
+            line-height: 34px;
+            margin-top: 15px;
+            background-color: pink;
+            font-size: initial;
+        }
+        #d1 span:nth-child(1) {
+            margin-top: 0px;
+        }
+        #d1 span:nth-child(3n-1) {
+            margin-top: 0px;
+            margin-left: 30px;
+        }
+        #d1 span:nth-child(3n) {
+            margin-top: 0px;
+            margin-left: 30px;
+        }
+        
+        .p3 { 
+            margin-left: auto;
+            margin-right: auto;
+            width: 600px;
+            border-bottom: 1px dotted;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            height: 22px;
+        }
+        .p4 {
+            border-bottom: none;
+            overflow: hidden;
+        }
+        .p5 {
+            text-align: center;
+            background-color: violet;
+        }
+    </style>
+</head>
+<body>
+    <header><p class="p1">hello world 请调整浏览器窗口大小查看效果hello world 请调整浏览器窗口大小查看效果hello world 请调整浏览器窗口大小查看效果hello world 请调整浏览器窗口大小查看效果hello world 请调整浏览器窗口大小查看效果hello world 请调整浏览器窗口大小查看效果</p></header>
+    <p class="p2">页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px</p>
+    <div id="d1">
+        <span>宽180高40(包含边框)</span>
+        <span>产品</span>
+        <span>产品</span>
+        <span>水平间隙30px</span>
+        <span>产品</span>
+        <span>产品</span>
+        <span>垂直间隙15px</span>
+        <span>产品</span>
+        <span>产品</span>
+        <span>边框宽度3px</span>
+        <span>产品</span>
+        <span>产品</span>
+    </div>
+    <p class="p3">link</p>
+    <p class="p3">link</p>
+    <p class="p3">link</p>
+    <p class="p3">link</p>
+    <p class="p3 p4">link</p>
+    <p class="p5">©版权所有<br>本页所有布局均使用块元素</p>
+</body>
+</html>
