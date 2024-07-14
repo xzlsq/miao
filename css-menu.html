@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>JS Bin</title>
+    <style>
+        * {
+            font-size: 20px;
+        }
+
+        ul {
+            position: relative;
+            padding: 0;
+        }
+
+        .menu {
+            border: 1px solid lightgrey;
+            border-radius: 6px;
+            background-color: lightgrey;
+        }
+
+        .menu>li:hover {
+            color: aqua;
+        }
+
+        .menu li {
+            position: relative;
+            display: block;
+            border: 1px solid lightgrey;
+            border-radius: 6px;
+            background-color: lightgrey;
+        }
+
+        .menu>li {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu>li ul {
+            position: absolute;
+            white-space: nowrap;
+            font-family: monospace;
+            display: none;
+            color: black;
+        }
+
+        .menu>li ul li:hover {
+            background-color: orange;
+        }
+
+        .firstTwo {
+            left: 100%;
+            top: 0;
+        }
+
+        .file {
+            left: 0px;
+        }
+
+        .file:hover>ul {
+            display: block;
+        }
+
+        .firstOne li:nth-child(3):hover .firstTwo {
+            display: block;
+        }
+
+        .edit {
+            left: 10px;
+        }
+
+        .edit>ul li:nth-child(3) {
+            border-radius: 6px 6px 0 0;
+            border-bottom: 1px solid;
+        }
+
+        .edit>ul li:nth-child(4) {
+            border-radius: 0 0 6px 6px;
+        }
+
+        .edit:hover>ul {
+            display: block;
+        }
+
+        .view {
+            left: 20px;
+        }
+
+        .view:hover>ul {
+            display: block;
+        }
+
+        .view>ul>li:nth-child(3) {
+            border-radius: 6px 6px 0 0;
+            border-bottom: 1px solid;
+        }
+
+        .view>ul li:nth-child(4) {
+            border-radius: 0 0 6px 6px;
+        }
+
+        .firstOne li:nth-child(4):hover .firstTwo {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <ul class="menu">
+        <li class="file">文件
+            <ul class="firstOne">
+                <li> 新建文件 <span>Ctrl+N</span></li>
+                <li> 打开文件 <span>Ctrl+O</span></li>
+                <li> 打开最近 <span>Ctrl+L</span>
+                    <ul class="firstTwo">
+                        <li>aaa.txt</li>
+                        <li>bbb.html</li>
+                        <li>ccc.md</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="edit">编辑
+            <ul class="firstOne">
+                <li> 剪切 <span>Ctrl+X</span></li>
+                <li> 复制 <span>Ctrl+C</span></li>
+                <li> 粘贴 <span>Ctrl+V</span></li>
+                <li> 查找 <span>Ctrl+F</span></li>
+                <li> 替换 <span>Ctrl+H</span></li>
+            </ul>
+        </li>
+        <li class="view">视图
+            <ul class="firstOne">
+                <li> 置顶模式 </li>
+                <li> 全屏模式 <span>F11</span></li>
+                <li> 便签模式 <span>F12</span></li>
+                <li> 缩放
+                    <ul class="firstTwo">
+                        <li>放大(I) <span>Ctrl+</span></li>
+                        <li>缩小(O) <span>Ctrl-</span></li>
+                        <li>撤销缩放 <span>Ctrl/</span></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</body>
+
+</html>
