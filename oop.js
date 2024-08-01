@@ -212,7 +212,7 @@ MySet.prototype.add = function (item) {
 MySet.prototype.delete = function (item) {
 
     let idx = this._elements.indexOf(item)
-    if (idx > 0) {
+    if (idx >= 0) {
         this._elements.splice(idx, 1)
     }
 
@@ -346,7 +346,7 @@ Stack.prototype.peek = function () {
 
 
 // 表示一个队列：即先进先出，后进后出
-function Queue(capacity) {
+function Queue(capacity = 20) {
     this.capacity = capacity
     this.queue = new Array(capacity)
     this._head = 0 // 队列头部的索引
@@ -363,21 +363,21 @@ function Queue(capacity) {
 }
 
 // 向队列中增加元素
-Stack.prototype.add = function (val) {
+Queue.prototype.add = function (val) {
     if (this.len !== this.capacity) {
         this.queue[this.tail] = val
-        this.tail = (this.tail++) % this.capacity
+        this.tail = (this.tail + 1) % this.capacity
         this.len++
     } else {
         console.log("队列已满")
     }
 }
 // 从队头取出元素并删除队头元素
-Stack.prototype.pop = function () {
+Queue.prototype.pop = function () {
     if (this.len !== 0) {
         let val = this.queue[this._head]
         this.queue[this._head] = null
-        this._head = (this._head++) % this.capacity
+        this._head = (this._head + 1) % this.capacity
         this.len--
         return val
     } else {
@@ -385,7 +385,7 @@ Stack.prototype.pop = function () {
     }
 }
 // 查看队头元素（没有查看队尾元素的功能）
-Stack.prototype.peek = function () {
+Queue.prototype.peek = function () {
     return this.queue[_head]
 }
 // 以及queue.size获取队列的长度
