@@ -1,0 +1,27 @@
+<script src="lodash.js"></script>
+<script src="./xzlsq-lodash.js"></script>
+
+<script>
+    var users = [
+        { 'user': 'barney', 'active': false },
+        { 'user': 'fred', 'active': false },
+        { 'user': 'pebbles', 'active': true }
+    ];
+    var users2 = [
+        { 'user': 'barney', 'active': true },
+        { 'user': 'fred', 'active': false },
+        { 'user': 'pebbles', 'active': false }
+    ];
+    console.log(xzlsq.compact([0, 1, false, 2, '', 3]))
+    console.log(xzlsq.chunk(['a', 'b', 'c', 'd'], 2), xzlsq.chunk(['a', 'b', 'c', 'd'], 3))
+    console.log(xzlsq.fill(Array(3), 2), xzlsq.fill([1, 2, 3], 'a'), xzlsq.fill([4, 6, 8, 10], '*', 1, 3))
+    console.log(xzlsq.drop([1, 2, 3]), xzlsq.drop([1, 2, 3], 2), xzlsq.drop([1, 2, 3], 5), xzlsq.drop([1, 2, 3], 0))
+    console.log(xzlsq.findIndex(users, function(o) { return o.user == 'barney'; }))
+    console.log(xzlsq.findIndex(users, _.matches({ 'user': 'fred', 'active': false })))
+    console.log(xzlsq.findIndex(users, _.matchesProperty('active', false)))
+    console.log(xzlsq.findIndex(users, _.property('active')))
+    console.log(xzlsq.findLastIndex(users2, function(o) { return o.user == 'pebbles'; }))
+    console.log(xzlsq.findLastIndex(users2, _.matches({ 'user': 'barney', 'active': true })))
+    console.log(xzlsq.findLastIndex(users2, _.matchesProperty('active', false)))
+    console.log(xzlsq.findLastIndex(users2, _.property('active')))
+</script>
