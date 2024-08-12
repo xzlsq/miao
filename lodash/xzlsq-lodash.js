@@ -4,7 +4,7 @@ var xzlsq = {
     compact: function compact(array) {
         var res = []
         for (var i = 0; i < array.length; i++) {
-            if (array[i] != "" && array[i] != null && array[i] != NaN && array[i] != false && array[i] != 0 && array[i] != undefined) {
+            if (array[i] != "" && array[i] != null && !Number.isNaN(array[i]) && array[i] != false && array[i] != 0 && array[i] != undefined) {
                 res.push(array[i])
             }
         }
