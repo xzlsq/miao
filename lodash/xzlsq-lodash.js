@@ -254,7 +254,7 @@ var xzlsq = {
         }
     },
 
-    property:function property(path) {
+    property: function property(path) {
         return function(obj) {
             return obj[path]
         }
@@ -294,7 +294,11 @@ var xzlsq = {
 
     indexOf: function indexOf(array, value, fromIndex=0) {
         if (fromIndex < 0) {
-            fromIndex = array.length - fromIndex
+            if ((fromIndex + array.length) >= 0) {
+                fromIndex = array.length - fromIndex
+            } else {
+                return -1
+            }
         }
 
         for (var i = fromIndex; i < array.length; i++) {
