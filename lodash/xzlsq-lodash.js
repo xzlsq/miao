@@ -1,3 +1,4 @@
+// const { partial } = require("lodash")
 
 
 var xzlsq = {
@@ -56,6 +57,21 @@ var xzlsq = {
     },
 
     findIndex: function findIndex(array, predicate, fromIndex = 0) {
+        if (typeof predicate == 'function') {
+            for (var i = fromIndex; i < array.length; i++) {
+                if (predicate(array[i])) {
+                    return i
+                }
+            }
+    
+            return -1
+        } else if (Array.isArray(predicate)) {
+            predicate = this.matchesProperty(predicate[0],predicate[1])
+        } else if (typeof predicate == "object") {
+            predicate = this.matches(predicate)
+        } else if (typeof predicate == "string") {
+            predicate = this.property(predicate)
+        }
         for (var i = fromIndex; i < array.length; i++) {
             if (predicate(array[i])) {
                 return i
@@ -66,6 +82,21 @@ var xzlsq = {
     },
 
     findLastIndex: function findLastIndex(array, predicate, fromIndex = array.length - 1) {
+        if (typeof predicate == 'function') {
+            for (var i = fromIndex; i >= 0; i--) {
+                if (predicate(array[i])) {
+                    return i
+                }
+            }
+    
+            return -1
+        } else if (Array.isArray(predicate)) {
+            predicate = this.matchesProperty(predicate[0],predicate[1])
+        } else if (typeof predicate == "object") {
+            predicate = this.matches(predicate)
+        } else if (typeof predicate == "string") {
+            predicate = this.property(predicate)
+        }
         for (var i = fromIndex; i >= 0; i--) {
             if (predicate(array[i])) {
                 return i
@@ -139,5 +170,153 @@ var xzlsq = {
             res.push([key,object[key]])
         }
         return res
+    },
+
+    head: function head(array) {
+        if (array) {
+            return array[0]
+        } else {
+            return undefined
+        }
+    },
+
+    isEqual: function isEqual(value, other) {
+        if (typeof value == "object" && typeof other == "object" && value !== null && other !== null) {
+            // 首先对比元素数量是否相同
+            let cnt1 = 0
+            let cnt2 = 0
+            for (var key in value) {
+                cnt1++
+            }
+            for (var key in other) {
+                cnt2++
+            }
+            // 元素数量不相同，直接返回false
+            if (cnt1 != cnt2) {
+                return false
+            }
+            // 元素数量相同，则判断key值是否相同
+            for (var key in value) {
+                if (!(key in other) || !(isEqual(value[key],other[key]))) {
+                    return false
+                }
+            }
+        } else {
+            if (Number.isNaN(value) && Number.isNaN(other)) {
+                return true
+            } else {
+                return value === other
+            }
+        }
+
+        return true
+    },
+
+    filter: function filter(collection, predicate = xzlsq.identity) {
+        var res = []
+        if (typeof predicate == 'function') {
+            for (let key in collection) {
+                if (predicate(collection[key])) {
+                    res.push(collection[key])
+                }
+            }
+    
+            return res
+        } else if (Array.isArray(predicate)) {
+            predicate = this.matchesProperty(predicate[0],predicate[1])
+        } else if (typeof predicate == "object") {
+            predicate = this.matches(predicate)
+        } else if (typeof predicate == "string") {
+            predicate = this.property(predicate)
+        }
+        for (let key in collection) {
+            if (predicate(collection[key])) {
+                res.push(collection[key])
+            }
+        }
+
+        return res
+    },
+
+    matches: function matches(object) {
+        return function(o) {
+            return xzlsq.partialEqual(o,object)
+        }
+    },
+
+    identity: function identity(value) {
+        return value
+    },
+
+    matchesProperty: function matchesProperty(path,srcValue) {
+        return function(obj) {
+            return xzlsq.isEqual(obj[path], srcValue)
+        }
+    },
+
+    property:function property(path) {
+        return function(obj) {
+            return obj[path]
+        }
+    },
+
+    // 部分对比
+    partialEqual: function partialEqual(value, other) { 
+        if (typeof value == "object" && typeof other == "object" && value !== null && other !== null) {
+            // 首先统计元素数量
+            let cnt1 = 0
+            let cnt2 = 0
+            for (var key in value) {
+                cnt1++
+            }
+            for (var key in other) {
+                cnt2++
+            }
+            // 判断key值是否相同
+            for (var key in value) {
+                if (!(key in other)) {
+                    continue
+                }
+                if (!(partialEqual(value[key],other[key]))) {
+                    return false
+                }
+            }
+        } else {
+            if (Number.isNaN(value) && Number.isNaN(other)) {
+                return true
+            } else {
+                return value === other
+            }
+        }
+
+        return true
+    },
+
+    indexOf: function indexOf(array, value, fromIndex=0) {
+        if (fromIndex < 0) {
+            fromIndex = array.length - fromIndex
+        }
+
+        for (var i = fromIndex; i < array.length; i++) {
+            if (this.isEqual(array[i],value)) {
+                return i
+            }
+        }
+
+        return -1
+    },
+
+    lastIndexOf: function lastIndexOf(array, value, fromIndex=array.length-1) {
+        if (fromIndex < 0) {
+            return -1
+        }
+
+        for (var i = fromIndex; i >= 0; i--) {
+            if (this.isEqual(array[i],value)) {
+                return i
+            }
+        }
+
+        return -1
     }
 }
