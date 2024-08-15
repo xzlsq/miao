@@ -322,5 +322,104 @@ var xzlsq = {
         }
 
         return -1
+    },
+
+    initial: function initial(array) {
+        array.pop()
+        return array
+    },
+
+    join: function join(array, separator=',') {
+        var res =""
+        var len = array.length
+        for (var i = 0; i < len; i++) {
+            if (i == len - 1) {
+                res += array[i]
+            } else {
+                res += array[i] + separator
+            }
+        }
+
+        return res
+    },
+
+    last: function last(array) {
+        return array.pop()
+    },
+
+    pull: function pull(array,...values) {
+        var res = []
+        var tmp = [...values]
+        var flag = true
+        if (values == undefined) {
+            return undefined
+        }
+
+        for (var i = 0; i < array.length; i++) {
+            for (var j = 0; j < tmp.length; j++) {
+                if (this.partialEqual(array[i],tmp[j])) {
+                    flag = false
+                }
+            }
+
+            if (flag) {
+                res.push(array[i])
+            }
+            flag = true
+        }
+
+        return res
+    },
+
+    reverse: function reverse(array) {
+        var i = 0
+        var j = array.length - 1
+        while(i < j) {
+            var tmp = array[j]
+            array[j] = array[i]
+            array[i] = tmp
+            i++
+            j--
+        }
+
+        return array
+    },
+
+    slice: function slice(array, start = 0, end = array.length) {
+        var res = []
+        for (var i = start; i < end; i++) {
+            if (array[i]) {
+                res.push(array[i])
+            }
+        }
+        return res
+    },
+ 
+    every: function every(collection, predicate = xzlsq.identity) {
+        if (collection == null) {
+            return true
+        }
+        if (typeof predicate == 'function') {
+            for (let key in collection) {
+                if (!predicate(collection[key])) {
+                    return false
+                }
+            }
+    
+            return true
+        } else if (Array.isArray(predicate)) {
+            predicate = this.matchesProperty(predicate[0],predicate[1])
+        } else if (typeof predicate == "object") {
+            predicate = this.matches(predicate)
+        } else if (typeof predicate == "string") {
+            predicate = this.property(predicate)
+        }
+        for (let key in collection) {
+            if (!predicate(collection[key])) {
+                return false
+            }
+        }
+
+        return true
     }
 }
