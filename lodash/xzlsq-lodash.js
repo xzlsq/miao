@@ -414,6 +414,7 @@ var xzlsq = {
         } else if (typeof predicate == "string") {
             predicate = this.property(predicate)
         }
+        
         for (let key in collection) {
             if (!predicate(collection[key])) {
                 return false
@@ -421,5 +422,59 @@ var xzlsq = {
         }
 
         return true
+    },
+
+    stringifyJSON: function stringifyJSON(value) {
+        var res = ""
+        if (!value) {
+            return undefined
+        }
+        if (typeof value == "object" && value !== null) {
+            if (Array.isArray(value)) {
+                res += '['
+                for (var i = 0; i < value.length; i++) {
+                    if (i != value.length - 1) {
+                        res += stringifyJSON(value[i]) + ','
+                    } else {
+                        res += stringifyJSON(value[i])
+                    }
+                }
+                res += ']'
+            } else {
+                res += '{'
+                for (var idx in value) {
+                    if (res.length > 1) {
+                        res += ',' + idx + ':' + stringifyJSON(value[idx])
+                    } else {
+                        res += idx + ':' + stringifyJSON(value[idx])
+                    }
+                }
+                res += '}'
+            }
+        } else {
+            if (typeof value == 'string') {
+                return '"' + value + '"'
+            } else {
+                return String(value)
+            }
+        }
+
+        return res
+
+    },
+
+    parseJSON: function parseJSON(value) {
+        var res = null
+        var obj = null
+        var arr  = null
+
+        for (var i = 0; i < value.length; i++) {
+            if (value[i] == '{') {
+                obj = new Object(null)
+            } else if (value[i] == '[') {
+                arr = new Array(0)
+            }
+        }
     }
+
 }
