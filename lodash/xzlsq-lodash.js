@@ -332,6 +332,9 @@ var xzlsq = {
     join: function join(array, separator=',') {
         var res =""
         var len = array.length
+        if (typeof separator != 'string') {
+            separator = String(separator)
+        }
         for (var i = 0; i < len; i++) {
             if (i == len - 1) {
                 res += array[i]
@@ -427,7 +430,7 @@ var xzlsq = {
     stringifyJSON: function stringifyJSON(value) {
         var res = ""
         if (!value) {
-            return undefined
+            return null
         }
         if (typeof value == "object" && value !== null) {
             if (Array.isArray(value)) {
@@ -444,16 +447,16 @@ var xzlsq = {
                 res += '{'
                 for (var idx in value) {
                     if (res.length > 1) {
-                        res += ',' + idx + ':' + stringifyJSON(value[idx])
+                        res += ',' + `\\` + `"` +  idx + `\\` + `"` + ':' + stringifyJSON(value[idx])
                     } else {
-                        res += idx + ':' + stringifyJSON(value[idx])
+                        res += `\\` + `"` +  idx + `\\` + `"` + ':' + stringifyJSON(value[idx])
                     }
                 }
                 res += '}'
             }
         } else {
             if (typeof value == 'string') {
-                return '"' + value + '"'
+                return `\\` + `"` + value + `\\` + `"`
             } else {
                 return String(value)
             }
@@ -475,6 +478,112 @@ var xzlsq = {
                 arr = new Array(0)
             }
         }
-    }
+    },
 
+    some: function some(collection, predicate = xzlsq.identity) {
+
+        if (typeof predicate == 'function') {
+            for (let key in collection) {
+                if (predicate(collection[key])) {
+                    return true
+                }
+            }
+    
+            return true
+        } else if (Array.isArray(predicate)) {
+            predicate = this.matchesProperty(predicate[0],predicate[1])
+        } else if (typeof predicate == "object") {
+            predicate = this.matches(predicate)
+        } else if (typeof predicate == "string") {
+            predicate = this.property(predicate)
+        }
+        
+        for (let key in collection) {
+            if (predicate(collection[key])) {
+                return true
+            }
+        }
+
+        return false
+    },
+
+    countBy: function countBy(collection, predicate = xzlsq.identity) {
+        var obj = {}
+
+        if (Array.isArray(predicate)) {
+            predicate = this.matchesProperty(predicate[0],predicate[1])
+        } else if (typeof predicate == "object") {
+            predicate = this.matches(predicate)
+        } else if (typeof predicate == "string") {
+            predicate = this.property(predicate)
+        }
+
+        for (var key in collection) {
+            let objKey = `"` + predicate(collection[key]) + `"`
+            if (objKey in obj) {
+                obj[objKey]++
+            } else {
+                obj[objKey] = 1
+            }
+        }
+
+        return obj
+
+    },
+
+    groupBy: function groupBy(collection, iteratee = xzlsq.identity) {
+        var obj = {}
+
+        if (Array.isArray(iteratee)) {
+            iteratee = this.matchesProperty(iteratee[0],iteratee[1])
+        } else if (typeof iteratee == "object") {
+            iteratee = this.matches(iteratee)
+        } else if (typeof iteratee == "string") {
+            iteratee = this.property(iteratee)
+        }
+
+        for (var key in collection) {
+            let objKey = `"` + iteratee(collection[key]) + `"`
+            if (objKey in obj) {
+                obj[objKey].push(collection[key])
+            } else {
+                obj[objKey] = [collection[key]]
+            }
+        }
+
+        return obj
+    },
+
+    keyBy: function keyBy(collection, iteratee=_.identity) {
+        var obj = {}
+
+        if (Array.isArray(iteratee)) {
+            iteratee = this.matchesProperty(iteratee[0],iteratee[1])
+        } else if (typeof iteratee == "object") {
+            iteratee = this.matches(iteratee)
+        } else if (typeof iteratee == "string") {
+            iteratee = this.property(iteratee)
+        }
+
+        for (var key in collection) {
+            let objKey = `"` + iteratee(collection[key]) + `"`
+            obj[objKey] = collection[key]
+        }
+
+        return obj
+    },
+
+    forEach: function forEach(collection, iteratee=_.identity) {
+        for (var key in collection) {
+            if (iteratee(collection[key],key,collection) == false) {
+                break
+            }
+        }
+
+        return collection
+    },
+
+    map: function map(collection, iteratee=_.identity) {
+
+    }
 }
