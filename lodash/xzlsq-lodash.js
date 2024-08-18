@@ -63,10 +63,10 @@ var xzlsq = {
                     return i
                 }
             }
-    
+
             return -1
         } else if (Array.isArray(predicate)) {
-            predicate = this.matchesProperty(predicate[0],predicate[1])
+            predicate = this.matchesProperty(predicate[0], predicate[1])
         } else if (typeof predicate == "object") {
             predicate = this.matches(predicate)
         } else if (typeof predicate == "string") {
@@ -88,10 +88,10 @@ var xzlsq = {
                     return i
                 }
             }
-    
+
             return -1
         } else if (Array.isArray(predicate)) {
-            predicate = this.matchesProperty(predicate[0],predicate[1])
+            predicate = this.matchesProperty(predicate[0], predicate[1])
         } else if (typeof predicate == "object") {
             predicate = this.matches(predicate)
         } else if (typeof predicate == "string") {
@@ -124,7 +124,7 @@ var xzlsq = {
     flattenDeep: function flattenDeep(array, res = []) {
         for (var i = 0; i < array.length; i++) {
             if (Array.isArray(array[i])) {
-                flattenDeep(array[i],res)
+                flattenDeep(array[i], res)
             } else {
                 res.push(array[i])
             }
@@ -167,7 +167,7 @@ var xzlsq = {
             if (key in object.__proto__) {
                 continue
             }
-            res.push([key,object[key]])
+            res.push([key, object[key]])
         }
         return res
     },
@@ -197,7 +197,7 @@ var xzlsq = {
             }
             // 元素数量相同，则判断key值是否相同
             for (var key in value) {
-                if (!(key in other) || !(isEqual(value[key],other[key]))) {
+                if (!(key in other) || !(isEqual(value[key], other[key]))) {
                     return false
                 }
             }
@@ -220,10 +220,10 @@ var xzlsq = {
                     res.push(collection[key])
                 }
             }
-    
+
             return res
         } else if (Array.isArray(predicate)) {
-            predicate = this.matchesProperty(predicate[0],predicate[1])
+            predicate = this.matchesProperty(predicate[0], predicate[1])
         } else if (typeof predicate == "object") {
             predicate = this.matches(predicate)
         } else if (typeof predicate == "string") {
@@ -239,8 +239,8 @@ var xzlsq = {
     },
 
     matches: function matches(object) {
-        return function(o) {
-            return xzlsq.partialEqual(o,object)
+        return function (o) {
+            return xzlsq.partialEqual(o, object)
         }
     },
 
@@ -248,20 +248,20 @@ var xzlsq = {
         return value
     },
 
-    matchesProperty: function matchesProperty(path,srcValue) {
-        return function(obj) {
+    matchesProperty: function matchesProperty(path, srcValue) {
+        return function (obj) {
             return xzlsq.isEqual(obj[path], srcValue)
         }
     },
 
     property: function property(path) {
-        return function(obj) {
+        return function (obj) {
             return obj[path]
         }
     },
 
     // 部分对比
-    partialEqual: function partialEqual(value, other) { 
+    partialEqual: function partialEqual(value, other) {
         if (typeof value == "object" && typeof other == "object" && value !== null && other !== null) {
             // 首先统计元素数量
             let cnt1 = 0
@@ -277,7 +277,7 @@ var xzlsq = {
                 if (!(key in other)) {
                     continue
                 }
-                if (!(partialEqual(value[key],other[key]))) {
+                if (!(partialEqual(value[key], other[key]))) {
                     return false
                 }
             }
@@ -292,7 +292,7 @@ var xzlsq = {
         return true
     },
 
-    indexOf: function indexOf(array, value, fromIndex=0) {
+    indexOf: function indexOf(array, value, fromIndex = 0) {
         if (fromIndex < 0) {
             if ((fromIndex + array.length) >= 0) {
                 fromIndex = array.length - fromIndex
@@ -302,7 +302,7 @@ var xzlsq = {
         }
 
         for (var i = fromIndex; i < array.length; i++) {
-            if (this.isEqual(array[i],value)) {
+            if (this.isEqual(array[i], value)) {
                 return i
             }
         }
@@ -310,13 +310,13 @@ var xzlsq = {
         return -1
     },
 
-    lastIndexOf: function lastIndexOf(array, value, fromIndex=array.length-1) {
+    lastIndexOf: function lastIndexOf(array, value, fromIndex = array.length - 1) {
         if (fromIndex < 0) {
             return -1
         }
 
         for (var i = fromIndex; i >= 0; i--) {
-            if (this.isEqual(array[i],value)) {
+            if (this.isEqual(array[i], value)) {
                 return i
             }
         }
@@ -329,8 +329,8 @@ var xzlsq = {
         return array
     },
 
-    join: function join(array, separator=',') {
-        var res =""
+    join: function join(array, separator = ',') {
+        var res = ""
         var len = array.length
         if (typeof separator != 'string') {
             separator = String(separator)
@@ -350,7 +350,7 @@ var xzlsq = {
         return array.pop()
     },
 
-    pull: function pull(array,...values) {
+    pull: function pull(array, ...values) {
         var res = []
         var tmp = [...values]
         var flag = true
@@ -360,7 +360,7 @@ var xzlsq = {
 
         for (var i = 0; i < array.length; i++) {
             for (var j = 0; j < tmp.length; j++) {
-                if (this.partialEqual(array[i],tmp[j])) {
+                if (this.partialEqual(array[i], tmp[j])) {
                     flag = false
                 }
             }
@@ -377,7 +377,7 @@ var xzlsq = {
     reverse: function reverse(array) {
         var i = 0
         var j = array.length - 1
-        while(i < j) {
+        while (i < j) {
             var tmp = array[j]
             array[j] = array[i]
             array[i] = tmp
@@ -397,7 +397,7 @@ var xzlsq = {
         }
         return res
     },
- 
+
     every: function every(collection, predicate = xzlsq.identity) {
         if (collection == null) {
             return true
@@ -408,16 +408,16 @@ var xzlsq = {
                     return false
                 }
             }
-    
+
             return true
         } else if (Array.isArray(predicate)) {
-            predicate = this.matchesProperty(predicate[0],predicate[1])
+            predicate = this.matchesProperty(predicate[0], predicate[1])
         } else if (typeof predicate == "object") {
             predicate = this.matches(predicate)
         } else if (typeof predicate == "string") {
             predicate = this.property(predicate)
         }
-        
+
         for (let key in collection) {
             if (!predicate(collection[key])) {
                 return false
@@ -447,16 +447,16 @@ var xzlsq = {
                 res += '{'
                 for (var idx in value) {
                     if (res.length > 1) {
-                        res += ',' + `\\` + `"` +  idx + `\\` + `"` + ':' + stringifyJSON(value[idx])
+                        res += ',' + `"` + idx + `"` + ':' + stringifyJSON(value[idx])
                     } else {
-                        res += `\\` + `"` +  idx + `\\` + `"` + ':' + stringifyJSON(value[idx])
+                        res += `"` + idx + `"` + ':' + stringifyJSON(value[idx])
                     }
                 }
                 res += '}'
             }
         } else {
             if (typeof value == 'string') {
-                return `\\` + `"` + value + `\\` + `"`
+                return `"` + value + `"`
             } else {
                 return String(value)
             }
@@ -467,15 +467,119 @@ var xzlsq = {
     },
 
     parseJSON: function parseJSON(value) {
-        var res = null
-        var obj = null
-        var arr  = null
+        var i = 0
 
-        for (var i = 0; i < value.length; i++) {
-            if (value[i] == '{') {
-                obj = new Object(null)
-            } else if (value[i] == '[') {
-                arr = new Array(0)
+        return parseVal()
+
+        // 从i位置开始扫描,并构建对象
+        function parseObj() {
+            var res = {}
+
+            i++ // skip '{'
+            if (value[i] === '}') {
+                i++ // 如果对象为空，则跳过对象最后一个的‘}’符号
+                return res
+            }
+
+            while (i < value.length) {
+                var key = parseString()
+                if (value[i] !== ':') {
+                    throw new SyntaxError('Expected `:` but got' + value[i])
+                }
+                i++ // skip ':'
+                var val = parseVal()
+                res[key] = val
+                if (value[i] === ',') {
+                    i++ // skip ','
+                } else if (value[i] === '}') {
+                    i++ // skip '}'
+                    break
+                }
+            }
+
+            return res
+
+        }
+        // 从i位置开始扫描,并构建数组
+        function parseArr() {
+            var res = []
+
+            i++ // 跳过数组的‘[’符号
+            if (value[i] === ']') {
+                i++ // 如果数组为空，则跳过数组最后一个的‘]’符号
+                return res
+            }
+
+            while (i < value.length) {
+                var val = parseVal()
+                res.push(val)
+
+                if (value[i] === ',') {
+                    i++ // 跳过','
+                } else if (value[i] === ']') {
+                    i++ // 跳过‘]’
+                    break
+                }
+            }
+
+            return res
+        }
+        // 从i位置开始扫描,并构建字符串
+        function parseString() {
+            i++ // skip the start "
+            var start = i
+
+            while (value[i] !== '"') {
+                i++
+            }
+
+            var res = value.slice(start, i)
+            i++ // skip the endding "
+
+            return res
+        }
+        // 从i位置开始扫描,并构建数，暂时只考虑整数
+        function parseNum() {
+            var startIdx = i
+            while (value[i] >= '0' && value[i] <= '9') {
+                i++
+            }
+
+            var res = Number(value.slice(startIdx, i))
+
+            return res
+        }
+        // 从i位置开始扫描,并构建数
+        function parseVal() {
+            if (value[i] === '{') {
+                return parseObj()
+            } else if (value[i] === '[') {
+                return parseArr()
+            } else if (value[i] === '"') {
+                return parseString()
+            } else if (value[i] === 't') {
+                if (value.slice(i, i + 4) === 'true') {
+                    i += 4
+                } else {
+                    throw new SyntaxError('unExpected token at pos' + i)
+                }
+                return true
+            } else if (value[i] === 'f') {
+                if (value.slice(i, i + 5) === 'false') {
+                    i += 5
+                } else {
+                    throw new SyntaxError('unExpected token at pos' + i)
+                }
+                return false
+            } else if (value[i] === 'n') {
+                if (value.slice(i, i + 4) === 'null') {
+                    i += 4
+                } else {
+                    throw new SyntaxError('unExpected token at pos' + i)
+                }
+                return null
+            } else {
+                return parseNum()
             }
         }
     },
@@ -488,16 +592,16 @@ var xzlsq = {
                     return true
                 }
             }
-    
+
             return true
         } else if (Array.isArray(predicate)) {
-            predicate = this.matchesProperty(predicate[0],predicate[1])
+            predicate = this.matchesProperty(predicate[0], predicate[1])
         } else if (typeof predicate == "object") {
             predicate = this.matches(predicate)
         } else if (typeof predicate == "string") {
             predicate = this.property(predicate)
         }
-        
+
         for (let key in collection) {
             if (predicate(collection[key])) {
                 return true
@@ -511,7 +615,7 @@ var xzlsq = {
         var obj = {}
 
         if (Array.isArray(predicate)) {
-            predicate = this.matchesProperty(predicate[0],predicate[1])
+            predicate = this.matchesProperty(predicate[0], predicate[1])
         } else if (typeof predicate == "object") {
             predicate = this.matches(predicate)
         } else if (typeof predicate == "string") {
@@ -519,7 +623,7 @@ var xzlsq = {
         }
 
         for (var key in collection) {
-            let objKey = `"` + predicate(collection[key]) + `"`
+            let objKey = predicate(collection[key])
             if (objKey in obj) {
                 obj[objKey]++
             } else {
@@ -535,7 +639,7 @@ var xzlsq = {
         var obj = {}
 
         if (Array.isArray(iteratee)) {
-            iteratee = this.matchesProperty(iteratee[0],iteratee[1])
+            iteratee = this.matchesProperty(iteratee[0], iteratee[1])
         } else if (typeof iteratee == "object") {
             iteratee = this.matches(iteratee)
         } else if (typeof iteratee == "string") {
@@ -543,7 +647,7 @@ var xzlsq = {
         }
 
         for (var key in collection) {
-            let objKey = `"` + iteratee(collection[key]) + `"`
+            let objKey = iteratee(collection[key])
             if (objKey in obj) {
                 obj[objKey].push(collection[key])
             } else {
@@ -554,11 +658,11 @@ var xzlsq = {
         return obj
     },
 
-    keyBy: function keyBy(collection, iteratee=_.identity) {
+    keyBy: function keyBy(collection, iteratee = xzlsq.identity) {
         var obj = {}
 
         if (Array.isArray(iteratee)) {
-            iteratee = this.matchesProperty(iteratee[0],iteratee[1])
+            iteratee = this.matchesProperty(iteratee[0], iteratee[1])
         } else if (typeof iteratee == "object") {
             iteratee = this.matches(iteratee)
         } else if (typeof iteratee == "string") {
@@ -566,16 +670,16 @@ var xzlsq = {
         }
 
         for (var key in collection) {
-            let objKey = `"` + iteratee(collection[key]) + `"`
+            let objKey = iteratee(collection[key])
             obj[objKey] = collection[key]
         }
 
         return obj
     },
 
-    forEach: function forEach(collection, iteratee=_.identity) {
+    forEach: function forEach(collection, iteratee = xzlsq.identity) {
         for (var key in collection) {
-            if (iteratee(collection[key],key,collection) == false) {
+            if (iteratee(collection[key], key, collection) == false) {
                 break
             }
         }
@@ -583,7 +687,145 @@ var xzlsq = {
         return collection
     },
 
-    map: function map(collection, iteratee=_.identity) {
+    map: function map(collection, iteratee = xzlsq.identity) {
+        var res = []
+
+        if (Array.isArray(iteratee)) {
+            iteratee = this.matchesProperty(iteratee[0], iteratee[1])
+        } else if (typeof iteratee == "object") {
+            iteratee = this.matches(iteratee)
+        } else if (typeof iteratee == "string") {
+            iteratee = this.property(iteratee)
+        }
+
+        for (var key in collection) {
+            res.push(iteratee(collection[key], key, collection))
+        }
+
+        return res
+    },
+
+    reduce: function reduce(collection, iteratee=xzlsq.identity, accumulator) {
+
+        for (var key in collection) {
+            if (accumulator == null) {
+                accumulator = collection[key]
+                continue
+            }
+            accumulator = iteratee(accumulator, collection[key], key, collection)
+        }
+
+        return accumulator
+    },
+
+    reduceRight: function reduceRight(collection, iteratee=xzlsq.identity, accumulator) {
+        if (Array.isArray(collection)) {
+            for (var i = collection.length - 1; i >= 0; i--) {
+                if (accumulator == null) {
+                    accumulator = collection[key]
+                    continue
+                }
+                accumulator = iteratee(accumulator, collection[i], i, collection)
+            }
+        } else if (typeof collection == 'object') {
+            var keys = []
+            for (var key in collection) {
+                keys.unshift(key)
+            }
+
+            for (var key of keys) {
+                if (accumulator == null) {
+                    accumulator = collection[key]
+                    continue
+                }
+                accumulator = iteratee(accumulator, collection[key], key, collection)
+            }
+        }
+
+        return accumulator
+    },
+
+    size: function size(collection) {
+
+        if (Array.isArray(collection)) {
+            return collection.length
+        } else if (typeof collection == 'object') {
+            var i = 0
+            for (var key in collection) {
+                i++
+            } 
+            return i
+        } else if (typeof collection == 'string') {
+            return collection.length
+        }
+
+        return 0
+    },
+
+    sortBy: function sortBy(collection, iteratees = [_.identity]) {
+        var res = []
+
+        if (collection == null) {
+            return res
+        }
+
+        if (Array.isArray(iteratees)) {
+            iteratees = this.matchesProperty(iteratees[0], iteratees[1])
+        } else if (typeof iteratees == "object") {
+            iteratees = this.matches(iteratees)
+        } else if (typeof iteratees == "string") {
+            iteratees = this.property(iteratees)
+        }
+
+        return mergeSort(res)
+
+        function mergeSort(array) {
+            if (array.length < 2) return array
+            
+            var midIdx = array.length >> 1 // 除以2之后取整
+            var leftArray = array.slice(0, midIdx)
+            var rightArray = array.slice(midIdx)
+        
+            leftArray = mergeSort(leftArray)
+            rightArray = mergeSort(rightArray)
+        
+            var i = 0, j = 0, k = 0
+        
+            while (i < leftArray.length && j < rightArray.length) {
+              if (leftArray[i] < rightArray[j]) {
+                array[k++] = leftArray[i++]
+              } else {
+                array[k++] = rightArray[j++]
+              }
+            }
+        
+            while (i < leftArray.length) {
+              array[k++] = leftArray[i++]
+            }
+        
+            while (j < rightArray.length) {
+              array[k++] = rightArray[j++]
+            }
+        
+            return res
+          }
+
+    },
+
+    sample: function sample(collection) {
+        if (collection == null) {
+            return undefined
+        }
+        if (Array.isArray(collection)) {
+            return collection[Math.random() * collection.length | 0]
+        } else if (typeof collection == 'object') {
+            var keys = []
+            for (var key in collection) {
+                keys.push(key)
+            }
+
+            return collection[keys[Math.random() * collection.length | 0]]
+        }
 
     }
 }
