@@ -705,7 +705,7 @@ var xzlsq = {
         return res
     },
 
-    reduce: function reduce(collection, iteratee=xzlsq.identity, accumulator) {
+    reduce: function reduce(collection, iteratee = xzlsq.identity, accumulator) {
 
         for (var key in collection) {
             if (accumulator == null) {
@@ -718,7 +718,7 @@ var xzlsq = {
         return accumulator
     },
 
-    reduceRight: function reduceRight(collection, iteratee=xzlsq.identity, accumulator) {
+    reduceRight: function reduceRight(collection, iteratee = xzlsq.identity, accumulator) {
         if (Array.isArray(collection)) {
             for (var i = collection.length - 1; i >= 0; i--) {
                 if (accumulator == null) {
@@ -753,7 +753,7 @@ var xzlsq = {
             var i = 0
             for (var key in collection) {
                 i++
-            } 
+            }
             return i
         } else if (typeof collection == 'string') {
             return collection.length
@@ -781,34 +781,34 @@ var xzlsq = {
 
         function mergeSort(array) {
             if (array.length < 2) return array
-            
+
             var midIdx = array.length >> 1 // 除以2之后取整
             var leftArray = array.slice(0, midIdx)
             var rightArray = array.slice(midIdx)
-        
+
             leftArray = mergeSort(leftArray)
             rightArray = mergeSort(rightArray)
-        
+
             var i = 0, j = 0, k = 0
-        
+
             while (i < leftArray.length && j < rightArray.length) {
-              if (leftArray[i] < rightArray[j]) {
-                array[k++] = leftArray[i++]
-              } else {
-                array[k++] = rightArray[j++]
-              }
+                if (leftArray[i] < rightArray[j]) {
+                    array[k++] = leftArray[i++]
+                } else {
+                    array[k++] = rightArray[j++]
+                }
             }
-        
+
             while (i < leftArray.length) {
-              array[k++] = leftArray[i++]
+                array[k++] = leftArray[i++]
             }
-        
+
             while (j < rightArray.length) {
-              array[k++] = rightArray[j++]
+                array[k++] = rightArray[j++]
             }
-        
+
             return res
-          }
+        }
 
     },
 
@@ -825,6 +825,163 @@ var xzlsq = {
             }
 
             return collection[keys[Math.random() * collection.length | 0]]
+        }
+
+    },
+
+    isUndefined: function isUndefined(value) {
+        return value === undefined
+    },
+
+    isNull: function isNull(value) {
+        return value === null
+    },
+
+    isNil: function isNil(value) {
+        return xzlsq.isUndefined(value) || xzlsq.isNull(value)
+    },
+
+    max: function max(array) {
+        if (array.length == 0) {
+            return undefined
+        }
+
+        var max = -Infinity
+
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] == false) {
+                return undefined
+            }
+            if (max < array[i]) {
+                max = array[i]
+            }
+        }
+
+        return max
+    },
+
+    min: function min(array) {
+        if (array.length == 0) {
+            return undefined
+        }
+
+        var min = Infinity
+
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] == false) {
+                return undefined
+            }
+            if (min > array[i]) {
+                min = array[i]
+            }
+        }
+
+        return min
+    },
+
+    maxBy: function maxBy(array, iteratee = xzlsq.identity) {
+        if (array.length == 0) {
+            return undefined
+        }
+
+        if (Array.isArray(iteratee)) {
+            iteratee = this.matchesProperty(iteratee[0], iteratee[1])
+        } else if (typeof iteratee == "object") {
+            iteratee = this.matches(iteratees)
+        } else if (typeof iteratee == "string") {
+            iteratee = this.property(iteratee)
+        }
+
+        var max = iteratee(array[0])
+        var res = array[0]
+
+        for (var i = 0; i < array.length - 1; i++) {
+            if (!iteratee(array[i])) {
+                return undefined
+            }
+            if (max < iteratee(array[i + 1])) {
+                max = iteratee(array[i + 1])
+                res = array[i + 1]
+            }
+        }
+
+        return res
+    },
+
+    minBy: function minBy(array, iteratee = xzlsq.identity) {
+        if (array.length == 0) {
+            return undefined
+        }
+
+        if (Array.isArray(iteratee)) {
+            iteratee = this.matchesProperty(iteratee[0], iteratee[1])
+        } else if (typeof iteratee == "object") {
+            iteratee = this.matches(iteratees)
+        } else if (typeof iteratee == "string") {
+            iteratee = this.property(iteratee)
+        }
+
+        var min = iteratee(array[0])
+        var res = array[0]
+
+        for (var i = 0; i < array.length - 1; i++) {
+            if (!iteratee(array[i])) {
+                return undefined
+            }
+            if (min > iteratee(array[i + 1])) {
+                min = iteratee(array[i + 1])
+                res = array[i + 1]
+            }
+        }
+
+        return res
+    },
+
+    round: function round(number, precision = 0) {
+        var res = 0
+        var intPart = number | 0
+        var decimalPart = number - intPart
+        var roundNum = decimalPart
+        var prec = Math.abs(precision)
+
+        if (precision > 0) {
+            while (precision > 0) {
+                roundNum *= 10
+                precision--
+            }
+            if (roundNum >= 0.5) {
+                roundNum = (roundNum + 1) | 0
+                decimalPart = roundNum / (10 ** prec)
+                res = intPart + decimalPart
+                return res
+            } else {
+                roundNum |= 0
+                decimalPart = roundNum / (10 ** prec)
+                res = intPart + decimalPart
+                return res
+            }
+
+        } else if (precision < 0) {
+            roundNum = number
+            while (precision < 0) {
+                roundNum /= 10
+                precision++
+            }
+            let intPart2 = roundNum | 0
+            decimalPart = roundNum - intPart2
+            if (decimalPart >= 0.5) {
+                roundNum = decimalPart * (10 ** prec)
+                decimalPart = (decimalPart + 1) | 0
+                decimalPart *= (10 ** prec)
+                res = number + decimalPart - roundNum
+                return res
+            } else {
+                decimalPart *= (10 ** prec)
+                res = number - (decimalPart | 0)
+                return res
+            }
+        } else {
+            return intPart
         }
 
     }
