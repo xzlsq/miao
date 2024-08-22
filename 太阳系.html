@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<style>
+    * {
+        xbox-shadow: inset 0 0 5px red;
+    }
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    div.universe {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        xbackground-color: black;
+        background-image: url(https://web.mit.edu/yenjie/www/lm-gb/Space/sky.gif);
+
+        div {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        div:nth-child(-n+8) {
+            border: 1px solid rgb(90, 84, 84);
+            z-index: 30;
+        }
+    }
+
+    div.Neptune {
+        height: 2249px;
+        width: 2249px;
+        border-radius: 99999px;
+        transform: rotateX(60deg);
+    }
+
+    div.Uranus {
+        height: 1635px;
+        width: 1635px;
+        border-radius: 99999px;
+        transform: rotateX(60deg);
+    }
+
+    div.Saturn {
+        height: 913px;
+        width: 913px;
+        border-radius: 99999px;
+        transform: rotateX(60deg);
+    }
+
+    div.Jupiter {
+        height: 589px;
+        width: 589px;
+        border-radius: 99999px;
+        transform: rotateX(60deg);
+    }
+
+    div.Mars {
+        height: 375px;
+        width: 375px;
+        border-radius: 99999px;
+        transform: rotateX(60deg);
+    }
+
+    div.Earth {
+        height: 325px;
+        width: 325px;
+        border-radius: 99999px;
+        transform: rotateX(60deg);
+    }
+
+    div.Venus {
+        height: 300px;
+        width: 300px;
+        border-radius: 99999px;
+        transform: rotateX(60deg);
+    }
+
+    div.Mercury {
+        height: 250px;
+        width: 250px;
+        border-radius: 99999px;
+        transform: rotateX(60deg);
+    }
+
+    div.sun {
+        height: 200px;
+        width: 200px;
+        border: 2px solid rgb(255, 165, 0);
+        background-color: rgb(255, 165, 0);
+        box-shadow: 0 0 15px rgb(255, 165, 0);
+        border-radius: 99999px;
+        z-index: 29;
+    }
+
+    span {
+        border-radius: 99999px;
+    }
+</style>
+
+<body>
+    <div class="universe">
+        <div title="海王星" class="Neptune"></div>
+        <div title="天王星" class="Uranus"></div>
+        <div title="土星" class="Saturn"></div>
+        <div title="木星" class="Jupiter"></div>
+        <div title="火星" class="Mars"></div>
+        <div title="地球" class="Earth"></div>
+        <div title="金星" class="Venus"></div>
+        <div title="水星" class="Mercury"></div>
+        <div title="太阳" class="sun"></div>
+        <div>
+            <span
+            style="width: 24px; height: 24px; z-index: 31; display: block; position: relative; background-color: darkblue; box-shadow: 0 0 20px rgb(51, 51, 235);"
+            title="海王星" class="Neptune2"></span>
+        </div>
+        <div>
+            <span
+                style="width: 25px; height: 25px; z-index: 31; display: block; position: relative; background-color: aquamarine; box-shadow: 0 0 20px aquamarine;"
+                title="天王星" class="Uranus2"></span>
+        </div>
+        <div>
+            <span
+                style="width: 60px; height: 60px; z-index: 31; display: block; position: relative; background-color: darkgoldenrod; box-shadow: 0 0 20px rgb(255, 165, 0);"
+                title="土星" class="Saturn2"></span>
+        </div>
+        <div>
+            <span
+                style="width: 70px; height: 70px; z-index: 31; display: block; position: relative; background-color: sienna; box-shadow: 0 0 20px sienna;"
+                title="木星" class="Jupiter2"></span>
+        </div>
+        <div>
+            <span style="width: 6px; height: 6px; z-index: 31; display: block; position: relative; background-color: red; box-shadow: 0 0 15px rgb(255, 165, 0);"
+                title="火星" class="Mars2"></span>
+        </div>
+        <div>
+            <span style="width: 10px; height: 10px; z-index: 31; display: block; position: relative; background-color: aqua; box-shadow: 0 0 15px rgb(255, 165, 0);"
+                title="地球" class="Earth2"></span>
+        </div>
+        <div>
+            <span style="width: 8px; height: 8px; z-index: 31; display: block; position: relative; background-color: gold; box-shadow: 0 0 15px rgb(255, 165, 0);"
+                title="金星" class="Venus2"></span>
+        </div>
+        <div>
+            <span
+                style="width: 4px; height: 4px; z-index: 31; display: block; position: relative; background-color: lightgray; box-shadow: 1 -1 5px rgb(255, 165, 0);"
+                title="水星" class="Mercury2"></span>
+        </div>
+    </div>
+
+    <script>
+        var planet = document.querySelectorAll('span')
+        var angle = 0
+        function animate(time) { // time 初始值为页面加载成功后的时间
+            angle = time / 240 // 设置水星角度time / 240
+            planet[7].style.top = (Math.sin(angle) * 62) + "px";
+            planet[7].style.left = (Math.cos(angle) * 125) + "px";
+
+            angle = time / 615 // 设置金星角度time / 615
+            planet[6].style.top = (Math.sin(angle) * 75) + "px";
+            planet[6].style.left = (Math.cos(angle) * 150) + "px";
+
+            angle = time / 1000 // 设置地球角度time / 1000
+            planet[5].style.top = (Math.sin(angle) * 81) + "px";
+            planet[5].style.left = (Math.cos(angle) * 162) + "px";
+
+            angle = time / 2000 // 设置火星角度time / 2000
+            planet[4].style.top = (Math.sin(angle) * 94) + "px";
+            planet[4].style.left = (Math.cos(angle) * 187) + "px";
+
+            angle = time / 11000 // 设置木星角度time / 11000
+            planet[3].style.top = (Math.sin(angle) * 147) + "px";
+            planet[3].style.left = (Math.cos(angle) * 294) + "px";
+
+            angle = time / 29000 // 设置土星角度time / 29000
+            planet[2].style.top = (Math.sin(angle) * 228) + "px";
+            planet[2].style.left = (Math.cos(angle) * 456) + "px";
+
+            angle = time / 84000 // 设置天王星角度time / 84000
+            planet[1].style.top = (Math.sin(angle) * 408) + "px";
+            planet[1].style.left = (Math.cos(angle) * 817) + "px";
+
+            angle = time / 164000 // 设置海王星角度time / 164000
+            planet[0].style.top = (Math.sin(angle) * 562) + "px";
+            planet[0].style.left = (Math.cos(angle) * 1125) + "px";
+            requestAnimationFrame(animate);
+        }
+        requestAnimationFrame(animate);
+    </script>
+</body>
+
+</html>
