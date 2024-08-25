@@ -255,8 +255,13 @@ var xzlsq = {
     },
 
     property: function property(path) {
+        let paths = path.split('.')
         return function (obj) {
-            return obj[path]
+            for (let key of paths) {
+                obj = obj[key]
+            }
+
+            return obj
         }
     },
 
@@ -297,7 +302,7 @@ var xzlsq = {
             if ((fromIndex + array.length) >= 0) {
                 fromIndex = array.length - fromIndex
             } else {
-                return -1
+                fromIndex = 0
             }
         }
 
@@ -698,9 +703,16 @@ var xzlsq = {
             iteratee = this.property(iteratee)
         }
 
-        for (var key in collection) {
-            res.push(iteratee(collection[key], key, collection))
+        if (Array.isArray(collection)) {
+            for (let i = 0; i < collection.length; i++) {
+                res.push(iteratee(collection[i], i, collection))
+            }
+        } else {
+            for (var key in collection) {
+                res.push(iteratee(collection[key], key, collection))
+            }
         }
+
 
         return res
     },
@@ -984,5 +996,118 @@ var xzlsq = {
             return intPart
         }
 
-    }
+    },
+
+    sumBy: function sumBy(array, iteratee = xzlsq.identity) {
+        var res = 0
+
+        if (Array.isArray(iteratee)) {
+            iteratee = this.matchesProperty(iteratee[0], iteratee[1])
+        } else if (typeof iteratee == "object") {
+            iteratee = this.matches(iteratee)
+        } else if (typeof iteratee == "string") {
+            iteratee = this.property(iteratee)
+        }
+
+        for (let i = 0; i < array.length; i++) {
+            res += iteratee(array[i], i, array)
+        }
+
+        return res
+    },
+
+    flatMap: function flatMap(collection, iteratee = xzlsq.identity) {
+        var res = []
+
+        if (Array.isArray(iteratee)) {
+            iteratee = this.matchesProperty(iteratee[0], iteratee[1])
+        } else if (typeof iteratee == "object") {
+            iteratee = this.matches(iteratee)
+        } else if (typeof iteratee == "string") {
+            iteratee = this.property(iteratee)
+        }
+
+        if (Array.isArray(collection)) {
+            for (let i = 0; i < collection.length; i++) {
+                res.push(...iteratee(collection[i], i, collection))
+            }
+        } else {
+            for (var key in collection) {
+                res.push(...iteratee(collection[key], key, collection))
+            }
+        }
+
+
+        return res
+    },
+
+    flatMapDeep: function flatMapDeep(collection, iteratee = xzlsq.identity) {
+        var res = []
+
+        if (Array.isArray(iteratee)) {
+            iteratee = this.matchesProperty(iteratee[0], iteratee[1])
+        } else if (typeof iteratee == "object") {
+            iteratee = this.matches(iteratee)
+        } else if (typeof iteratee == "string") {
+            iteratee = this.property(iteratee)
+        }
+
+        if (Array.isArray(collection)) {
+            for (let i = 0; i < collection.length; i++) {
+                let arr = iteratee(collection[i], i, collection)
+                if (Array.isArray(arr)) {
+                    res.push(...this.flattenDeep(arr))
+                } else {
+                    res.push(arr)
+                }
+            }
+        } else if (typeof collection == 'object') {
+            
+            for (var key in collection) {
+                let obj = iteratee(collection[key], key, collection)
+                if (Array.isArray(obj)) {
+                    res.push(...this.flattenDeep(obj))
+                } else {
+                    res.push(obj)
+                }
+            }
+        }
+
+        return res
+    }, 
+
+    flatMapDepth: function flatMapDepth(collection, iteratee = xzlsq.identity, depth=1) {
+        var res = []
+
+        if (Array.isArray(iteratee)) {
+            iteratee = this.matchesProperty(iteratee[0], iteratee[1])
+        } else if (typeof iteratee == "object") {
+            iteratee = this.matches(iteratee)
+        } else if (typeof iteratee == "string") {
+            iteratee = this.property(iteratee)
+        }
+
+        if (Array.isArray(collection)) {
+            for (let i = 0; i < collection.length; i++) {
+                let arr = iteratee(collection[i], i, collection)
+                if (Array.isArray(arr)) {
+                    res.push(...this.flattenDepth(arr,depth - 1))
+                } else {
+                    res.push(arr)
+                }
+            }
+        } else if (typeof collection == 'object') {
+            
+            for (var key in collection) {
+                let obj = iteratee(collection[key], key, collection)
+                if (Array.isArray(obj)) {
+                    res.push(...this.flattenDepth(obj,depth - 1))
+                } else {
+                    res.push(obj)
+                }
+            }
+        }
+
+        return res
+    },
 }
