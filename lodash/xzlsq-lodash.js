@@ -261,8 +261,10 @@ var xzlsq = {
             paths = path
         }
         return function (obj) {
-            for (let key of paths) {
-                obj = obj[key]
+            if (paths) {
+                for (let key of paths) {
+                    obj = obj[key]
+                }
             }
 
             return obj
@@ -272,16 +274,7 @@ var xzlsq = {
     // 部分对比
     partialEqual: function partialEqual(value, other) {
         if (typeof value == "object" && typeof other == "object" && value !== null && other !== null) {
-            // 首先统计元素数量
-            let cnt1 = 0
-            let cnt2 = 0
-            for (var key in value) {
-                cnt1++
-            }
-            for (var key in other) {
-                cnt2++
-            }
-            // 判断key值是否相同
+            
             for (var key in value) {
                 if (!(key in other)) {
                     continue
@@ -1027,8 +1020,6 @@ var xzlsq = {
             iteratee = this.matchesProperty(iteratee[0], iteratee[1])
         } else if (typeof iteratee == "object") {
             iteratee = this.matches(iteratee)
-        } else if (typeof iteratee == "string") {
-            iteratee = this.property(iteratee)
         }
 
         if (Array.isArray(collection)) {
@@ -1052,8 +1043,6 @@ var xzlsq = {
             iteratee = this.matchesProperty(iteratee[0], iteratee[1])
         } else if (typeof iteratee == "object") {
             iteratee = this.matches(iteratee)
-        } else if (typeof iteratee == "string") {
-            iteratee = this.property(iteratee)
         }
 
         if (Array.isArray(collection)) {
