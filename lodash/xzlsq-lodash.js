@@ -1,4 +1,3 @@
-// const { partial } = require("lodash")
 
 
 var xzlsq = {
@@ -255,7 +254,12 @@ var xzlsq = {
     },
 
     property: function property(path) {
-        let paths = path.split('.')
+        let paths = null
+        if (typeof path == 'string') {
+            paths = path.split('.')
+        } else if (Array.isArray(path)) {
+            paths = path
+        }
         return function (obj) {
             for (let key of paths) {
                 obj = obj[key]
@@ -1062,7 +1066,7 @@ var xzlsq = {
                 }
             }
         } else if (typeof collection == 'object') {
-            
+
             for (var key in collection) {
                 let obj = iteratee(collection[key], key, collection)
                 if (Array.isArray(obj)) {
@@ -1074,9 +1078,9 @@ var xzlsq = {
         }
 
         return res
-    }, 
+    },
 
-    flatMapDepth: function flatMapDepth(collection, iteratee = xzlsq.identity, depth=1) {
+    flatMapDepth: function flatMapDepth(collection, iteratee = xzlsq.identity, depth = 1) {
         var res = []
 
         if (Array.isArray(iteratee)) {
@@ -1091,17 +1095,17 @@ var xzlsq = {
             for (let i = 0; i < collection.length; i++) {
                 let arr = iteratee(collection[i], i, collection)
                 if (Array.isArray(arr)) {
-                    res.push(...this.flattenDepth(arr,depth - 1))
+                    res.push(...this.flattenDepth(arr, depth - 1))
                 } else {
                     res.push(arr)
                 }
             }
         } else if (typeof collection == 'object') {
-            
+
             for (var key in collection) {
                 let obj = iteratee(collection[key], key, collection)
                 if (Array.isArray(obj)) {
-                    res.push(...this.flattenDepth(obj,depth - 1))
+                    res.push(...this.flattenDepth(obj, depth - 1))
                 } else {
                     res.push(obj)
                 }
@@ -1110,4 +1114,184 @@ var xzlsq = {
 
         return res
     },
+
+    get: function get(object, path, defaultValue) {
+        var res = defaultValue
+        var paths = ''
+
+        if (typeof path == 'string') {
+            for (var i = 0; i < path.length; i++) {
+                if (path[i] != '[' && path[i] != ']') {
+                    paths += path[i]
+                } else if (path[i] == '[') {
+                    paths += '.'
+                }
+            }
+        } else {
+            paths = path
+        }
+
+        let iteratee = property(paths)
+
+        if ((res = iteratee(object)) === undefined) {
+            return defaultValue
+        } else {
+            return res
+        }
+
+
+        function property(path) {
+            let paths = null
+            if (typeof path == 'string') {
+                paths = path.split('.')
+            } else if (Array.isArray(path)) {
+                paths = path
+            }
+            return function (obj) {
+                for (let key of paths) {
+                    if (obj.hasOwnProperty(key)) {
+                        obj = obj[key]
+                    } else {
+                        return undefined
+                    }
+                }
+
+                return obj
+            }
+        }
+    },
+
+    has: function has(object, path) {
+        return this.get(object, path, undefined) !== undefined
+    },
+
+    create: function create(prototype, properties) {
+        var newObj = Object.create(prototype)
+
+        for (let key in properties) {
+            newObj[key] = properties[key]
+        }
+
+        return newObj
+    },
+
+    mapKeys: function mapKeys(object, iteratee = xzlsq.identity) {
+        var obj = {}
+        for (let key in object) {
+            obj[iteratee(object[key], key, object)] = object[key]
+        }
+
+        return obj
+    },
+
+    mapValues: function mapValues(object, iteratee = xzlsq.identity) {
+        var obj = {}
+
+        if (Array.isArray(iteratee)) {
+            iteratee = this.matchesProperty(iteratee[0], iteratee[1])
+        } else if (typeof iteratee == "object") {
+            iteratee = this.matches(iteratee)
+        } else if (typeof iteratee == "string") {
+            iteratee = this.property(iteratee)
+        }
+
+        for (let key in object) {
+            obj[key] = iteratee(object[key], key, object)
+        }
+
+        return obj
+    },
+
+    range: function range(start, end, step = 1) {
+        var arr = []
+        var negative = false
+        if (!end) {
+            end = start
+            start = 0
+        }
+        if (end < 0) {
+            end = -end
+            negative = true
+        }
+        if (step < 0) {
+            step = -step
+        }
+        for (var i = start; i < end; i += step) {
+            if (negative && i != 0) {
+                arr.push(-i)
+            } else if (step == 0) {
+                i++
+                arr.push(1)
+            } else {
+                arr.push(i)
+            }
+        }
+
+        return arr
+    },
+
+    concat: function concat(array, ...values) {
+        var arr = array
+
+        for (var i = 0; i < values.length; i++) {
+            if (Array.isArray(values[i])) {
+                for (var val of values[i]) {
+                    arr.push(val)
+                }
+            } else {
+                arr.push(values[i])
+            }
+        }
+
+        return arr
+    },
+
+    repeat: function repeat(string = '', n = 1) {
+        var str = ''
+
+        for (var i = 0; i < n; i++) {
+            str += string
+        }
+
+        return str
+    },
+
+    padStart: function padStart(string='', length=0, chars=' ') {
+        var str = ''
+        var charArr = chars.split('')
+        var len = length - string.length
+
+        for (var i = 0; i < len;) {
+            for (var j = 0; j < charArr.length; j++) {
+                str += charArr[j]
+                i++
+                if (i >= len) {
+                    str += string
+                    return str
+                }
+            }
+        }
+
+        str += string
+
+        return str
+    },
+
+    padEnd: function padEnd(string='', length=0, chars=' ') {
+        var str = string
+        var charArr = chars.split('')
+        var len = length - string.length
+
+        for (var i = 0; i < len;) {
+            for (var j = 0; j < charArr.length; j++) {
+                str += charArr[j]
+                i++
+                if (i >= len) {
+                    return str
+                }
+            }
+        }
+
+        return str
+    }
 }
