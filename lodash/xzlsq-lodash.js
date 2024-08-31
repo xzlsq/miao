@@ -274,7 +274,7 @@ var xzlsq = {
     // 部分对比
     partialEqual: function partialEqual(value, other) {
         if (typeof value == "object" && typeof other == "object" && value !== null && other !== null) {
-            
+
             for (var key in value) {
                 if (!(key in other)) {
                     continue
@@ -1245,7 +1245,7 @@ var xzlsq = {
         return str
     },
 
-    padStart: function padStart(string='', length=0, chars=' ') {
+    padStart: function padStart(string = '', length = 0, chars = ' ') {
         var str = ''
         var charArr = chars.split('')
         var len = length - string.length
@@ -1266,7 +1266,7 @@ var xzlsq = {
         return str
     },
 
-    padEnd: function padEnd(string='', length=0, chars=' ') {
+    padEnd: function padEnd(string = '', length = 0, chars = ' ') {
         var str = string
         var charArr = chars.split('')
         var len = length - string.length
@@ -1282,5 +1282,84 @@ var xzlsq = {
         }
 
         return str
+    },
+
+    pad(string = '', length = 0, chars = ' ') {
+        var res = ''
+        var len = length - string.length
+        var strLen = string.length
+
+        var headStr = this.padStart(string, length = (strLen + (len >> 1)), chars)
+        var endStr = this.padEnd(string, length = (strLen + len - (len >> 1)), chars)
+
+        var str = (headStr + endStr).split(string)
+
+        res += str[0]
+        res += string
+        res += str.at(-1)
+
+        return res
+    },
+
+    keys(object) {
+        var res = []
+
+        if (typeof object == 'number' || typeof object == 'boolean') {
+            return res
+        }
+
+        if (!Array.isArray(object) && typeof object === 'object') {
+            for (let key in object) {
+                if (object.hasOwnProperty(key)) {
+                    res.push(key)
+                }
+            }
+        } else {
+            for (let key in object) {
+                res.push(key)
+            }
+        }
+
+        return res
+    },
+
+    values(object) {
+        var res = []
+        var keys = this.keys(object)
+
+        if (typeof object == 'number' || typeof object == 'boolean') {
+            return res
+        }
+
+        for (let key of keys) {
+            res.push(object[key])
+        }
+
+        return res
+    },
+
+    random(lower, upper, floating) {
+        if (!floating) {
+            floating = false
+        }
+        if (!upper) {
+            upper = lower
+            lower = 0
+        }
+
+        var res = 0
+
+        while(1) {
+            if (floating) {
+                res = Math.random() * upper
+            } else {
+                res = Math.random() * upper | 0
+            }
+            if (res > lower && res < upper) {
+                break
+            }
+        }
+
+        return res
     }
 }
