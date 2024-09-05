@@ -947,6 +947,10 @@ var xzlsq = {
     },
 
     round: function round(number, precision = 0) {
+        if (number == undefined) {
+            return NaN
+        }
+
         var res = 0
         var intPart = number | 0
         var decimalPart = number - intPart
@@ -1349,7 +1353,7 @@ var xzlsq = {
 
         var res = 0
 
-        while(1) {
+        while (1) {
             if (floating) {
                 res = Math.random() * upper
             } else {
@@ -1361,5 +1365,219 @@ var xzlsq = {
         }
 
         return res
+    },
+
+    ceil(number, precision = 0) {
+        if (number == undefined) {
+            return NaN
+        }
+
+        var res = 0
+        var intPart = number | 0    // 整数部分
+        var decimalPart = number - intPart // 小数部分
+        var ceilNum = decimalPart   // 要向上取整的部分
+        var prec = Math.abs(precision)
+
+        if (precision > 0) {
+            while (precision > 0) {
+                ceilNum *= 10
+                precision--
+            }
+            ceilNum = (ceilNum + 1) | 0
+            decimalPart = ceilNum / (10 ** prec)
+            res = intPart + decimalPart
+            return res
+
+        } else if (precision < 0) {
+            ceilNum = number
+            while (precision < 0) {
+                ceilNum /= 10
+                precision++
+            }
+            let intPart2 = ceilNum | 0
+            decimalPart = ceilNum - intPart2
+            ceilNum = decimalPart * (10 ** prec)
+            decimalPart = (decimalPart + 1) | 0
+            decimalPart *= (10 ** prec)
+            res = number + decimalPart - ceilNum
+            return res
+
+        } else {
+            if (decimalPart == 0) {
+                return intPart
+            } else {
+                return intPart + 1
+            }
+        }
+    },
+
+    floor(number, precision = 0) {
+        if (number == undefined) {
+            return NaN
+        }
+
+        var res = 0
+        var intPart = number | 0
+        var decimalPart = number - intPart
+        var floorNum = decimalPart
+        var prec = Math.abs(precision)
+
+        if (precision > 0) {
+            while (precision > 0) {
+                floorNum *= 10
+                precision--
+            }
+
+            floorNum |= 0
+            decimalPart = floorNum / (10 ** prec)
+            res = intPart + decimalPart
+            return res
+
+        } else if (precision < 0) {
+            floorNum = number
+            while (precision < 0) {
+                floorNum /= 10
+                precision++
+            }
+            let intPart2 = floorNum | 0
+            decimalPart = floorNum - intPart2
+
+            decimalPart *= (10 ** prec)
+            res = number - (decimalPart | 0)
+            return res
+
+        } else {
+            return intPart
+        }
+    },
+
+    cloneDeep(value) {
+
+        if (typeof value == 'object' && value != null) {
+            if (Array.isArray(value)) {
+                var res = []
+                for (var i in value) {
+                    res.push(cloneDeep(value[i]))
+                }
+                return res
+            } else {
+                var res = {}
+                for (var key in value) {
+                    res[key] = cloneDeep(value[key])
+                }
+                return res
+            }
+        } else {
+            return value
+        }
+    },
+
+    trim(string = '', chars = ' ') {
+        // debugger
+        if (typeof chars !== 'string') {
+            chars = ' '
+        }
+        var str = string.split('')
+        var charArr = chars.split('')
+        var res = []
+
+        for (var i = 0; i < str.length; i++) {
+            var flag = false
+            for (var j = 0; j < charArr.length; j++) {
+                if (str[i] == charArr[j]) {
+                    flag = true
+                }
+            }
+            if (!flag) {
+                res.push(str[i])
+            }
+        }
+
+        return res.join('')
+    },
+
+    trimStart(string = '', chars = ' ') {
+        if (typeof chars !== 'string') {
+            chars = ' '
+        }
+        var str = string.split('')
+        var charArr = chars.split('')
+
+
+        for (var i = 0; i < str.length;) {
+            var flag = false
+            for (var j = 0; j < charArr.length; j++) {
+                if (str[i] == charArr[j]) {
+                    i++
+                    flag = true
+                }
+            }
+            if (!flag) {
+                return str.slice(i).join('')
+            }
+        }
+    },
+
+    trimEnd(string = '', chars = ' ') {
+        if (typeof chars !== 'string') {
+            chars = ' '
+        }
+        var str = string.split('')
+        var charArr = chars.split('')
+
+        for (var i = str.length - 1; i >= 0;) {
+            var flag = false
+            for (var j = 0; j < charArr.length; j++) {
+                if (str[i] == charArr[j]) {
+                    str.pop()
+                    i--
+                    flag = true
+                }
+            }
+            if (!flag) {
+                return str.join('')
+            }
+        }
+
+    },
+
+    assign(object, ...sources) {
+        var obj = object
+
+        for (var i of sources) {
+            if (typeof i == 'object') {
+                for (var key in i) {
+                    if (i.hasOwnProperty(key)) {
+                        obj[key] = i[key]
+                    }
+                }
+            } else {
+                return i
+            }
+        }
+
+        return obj
+    },
+
+    merge(object, ...sources) {
+        var obj = object
+
+        for (var key in sources) {
+            if (typeof sources[key] == 'object' && sources[key] != null) {
+                for (var i in sources[key]) {
+                    if (Array.isArray(sources[key][i]) && Array.isArray(obj[i])) {
+                        for (var j in sources[key][i]) {
+                            obj[i][j] = xzlsq.assign(obj[i][j],sources[key][i][j])
+                        }
+                    } else {
+                        obj[i] = xzlsq.assign(obj[i],sources[key][i])
+                    }
+                }
+            } else {
+                obj[key] = xzlsq.assign(obj,sources)
+            }
+        }
+
+        return obj
     }
 }
