@@ -771,25 +771,33 @@ var xzlsq = {
         return 0
     },
 
-    sortBy: function sortBy(collection, iteratees = [_.identity]) {
+    sortBy: function sortBy(collection, iteratees = _.identity) {
         var res = []
+        
 
         if (collection == null) {
             return res
         }
 
-        if (Array.isArray(iteratees)) {
-            iteratees = this.matchesProperty(iteratees[0], iteratees[1])
-        } else if (typeof iteratees == "object") {
-            iteratees = this.matches(iteratees)
-        } else if (typeof iteratees == "string") {
+        if (typeof iteratees == "string") {
             iteratees = this.property(iteratees)
         }
 
-        return mergeSort(res)
+        if (Array.isArray(iteratees)) {
+            var parament = iteratees
+            for (var key in parament) {
+                iteratees = this.property(parament[key])
+                res = mergeSort(collection)
+            }
+        } else {
+            res = mergeSort(collection)
+        }
+
+        return res
 
         function mergeSort(array) {
-            if (array.length < 2) return array
+            if (array.length < 2)
+                return array
 
             var midIdx = array.length >> 1 // 除以2之后取整
             var leftArray = array.slice(0, midIdx)
@@ -801,22 +809,30 @@ var xzlsq = {
             var i = 0, j = 0, k = 0
 
             while (i < leftArray.length && j < rightArray.length) {
-                if (leftArray[i] < rightArray[j]) {
-                    array[k++] = leftArray[i++]
+                if (iteratees(leftArray[i]) <= iteratees(rightArray[j])) {
+                    array[k] = leftArray[i]
+                    k++
+                    i++
                 } else {
-                    array[k++] = rightArray[j++]
+                    array[k] = rightArray[j]
+                    k++
+                    j++
                 }
             }
 
             while (i < leftArray.length) {
-                array[k++] = leftArray[i++]
+                array[k] = leftArray[i]
+                k++
+                i++
             }
 
             while (j < rightArray.length) {
-                array[k++] = rightArray[j++]
+                array[k] = rightArray[j]
+                k++
+                j++
             }
 
-            return res
+            return array
         }
 
     },
@@ -1567,14 +1583,14 @@ var xzlsq = {
                 for (var i in sources[key]) {
                     if (Array.isArray(sources[key][i]) && Array.isArray(obj[i])) {
                         for (var j in sources[key][i]) {
-                            obj[i][j] = xzlsq.assign(obj[i][j],sources[key][i][j])
+                            obj[i][j] = xzlsq.assign(obj[i][j], sources[key][i][j])
                         }
                     } else {
-                        obj[i] = xzlsq.assign(obj[i],sources[key][i])
+                        obj[i] = xzlsq.assign(obj[i], sources[key][i])
                     }
                 }
             } else {
-                obj[key] = xzlsq.assign(obj,sources)
+                obj[key] = xzlsq.assign(obj, sources)
             }
         }
 
