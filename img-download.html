@@ -141,16 +141,17 @@
       this._runningTask = new TaskList(null, parallelLimit)
       this._waitRunTask = new TaskList(null)
       this.limit = parallelLimit
+      this.allDone = () => console.log('all done')
     }
 
     addTask(task) {
       this._waitRunTask.append(task)
-      this.startNextTask(() => console.log('all done'))
+      this._startNextTask(this.allDone)
 
       return this
     }
 
-    startNextTask(allDone) {
+    _startNextTask(allDone) {
       var task
       if (this._waitRunTask.taskLen > 0) {
         for (let i = this._runningTask.taskLen; i < this._runningTask.lenLimit; i++) {
@@ -162,7 +163,7 @@
           task(() => {
             this._runningTask.remove()
             if (this._waitRunTask.taskLen > 0) {
-              this.startNextTask(() => console.log('all done'))
+              this._startNextTask(this.allDone)
             } else if (this._runningTask.taskLen == 0) {
               allDone()
             }
@@ -212,8 +213,6 @@
     }
     img.src = url
   }
-
-
 
   function downloadOneByOne(callback) {
     var i = -1
@@ -384,7 +383,7 @@
             runningTask.remove()
             if (waitRunTask.taskLen > 0) {
               startNextTask()
-            } else {
+            } else if (runningTask.taskLen == 0) {
               allDone()
             }
           })
