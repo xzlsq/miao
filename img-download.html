@@ -157,7 +157,7 @@
           if (this._waitRunTask.taskLen == 0) {
             break
           }
-          task = this._waitRunTask.removeHead()
+          task = this._waitRunTask.removeHead().task
           this._runningTask.append(task)
           task(() => {
             this._runningTask.remove()
