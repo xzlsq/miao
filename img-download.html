@@ -1,0 +1,398 @@
+<!-- <script src="imgs.js"></script> -->
+<!-- <script src="https://caolan.github.io/async/scripts/async.js"></script> -->
+<script>
+  // https://xieranmaya.github.io/images/cats/cats.json
+  // 图片请请求这个地址获取。
+  // 自行查看json结构
+
+  // imgs = imgs.slice(0, 18)
+
+  // 下载给定url的图片，下载完成后调用callback
+
+  class TaskList {
+    constructor(tasks, limit = Infinity) {
+      this.taskLen = 0
+      this.endPoint = null
+      this.lenLimit = limit
+      this.isLimit = false
+      this.taskQueue = this.arrayToList(tasks)
+    }
+
+    arrayToList(array) {
+      // debugger
+      var helperNode = { task: -1, num: -1, next: null, prev: null }
+      var prevNode = helperNode
+
+      if (!array) {
+        return helperNode.next
+      }
+
+      for (let i in array) {
+        if (this.taskLen == this.lenLimit) {
+          this.isLimit = true
+          console.log('任务以达到上限')
+          return helperNode.next
+        }
+        var node = { task: array[i], num: i, next: null, prev: null }
+        prevNode.next = node
+        node.prev = prevNode
+        prevNode = node
+        this.taskLen++
+        this.endPoint = node
+      }
+
+      return helperNode.next
+    }
+
+    // 尾插法
+    append(task) {
+
+      if (!task) {
+        console.log('task不可为空')
+        return this
+      }
+      if (this.taskLen == this.lenLimit) {
+        this.isLimit = true
+        console.log('任务以达到上限')
+        return this
+      }
+
+      var node = {
+        task: task,
+        num: this.taskLen,
+        next: null,
+        prev: null
+      }
+
+      this.taskLen++
+      if (this.taskQueue == null) {
+        this.taskQueue = node
+        this.endPoint = node
+      } else {
+        node.prev = this.endPoint
+        this.endPoint.next = node
+        this.endPoint = node
+      }
+
+
+
+      return this
+    }
+
+    // 在链表移除节点
+    remove() {
+
+      if (this.taskLen == 0 || !this.taskQueue) {
+        console.log('无任务可移除')
+        return this
+      }
+
+      var helperNode = this.endPoint.prev
+      if (this.taskLen == 1) {
+        this.taskQueue = null
+        this.endPoint = null
+      } else {
+        this.endPoint.prev = null
+        helperNode.next = null
+        this.endPoint = helperNode
+      }
+      this.taskLen--
+
+      if (this.taskLen < this.lenLimit) {
+        this.isLimit = false
+      }
+
+      return this
+    }
+
+    // 移除头节点
+    removeHead() {
+
+      if (this.taskLen == 0 || !this.taskQueue) {
+        console.log('无任务可移除')
+        return this
+      }
+
+      this.taskLen--
+      if (this.taskLen == 0) {
+        this.endPoint = null
+      }
+
+      var taskNode = this.taskQueue
+      var helperNode = this.taskQueue.next
+      this.taskQueue.prev = null
+      this.taskQueue.next = null
+      this.taskQueue = helperNode
+      if (this.taskQueue) {
+        this.taskQueue.prev = null
+      }
+
+      if (this.taskLen < this.lenLimit) {
+        this.isLimit = false
+      }
+
+      return taskNode
+    }
+
+  }
+
+  class TaskQueue {
+    constructor(parallelLimit = 1) {
+      this._runningTask = new TaskList(null, parallelLimit)
+      this._waitRunTask = new TaskList(null)
+      this.limit = parallelLimit
+    }
+
+    addTask(task) {
+      this._waitRunTask.append(task)
+      this.startNextTask(() => console.log('all done'))
+
+      return this
+    }
+
+    startNextTask(allDone) {
+      var task
+      if (this._waitRunTask.taskLen > 0) {
+        for (let i = this._runningTask.taskLen; i < this._runningTask.lenLimit; i++) {
+          if (this._waitRunTask.taskLen == 0) {
+            break
+          }
+          task = this._waitRunTask.removeHead()
+          this._runningTask.append(task)
+          task(() => {
+            this._runningTask.remove()
+            if (this._waitRunTask.taskLen > 0) {
+              this.startNextTask(() => console.log('all done'))
+            } else if (this._runningTask.taskLen == 0) {
+              allDone()
+            }
+          })
+        }
+      } else {
+        allDone()
+      }
+    }
+  }
+
+  var imgUrls
+
+  function get(url, callback) {
+    var xhr = new XMLHttpRequest()
+    xhr.open('get', url)
+
+    xhr.send()
+
+    xhr.addEventListener('load', () => {
+      if (xhr.status < 400) {
+        callback(xhr.responseText)
+      } else {
+        callback(null, new Error('xxx'))
+      }
+    })
+
+  }
+
+
+  get(`https://xieranmaya.github.io/images/cats/cats.json`, (data, err) => {
+    if (data) {
+      imgUrls = JSON.parse(data).map(it => it.fullUrl)
+    } else {
+      alert('get failed')
+    }
+  })
+
+
+  function downloadImg(url, callback) {
+    var img = new Image()//document.create('img')
+    img.onload = function () {
+      callback(img)
+    }
+    img.onerror = function () {
+      callback(img)
+    }
+    img.src = url
+  }
+
+
+
+  function downloadOneByOne(callback) {
+    var i = -1
+    startNextTask()
+
+    function startNextTask() {
+      i++
+      if (i < imgUrls.length) {
+        downloadImg(imgUrls[i], (img) => {
+          document.body.append(img)
+          startNextTask()
+        })
+      } else {
+        callback()
+      }
+    }
+  }
+
+
+  //两个一组，都下载完以后，下载下一组
+  function downloadTwoByTwo(callback) {
+    var completedDownloadCnt = 0
+    startNextTask()
+
+    function startNextTask() {
+      var TaskCnt = 0
+      if (completedDownloadCnt < imgUrls.length) {
+        var limit = completedDownloadCnt + 2
+        if (limit >= imgUrls.length) {
+          limit = imgUrls.length
+        }
+        for (var i = completedDownloadCnt; i < limit; i++) {
+          downloadImg(imgUrls[i], (img) => {
+            completedDownloadCnt++
+            TaskCnt++
+            document.body.append(img)
+            if (TaskCnt == 2) {
+              startNextTask()
+            }
+          })
+        }
+      } else {
+        callback()
+      }
+    }
+  }
+
+  //最多同时下载4张，有任何一张下载完，就开始一张新的下载
+  function downloadMax4(callback) {
+    var tasks = []
+    for (var n = 0; n < imgUrls.length; n++) {
+      tasks.push(downloadImg)
+    }
+    var runningTask = new TaskList(null, 4)
+    var waitRunTask = new TaskList(tasks)
+
+    // debugger
+    startNextTask()
+
+    function startNextTask() {
+      var task
+      if (waitRunTask.taskLen > 0) {
+        for (let i = runningTask.taskLen; i < runningTask.lenLimit; i++) {
+          if (waitRunTask.taskLen == 0) {
+            break
+          }
+          var taskNode = waitRunTask.removeHead()
+          var num = taskNode.num
+          task = taskNode.task
+          runningTask.append(task)
+          task(imgUrls[num],(img) => {
+            runningTask.remove()
+            document.body.append(img)
+            if (waitRunTask.taskLen > 0) {
+              startNextTask()
+            } else if (runningTask.taskLen == 0) {
+              callback()
+            }
+          })
+        }
+      } else {
+        callback()
+      }
+    }
+  }
+
+
+
+
+
+
+
+  // 串行执行任务
+  function series(tasks, allDone) {
+    var i = -1
+    startNextTask()
+
+    function startNextTask() {
+      i++
+      if (i < tasks.length) {
+        tasks[i](startNextTask)
+      } else {
+        allDone()
+      }
+    }
+  }
+
+  // 并行运行所有任务
+  function parallel(tasks, allDone) {
+    var completedTaskCnt = 0
+
+    if (tasks.length == 0) {
+      allDone()
+    }
+
+    for (var task of tasks) {
+      task(() => {
+        completedTaskCnt++
+        if (completedTaskCnt == tasks.length) {
+          allDone()
+        }
+      })
+    }
+  }
+
+  var test = [
+    function (done) {
+      console.log(1)
+      setTimeout(done, 1000)
+    },
+    function (done) {
+      console.log(2)
+      setTimeout(done, 2000)
+    },
+    function (done) {
+      console.log(3)
+      setTimeout(done, 3000)
+    },
+    function (done) {
+      console.log(4)
+      setTimeout(done, 1000)
+    },
+    function (done) {
+      console.log(5)
+      setTimeout(done, 2000)
+    },
+  ]
+
+  // 并行运行所有任务
+  function parallelLimit(tasks, allDone, limit = 1) {
+
+    var runningTask = new TaskList(null, limit)
+    var waitRunTask = new TaskList(tasks)
+
+    // debugger
+    startNextTask()
+
+    function startNextTask() {
+      var task
+      if (waitRunTask.taskLen > 0) {
+        for (let i = runningTask.taskLen; i < runningTask.lenLimit; i++) {
+          if (waitRunTask.taskLen == 0) {
+            break
+          }
+          task = waitRunTask.removeHead().task
+          runningTask.append(task)
+          task(() => {
+            runningTask.remove()
+            if (waitRunTask.taskLen > 0) {
+              startNextTask()
+            } else {
+              allDone()
+            }
+          })
+        }
+      } else {
+        allDone()
+      }
+    }
+  }
+
+</script>
