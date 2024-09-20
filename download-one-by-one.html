@@ -141,28 +141,29 @@
       this._runningTask = new TaskList(null, parallelLimit)
       this._waitRunTask = new TaskList(null)
       this.limit = parallelLimit
+      this.allDone = () => console.log('all done')
     }
 
     addTask(task) {
       this._waitRunTask.append(task)
-      this.startNextTask(() => console.log('all done'))
+      this._startNextTask(this.allDone)
 
       return this
     }
 
-    startNextTask(allDone) {
+    _startNextTask(allDone) {
       var task
       if (this._waitRunTask.taskLen > 0) {
         for (let i = this._runningTask.taskLen; i < this._runningTask.lenLimit; i++) {
           if (this._waitRunTask.taskLen == 0) {
             break
           }
-          task = this._waitRunTask.removeHead()
+          task = this._waitRunTask.removeHead().task
           this._runningTask.append(task)
           task(() => {
             this._runningTask.remove()
             if (this._waitRunTask.taskLen > 0) {
-              this.startNextTask(() => console.log('all done'))
+              this._startNextTask(this.allDone)
             } else if (this._runningTask.taskLen == 0) {
               allDone()
             }
@@ -213,8 +214,6 @@
     img.src = url
   }
 
-
-
   function downloadOneByOne(callback) {
     var i = -1
     startNextTask()
@@ -234,23 +233,25 @@
 
 
   //两个一组，都下载完以后，下载下一组
-  function downloadTwoByTwo(callback) {
+  function downloadTwoByTwo(callback, times = 2) {
     var completedDownloadCnt = 0
     startNextTask()
 
     function startNextTask() {
       var TaskCnt = 0
       if (completedDownloadCnt < imgUrls.length) {
-        var limit = completedDownloadCnt + 2
+
+        var limit = completedDownloadCnt + times
         if (limit >= imgUrls.length) {
           limit = imgUrls.length
         }
+
         for (var i = completedDownloadCnt; i < limit; i++) {
           downloadImg(imgUrls[i], (img) => {
             completedDownloadCnt++
             TaskCnt++
             document.body.append(img)
-            if (TaskCnt == 2) {
+            if (TaskCnt == times) {
               startNextTask()
             }
           })
@@ -262,12 +263,12 @@
   }
 
   //最多同时下载4张，有任何一张下载完，就开始一张新的下载
-  function downloadMax4(callback) {
+  function downloadMax4(callback,limit = 4) {
     var tasks = []
     for (var n = 0; n < imgUrls.length; n++) {
       tasks.push(downloadImg)
     }
-    var runningTask = new TaskList(null, 4)
+    var runningTask = new TaskList(null, limit)
     var waitRunTask = new TaskList(tasks)
 
     // debugger
@@ -384,7 +385,7 @@
             runningTask.remove()
             if (waitRunTask.taskLen > 0) {
               startNextTask()
-            } else {
+            } else if (runningTask.taskLen == 0) {
               allDone()
             }
           })
