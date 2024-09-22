@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正则铁路图</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html,
+        body {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-image: linear-gradient(rgb(219, 240, 152) 0%, rgb(161, 194, 52) 100%);
+            box-shadow: 0 0 5px 5px gray;
+        }
+
+        #inputReg {
+            outline: none;
+            width: 100%;
+        }
+
+        button {
+            border-radius: 5px;
+        }
+
+        a.myGithub {
+            text-decoration: underline;
+        }
+
+        #result {
+            background-color: #fff;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            margin: 20px 0;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="w-full">
+        <header class="w-full h-[100px]"><span class="ml-[20px] leading-[100px] text-[26px]">MY REGEXPER</span></header>
+        <div class="p-[20px] bg-gray-600 relative">
+            <textarea class="bg-zinc-300" name="输入框" id="inputReg"></textarea>
+            <div class="BTNS mb-[20px] overflow-hidden">
+                <button class="w-[80px] h-[30px] bg-lime-400 float-left" onclick="drawRegularExpGraph()">绘制</button>
+                <button class="w-[80px] h-[30px] bg-lime-400 ml-[5px] float-right" onclick="copySVGLink()">复制链接</button>
+                <button class="w-[80px] h-[30px] bg-lime-400 ml-[5px] float-right"
+                    onclick="downloadForPNG()">下载PNG</button>
+                <button class="w-[80px] h-[30px] bg-lime-400 ml-[5px] float-right"
+                    onclick="downloadForSVG()">下载SVG</button>
+            </div>
+
+            <div class="w-full" id="result">
+                <svg xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
+            <br>
+            <span class="absolute bottom-0">Create By <a class="myGithub"
+                    href="https://github.com/xzlsq/miao">nisekoi</a></span>
+        </div>
+    </div>
+
+    <script>
+        var re = '(a{20,400}|b{200000,})*?ad(a{20,400}b{200000,})+?|([a-z0-9][^123]+)|(d*e*?f+?g?)|(h{0,3100})(?=1)(?!1)(?<=1)(?<!1)(adabd\\b(\\w)+)'
+        var re2 = `(a|[^123])|((\\w)+[^123])(a+[^123])(a+|[^123])`
+        var re3 = `([a-z0-9][^123]+)([a-z0-9])`
+        var re4 = `((w)+[^123])(a+|[^123])`
+        var re5 = `([a-z0-9]|[^123]+)w+[^123]`
+        var re7 = `(a+|[^123])([a-z0-9]|[^123]+)`
+        var re6 = re + re2 + re3 + re5
+        inputReg.value = re6
+        var graphGap = 10
+        var div = document.querySelector('#result')
+        var svg = document.querySelector('svg')
+
+        // 创建SVG标签和属性
+        function elt(tagName, attrs = {}, ...children) {
+            var el = document.createElementNS('http://www.w3.org/2000/svg', tagName)
+            if (attrs) {
+                for (var key in attrs) {
+                    el.setAttribute(key, attrs[key])
+                }
+            }
+
+            for (var child of children) {
+                if (typeof child == 'string') {
+                    child = document.createTextNode(child)
+                }
+                el.append(child)
+            }
+            svg.append(el)
+            return el
+        }
+
+        function downloadForSVG() {
+            var text = '<?xml version="1.0>' + '<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">' + svg.innerHTML + '</svg>'
+            var blob = new Blob([text], { type: 'image/svg+xml' })
+            var url = URL.createObjectURL(blob)
+            var a = document.createElement('a')
+            a.href = url
+            a.download = 'regRailGraph.svg'
+            a.click()
+        }
+
+        function downloadForPNG() {
+
+            var text = '<svg xmlns="http://www.w3.org/2000/svg">' + svg.innerHTML + '</svg>'
+            var canvas = document.createElement('canvas')
+            var context = canvas.getContext('2d')
+
+            var img = new Image()
+            img.style.width = svg.style.width
+            img.style.height = svg.style.height
+            document.body.append(img)
+            // debugger
+            img.onload = () => {
+                // debugger
+                // 设置画布尺寸
+                canvas.width = img.width
+                canvas.height = img.height
+
+                // 将SVG绘制到画布上
+                context.drawImage(img, 0, 0)
+
+                // 转为PNG并下载
+                var dataURL = canvas.toDataURL('image/png')
+                var a = document.createElement('a')
+                a.href = dataURL
+                a.download = 'regRailGraph.png'
+                a.click()
+                img.remove()
+            }
+            img.src = `data:image/svg+xml;base64,${btoa(text)}`
+        }
+
+        function copySVGLink() {
+            var text = '<?xml version="1.0"?>' + '<svg xmlns="http://www.w3.org/2000/svg">' + svg.innerHTML + '</svg>'
+            var blob = new Blob([text], { type: 'image/svg+xml' })
+            var url = URL.createObjectURL(blob)
+
+            var linkText = document.createElement('span')
+            linkText.textContent = url
+
+            navigator.clipboard.writeText(linkText.textContent)
+                .then(() => {
+                    alert('复制成功！');
+                })
+                .catch(err => {
+                    console.error('复制失败', err);
+                });
+        }
+
+
+        function parseRegularExp(input) {
+            var i = 0
+            var groupIdx = 1 // 分组编号
+
+            var reBranch = parseBranches()
+
+            return {
+                type: 'RegularExp',
+                start: 0,
+                end: i,
+                branches: reBranch,
+            }
+
+            function parseCaptureGroup() {
+                var node = {
+                    type: 'CaptureGroup',
+                    start: i,
+                    end: 0,
+                    raw: '',
+                    groupIndex: groupIdx,
+                    capture: true, // 是否是捕获分组(?:)
+                    zeroAssertion: false, // 是否为零宽断言, 是零宽断言下面两个分组才有意义
+                    positive: true,
+                    lookahead: true,
+                    groupName: null,
+                    branches: [],
+                }
+
+                i++ // skip '('
+
+                if (input[i] == '?') {
+                    i++
+                    // 是否是非捕获分组
+                    if (input[i] == ':') {
+                        node.capture = false
+                        i++
+                    } else if (input[i] == '=') {
+                        // positive lookahead
+                        i++
+                        node.zeroAssertion = true
+                        node.positive = true
+                        node.lookahead = true
+                    } else if (input[i] == '!') {
+                        // negative lookahead
+                        i++
+                        node.zeroAssertion = true
+                        node.positive = false
+                        node.lookahead = true
+                    } else if (input[i] == '<') {
+                        // lookbehind
+                        i++
+                        if (input[i] == '=') {
+                            // positive lookbehind
+                            i++
+                            node.zeroAssertion = true
+                            node.positive = true
+                            node.lookahead = false
+                        } else if (input[i] == '!') {
+                            // negative lookbehind
+                            i++
+                            node.zeroAssertion = true
+                            node.positive = false
+                            node.lookahead = false
+                        } else {
+                            // 是具名分组
+                            node.groupName = parseGroupName()
+                            i++
+                        }
+                    }
+                }
+
+                // 如果不是零宽断言并且是捕获分组则分组索引加1
+                if (!node.zeroAssertion && node.capture) {
+                    groupIdx++
+                } else {
+                    // 该分组不能有分组编号
+                    node.groupIndex = null
+                }
+
+                // 解析捕获分组内的表达式
+                node.branches = parseBranches()
+                i++
+
+                node.end = i
+                node.raw = input.slice(node.start, node.end)
+
+                return node
+            }
+
+            function parseGroupName() {
+                var start = i
+                while (input[i] !== '>') {
+                    i++
+                }
+
+                return input.slice(start, i)
+            }
+
+            // 解析一个由|分隔的分支 
+            function parseBranch() {
+                var node = {
+                    type: 'Branch',
+                    start: i,
+                    end: 0,
+                    raw: '',
+                    elements: [],
+                }
+
+                while (input[i] !== ')' && input[i] !== '|' && i < input.length) {
+                    var element = parseOnePart()
+                    if (element.type == 'Quantifier') {
+                        if (node.elements.length == 0) {
+                            throw new SyntaxError('nothing to repeat')
+                        }
+
+                        var repeatChar = node.elements.pop()
+                        element.repeatElement = repeatChar
+                        element.start = repeatChar.start
+                        element.raw = input.slice(element.start, element.end)
+                    }
+                    node.elements.push(element)
+                }
+
+                node.end = i
+                node.raw = input.slice(node.start, node.end)
+
+                return node
+            }
+
+            // 解析非分组分支"|"
+            function parseBranches() {
+                var branches = []
+
+                while (input[i] !== ')' && i < input.length) {
+                    var branch = parseBranch()
+                    branches.push(branch)
+                    if (input[i] == '|') {
+                        i++ // skip '|'
+                    }
+                }
+
+                return branches
+
+            }
+
+            // 解析量词'?*+{等'
+            function parseQuantifier() {
+                var node = {
+                    type: 'Quantifier',
+                    start: i,
+                    end: 0,
+                    raw: '',
+                    min: 0,
+                    kind: '',
+                    max: Infinity,
+                    greedy: true, // 贪婪匹配
+                    repeatElement: null, // 贪婪匹配谁
+                }
+
+                if (input[i] == '+') {
+                    node.min = 1
+                    node.kind = '+'
+                    i++
+                } else if (input[i] == '*') {
+                    node.kind = '*'
+                    i++
+                } else if (input[i] == '?') {
+                    node.kind = '?'
+                    node.max = 1
+                    i++
+                } else if (input[i] == '{') {
+                    // {2,15}
+                    // {2,}
+                    // {2}
+                    i++ // skip '{'
+                    node.min = parseInteger()
+                    // i++ 
+                    if (input[i] == ',' && input[i + 1] != '}') {
+                        i++ // skip ','
+                        node.max = parseInteger()
+                        i++ // skip '}'
+                    } else if (input[i] == '}') {
+                        node.max = node.min
+                        i++ // skip '}'
+                    } else {
+                        i += 2 //skip ',}'
+                    }
+                    node.kind = '{}'
+                }
+
+                // 是否是非贪婪匹配
+                if (input[i] == '?') {
+                    node.kind = '?'
+                    node.greedy = false
+                    i++
+                }
+
+                node.end = i
+                node.raw = input.slice(node.start, node.end)
+
+                return node
+            }
+
+            // 从i位置开始解析一个整数，并移动到解析完成之后
+            function parseInteger() {
+                var start = i
+                while (input[i] >= '0' && input[i] <= '9') {
+                    i++
+                }
+
+                return Number(input.slice(start, i))
+            }
+
+            // 解析“[xxx]”
+            function parseCharacterClass() {
+                var node = {
+                    type: 'CharacterClass',
+                    start: i,
+                    end: 0,
+                    raw: '',
+                    invert: false,
+                    CharacterClasses: [],
+                }
+
+                i++
+                if (input[i] == '^') {
+                    node.invert = true
+                    i++
+                }
+
+                while (input[i] !== ']') {
+                    var part = parseOneClass()
+                    node.CharacterClasses.push(part)
+                }
+
+                i++
+
+                node.end = i
+                node.raw = input.slice(node.start, node.end)
+
+                return node
+
+                // 解析[]中的某个部分
+                function parseOneClass() {
+                    if (input[i] == '\\') {
+                        return parseEscape()
+                    } else if (input[i + 1] == '-' && input[i + 2] !== ']') {
+                        return parseCharacters(i, i + 2)
+                    } else if (input[i] == '.') {
+                        return parseClassDot()
+                    } else {
+                        return parseCharacter()
+                    }
+                }
+            }
+
+            function parseClassDot() {
+                var node = {
+                    type: 'Character',
+                    start: i,
+                    end: 0,
+                    raw: '',
+                    character: '.',
+                }
+
+                i++
+                node.end = i
+                node.raw = input.slice(node.start, node.end)
+
+                return node
+            }
+
+            // 解析单个字符
+            function parseCharacter() {
+                var node = {
+                    type: 'Character',
+                    start: i,
+                    end: 0,
+                    raw: '',
+                    character: input[i] == '.' ? 'any character' : input[i],
+                }
+
+                i++
+                node.end = i
+                node.raw = input.slice(node.start, node.end)
+
+                return node
+            }
+
+            // 解析单个字符
+            function parseCharacters(start, end) {
+                var node = {
+                    type: 'String',
+                    start: start,
+                    end: end,
+                    raw: '',
+                    character: '',
+                }
+
+                node.raw = node.character = input.slice(node.start, node.end + 1)
+                i += 3
+
+                return node
+            }
+
+            // 解析转义符（只考虑一个反斜杠后面跟一个字符）
+            function parseEscape() {
+                var node = {
+                    type: 'Escape',
+                    start: i,
+                    end: 0,
+                    raw: '',
+                    escape: '',
+                }
+
+                i++
+                node.escape = input[i]
+                i++
+
+                node.end = i
+                node.raw = input.slice(node.start, node.end)
+
+                return node
+            }
+
+            function parseOnePart() {
+                if (input[i] == '[') {
+                    return parseCharacterClass()
+                }
+                if (input[i] == '(') {
+                    return parseCaptureGroup()
+                }
+                if (input[i] == '+' || input[i] == '?' || input[i] == '*' || input[i] == '{') {
+                    return parseQuantifier()
+                } if (input[i] == '\\') {
+                    return parseEscape()
+                }
+                else {
+                    return parseCharacter()
+                }
+            }
+        }
+
+
+        function drawRegularExpGraph() {
+            if (svg.innerHTML !== '') {
+                svg.innerHTML = ''
+            }
+            var reg = inputReg.value
+            var regTree
+            // debugger
+            try {
+                new RegExp(reg)
+                inputReg.style.textDecoration = 'none'
+                regTree = parseRegularExp(reg)
+            } catch (e) {
+                inputReg.style.textDecoration = 'underline'
+                inputReg.style.textDecorationColor = 'red'
+                throw new Error(e)
+            }
+
+            div.style.display = 'flex'
+
+            var graph = drawBranchesGraph(regTree.branches)
+            var g = elt('g')
+            g.setAttribute('title', 'drawRegularExpGraph-g')
+            g.append(graph.g)
+            var height = graph.height
+            var width = graph.width + graphGap * 4
+            svg.style.width = `${width + graphGap}px`
+            svg.style.height = `${height}px`
+
+            var rect = elt('rect', {
+                width,
+                height,
+                fill: 'none',
+            })
+            rect.setAttribute('title', 'drawRegularExpGraph-rect')
+            g.append(rect)
+
+            graph.g.setAttribute('transform', `translate(${graphGap * 2},${0})`)
+
+            var path = elt('path', {
+                d:
+                    `
+                    M ${graphGap} ${height / 2}
+                    l ${graphGap} ${0}
+                    M ${width - graphGap} ${height / 2}
+                    l ${-graphGap - 1} ${0}
+                `,
+                "stroke-width": 2,
+                "stroke": "black",
+                fill: 'none',
+            })
+            path.setAttribute('title', 'drawRegularExpGraph-path')
+            g.append(path)
+
+            var circle = elt('path', {
+                d:
+                    `
+                    M ${0} ${height / 2}
+                    a ${graphGap / 2} ${graphGap / 2} 0 0 0 ${graphGap} ${0}
+                    a ${graphGap / 2} ${graphGap / 2} 0 0 0 ${-graphGap} ${0}
+                    M ${width} ${height / 2}
+                    a ${graphGap / 2} ${graphGap / 2} 0 0 0 ${-graphGap} ${0}
+                    a ${graphGap / 2} ${graphGap / 2} 0 0 0 ${graphGap} ${0}
+                `,
+                "stroke-width": 2,
+                "stroke": "black",
+                fill: 'gray',
+            })
+            circle.setAttribute('title', 'drawRegularExpGraph-circle')
+            g.append(circle)
+            g.setAttribute('transform', `translate(${1},${0})`)
+
+
+            div.style.display = 'flex'
+
+            function drawCharacterGraph(node) {
+                var g = elt('g')
+                g.setAttribute('title', 'Character-g')
+
+                var text
+                var bg
+                var size
+                if (node.character == '^' || node.character == '$') {
+                    text = elt('text', {
+                        'alignment-baseline': 'text-before-edge', // 文本元素的定位点在其左上角
+                        x: graphGap,
+                        y: graphGap,
+                        fill: 'white',
+                    }, node.character == '^' ? 'Start of line' : 'End of line')
+                    text.setAttribute('title', 'Character-text')
+
+                    size = text.getBBox()
+
+                    bg = elt('rect', {
+                        fill: '#6b6659',    // 设置填充颜色
+                        rx: '3', // 设置圆角
+                        ry: '3',
+                        width: size.width + graphGap * 2,
+                        height: size.height + graphGap * 2,
+                    })
+                    bg.setAttribute('title', 'Character-bg')
+                    g.append(bg, text)
+                } else {
+                    text = elt('text', {
+                        'alignment-baseline': 'text-before-edge', // 文本元素的定位点在其左上角
+                        x: graphGap,
+                        y: graphGap,
+                    }, node.character)
+                    text.setAttribute('title', 'Character-text')
+
+                    size = text.getBBox()
+
+                    bg = elt('rect', {
+                        fill: '#dae9e5',    // 设置填充颜色
+                        rx: '3', // 设置圆角
+                        ry: '3',
+                        width: size.width + graphGap * 2,
+                        height: size.height + graphGap * 2,
+                    })
+                    bg.setAttribute('title', 'Character-bg')
+                    g.append(bg, text)
+
+                }
+                var box = g.getBBox()
+
+                return {
+                    g,
+                    width: box.width,
+                    height: box.height,
+                    name: 'Character',
+                }
+            }
+
+            function drawEscapeGraph(node) {
+                var escapeChar = node.escape
+
+                switch (escapeChar) {
+                    case 'd':
+                        return drawEscapeChar('digit')
+                    case 'D':
+                        return drawEscapeChar('non-digit')
+                    case 'b':
+                        return drawEscapeChar('word boundary')
+                    case 'B':
+                        return drawEscapeChar('non-word boundary')
+                    case 's':
+                        return drawEscapeChar('white space')
+                    case 'S':
+                        return drawEscapeChar('non-white space')
+                    case 'w':
+                        return drawEscapeChar('word')
+                    case 'W':
+                        return drawEscapeChar('non-word')
+                    case 'n':
+                        return drawEscapeChar('line feed (0x0A)')
+                    case 't':
+                        return drawEscapeChar('tab (0x09)')
+                    case 'r':
+                        return drawEscapeChar('carriage return (0x0D)')
+                    case 'f':
+                        return drawEscapeChar('form feed (0x0C)')
+                    case '0':
+                        return drawEscapeChar('null (0x00)')
+                    default:
+                        return drawEscapeChar(escapeChar, '#dae9e5')
+                }
+
+                function drawEscapeChar(char, color = '#bada55') {
+                    var g = elt('g')
+                    g.setAttribute('title', 'Escape-g')
+                    var text = elt('text', {
+                        'alignment-baseline': 'text-before-edge', // 文本元素的定位点在其左上角
+                        x: graphGap,
+                        y: graphGap,
+                    }, char)
+                    text.setAttribute('title', 'Escape-text')
+                    var size = text.getBBox()
+
+                    var bg = elt('rect', {
+                        fill: color,    // 设置填充颜色
+                        rx: '3', // 设置圆角
+                        ry: '3',
+                        width: size.width + graphGap * 2,
+                        height: size.height + graphGap * 2,
+                    })
+                    bg.setAttribute('title', 'Escape-bg')
+                    g.append(bg, text)
+
+                    var box = g.getBBox()
+
+                    return {
+                        g,
+                        width: box.width,
+                        height: box.height,
+                        name: 'Character',
+                    }
+                }
+            }
+
+            function drawCaptureGroupGraph(node) {
+                var graph = drawBranchesGraph(node.branches)
+                // debugger
+                var g = elt('g')
+                g.setAttribute('title', 'CaptureGroup-g')
+                g.setAttribute('class', 'Group')
+                g.append(graph.g)
+
+                var height = graph.height + graphGap * 3 + 3
+                var width = graph.width + graphGap * 2
+                if (node.branches.length == 1) {
+                    width = graph.width
+                }
+                var hasQ = false
+
+                // 零宽断言
+                if (node.zeroAssertion) {
+                    let text
+                    if (node.lookahead && node.positive) {
+                        text = elt('text', {
+                            'alignment-baseline': 'text-before-edge',
+                            'font-size': "12px",
+                            x: graphGap * 2,
+                            y: 1,
+                        }, `positive lookahead`)
+                    } else if (node.lookahead && !node.positive) {
+                        text = elt('text', {
+                            'alignment-baseline': 'text-before-edge',
+                            'font-size': "12px",
+                            x: graphGap * 2,
+                            y: 1,
+                        }, `negative lookahead`)
+                    } else if (!node.lookahead && node.positive) {
+                        text = elt('text', {
+                            'alignment-baseline': 'text-before-edge',
+                            'font-size': "12px",
+                            x: graphGap * 2,
+                            y: 1,
+                        }, `positive lookbehind`)
+                    } else {
+                        text = elt('text', {
+                            'alignment-baseline': 'text-before-edge',
+                            'font-size': "12px",
+                            x: graphGap * 2,
+                            y: 1,
+                        }, `negative lookbehind`)
+                    }
+
+                    text.setAttribute('title', 'CaptureGroup-zeroAssertion-text')
+                    g.append(text)
+                    var textW = text.getBBox().width + graphGap * 3
+                    if (width < textW) {
+                        width = textW
+                    }
+                    graph.g.setAttribute('transform', `translate(${(width - graph.width) / 2},${(height - graph.height) / 2})`)
+                    g.append(graph.g)
+                    let line = elt('path', {
+                        d:
+                            `
+                        M 0 ${height / 2}
+                        L ${(width - graph.width) / 2} ${height / 2}
+                        M ${width} ${height / 2}
+                        L ${width - (width - graph.width) / 2} ${height / 2}
+                    `,
+                        "stroke-width": 2,
+                        "stroke": "black",
+                        fill: 'none',
+                    })
+                    line.setAttribute('title', 'CaptureGroup-zero-line')
+                    g.append(line)
+                } else {
+                    graph.g.setAttribute('transform', `translate(${(width - graph.width) / 2},${(height - graph.height) / 2})`)
+                    g.append(graph.g)
+                }
+
+                var rect = elt('rect', {
+                    width,
+                    height,
+                    fill: 'none',
+                })
+                rect.setAttribute('title', 'CaptureGroup-rect')
+                g.append(rect)
+
+                var line = elt('path', {
+                    d:
+                        `
+                        M 0 ${height / 2}
+                        L ${graphGap} ${height / 2}
+                        M ${width} ${height / 2}
+                        L ${width - graphGap} ${height / 2}
+                    `,
+                    "stroke-width": 2,
+                    "stroke": "black",
+                    fill: 'none',
+                })
+                line.setAttribute('title', 'CaptureGroup-line')
+                g.append(line)
+
+                // debugger
+                var path
+                if (graph.hasQ) {
+                    hasQ = true
+                    path = elt('path', {
+                        d:
+                            `
+                                M ${graphGap} ${height / 2}
+                                l 0 ${-(height / 2 - graphGap - 2)}
+                                a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${-graphGap}
+                                l ${width - graphGap * 4} ${0}
+                                a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${graphGap}
+                                l 0 ${height - graphGap * 3 - 4}
+                                a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${graphGap}
+                                l ${-(width - graphGap * 4)} ${0}
+                                a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${-graphGap}
+                                l 0 ${-(height / 2 - graphGap * 2 - 2)}
+                             `,
+                        "stroke-width": 2,
+                        "stroke-dasharray": "4 2",
+                        "stroke": "black",
+                        fill: 'none',
+                    })
+                } else if (node.zeroAssertion)  {
+                    path = elt('path', {
+                        d:
+                            `
+                                M ${graphGap} ${height / 2}
+                                l 0 ${-(height / 2 - graphGap / 2)}
+                                a ${graphGap / 2} ${graphGap / 2} 0 0 1 ${graphGap / 2} ${-graphGap / 2}
+                                l ${width - graphGap * 2} ${0}
+                                a ${graphGap / 2} ${graphGap / 2} 0 0 1 ${graphGap / 2} ${graphGap / 2}
+                                l 0 ${height - graphGap - 4}
+                                a ${graphGap / 2} ${graphGap / 2} 0 0 1 ${-graphGap / 2} ${graphGap / 2}
+                                l ${-(width - graphGap * 2)} ${0}
+                                a ${graphGap / 2} ${graphGap / 2} 0 0 1 ${-graphGap / 2} ${-graphGap / 2}
+                                l 0 ${-(height / 2 - graphGap / 2)}
+                             `,
+                        "stroke-width": 2,
+                        "stroke-dasharray": "4 2",
+                        "stroke": "black",
+                        fill: 'none',
+                    })
+                } else {
+                    path = elt('path', {
+                        d:
+                            `
+                                M ${graphGap} ${height / 2}
+                                l 0 ${-(height / 2 - graphGap - 2)}
+                                a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${-graphGap}
+                                l ${width - graphGap * 4} ${0}
+                                a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${graphGap}
+                                l 0 ${height - graphGap * 2 - 4}
+                                a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${graphGap}
+                                l ${-(width - graphGap * 4)} ${0}
+                                a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${-graphGap}
+                                l 0 ${-(height / 2 - graphGap - 2)}
+                             `,
+                        "stroke-width": 2,
+                        "stroke-dasharray": "4 2",
+                        "stroke": "black",
+                        fill: 'none',
+                    })
+                }
+                path.setAttribute('title', 'CaptureGroup-path')
+
+                g.append(path)
+
+                if (node.groupIndex != null) {
+                    let text = elt('text', {
+                        'alignment-baseline': 'text-before-edge', // 文本元素的定位点在其左上角
+                        'font-size': "12px",
+                        x: graphGap + 3,
+                        y: 3,
+                    }, `group#${node.groupIndex}`)
+                    text.setAttribute('title', 'CaptureGroup-groupIndex-text')
+                    g.append(text)
+                }
+
+                var box = g.getBBox()
+
+                return {
+                    g,
+                    width: box.width - graphGap * 2,
+                    widthG: box.width,
+                    height: box.height,
+                    name: 'group',
+                    hasQ
+                }
+
+            }
+
+            function drawBranchGraph(node) {
+                var graphs = node.elements.map(drawGraph)
+                // debugger
+
+                var height = Math.max(...graphs.map(it => it.height))
+                var width = graphs.map(it => it.width).reduce((a, b) => a + b) + graphGap * (graphs.length + 1)
+                var hasQ = false
+
+                var g = elt('g', {
+                    width,
+                    height,
+                })
+                g.setAttribute('title', 'Branch-g')
+
+                var rect = elt('rect', {
+                    width,
+                    height,
+                    fill: 'none',
+                })
+                rect.setAttribute('title', 'Branch-rect')
+                g.append(rect)
+
+                let line = elt('line', {
+                    x1: 0,
+                    y1: height / 2,
+                    x2: graphGap,
+                    y2: height / 2,
+                    "stroke-width": 2,
+                    "stroke": "black",
+                })
+                line.setAttribute('title', 'Branch-line')
+                g.append(line)
+
+                var x = graphGap
+                for (var graph of graphs) {
+                    if (graph.classN == 'Quantifier') {
+                        hasQ = true
+                    }
+                    if (graph.name == 'CharacterClass') {
+                        graph.g.setAttribute('transform', `translate(${x},${(height - graph.height) / 2 + graph.textH})`)
+                    } else {
+                        graph.g.setAttribute('transform', `translate(${x},${(height - graph.height) / 2})`) // onlyChars ? graphGap : 
+                    }
+                    graph.g.setAttribute('data-set-x', x)
+                    if (graph.name == 'group') {
+                        x += graph.widthG + graphGap
+                    } else {
+                        x += graph.width + graphGap
+                    }
+                    let line = elt('line', {
+                        x1: x,
+                        y1: height / 2,
+                        x2: x - graphGap,
+                        y2: height / 2,
+                        "stroke-width": 2,
+                        "stroke": "black",
+                    })
+                    line.setAttribute('title', 'Branch-graph-line')
+                    g.append(line)
+                    g.append(graph.g)
+                }
+
+                var box = g.getBBox()
+
+                return {
+                    g,
+                    width: box.width,
+                    height: box.height,
+                    hasQ
+                }
+            }
+
+            // 参数是一个数组
+            function drawBranchesGraph(nodes) {
+                var graphs = nodes.map(drawBranchGraph)
+                var width = Math.max(...graphs.map(it => it.width)) + graphGap * 4
+                var height = graphs.map(it => it.height).reduce((a, b) => a + b) + graphGap * (graphs.length - 1)
+                var hasQ = false
+                // debugger
+                
+                var g = elt('g')
+
+                g.setAttribute('title', 'Branches-g')
+
+                var rect = elt('rect', {
+                    width, height,
+                    fill: 'none',
+                })
+                rect.setAttribute('title', 'Branches-rect')
+                g.append(rect)
+
+                var y = 0
+                // let cnt = 0
+                for (var graph of graphs) {
+                    if (graph.hasQ) {
+                        hasQ = true
+                    }
+                    let path
+                    if (graphs.length > 1) {
+                        graph.g.setAttribute('transform', `translate(${(width - graph.width) / 2},${y})`)
+                        path = elt('path', {
+                            d:
+                                `
+                                    M 0 ${height / 2}
+                                    C ${graphGap * 2} ${height / 2} ${0} ${y + graph.height / 2} ${graphGap * 2} ${y + graph.height / 2}
+                                    M ${graphGap * 2} ${y + graph.height / 2}
+                                    L ${(width - graph.width) / 2} ${y + graph.height / 2}
+                                    M ${width} ${height / 2}
+                                    C ${width - graphGap * 2} ${height / 2} ${width} ${y + graph.height / 2} ${width - graphGap * 2} ${y + graph.height / 2}
+                                    M ${width - graphGap * 2} ${y + graph.height / 2}
+                                    L ${width - (width - graph.width) / 2} ${y + graph.height / 2}
+                                    `,
+                            "stroke-width": 2,
+                            "stroke": "black",
+                            fill: 'none',
+                        })
+
+                        path.setAttribute('title', 'Branches-path')
+                    } else {
+
+                        graph.g.setAttribute('transform', `translate(${(width - graph.width) / 2},${y})`)
+                        path = elt('path', {
+                            d:
+                                `
+                                    M 0 ${height / 2}
+                                    L ${(width - graph.width) / 2} ${height / 2}
+                                    M ${width} ${height / 2}
+                                    L ${width - (width - graph.width) / 2} ${height / 2}
+                                    `,
+                            "stroke-width": 2,
+                            "stroke": "black",
+                            fill: 'none',
+                        })
+
+                        path.setAttribute('title', 'Branches-path')
+                    }
+
+                    // cnt++
+                    y += graphGap + graph.height
+                    g.append(graph.g)
+                    g.append(path)
+                }
+
+                var box = g.getBBox()
+
+                return {
+                    g,
+                    width: box.width,
+                    height: box.height,
+                    name: 'branches',
+                    hasQ
+                }
+            }
+
+            function drawQuantifierGraph(node) {
+                var graph = drawGraph(node.repeatElement)
+                var g = elt('g')
+                g.setAttribute('title', 'Quantifier-g')
+
+                var width
+                var height
+                var adjust = false
+
+                var tsx = graphGap * 2
+                var adjustFactor = 2
+                if (graph.name == 'group') {
+                    tsx = graphGap
+                    adjust = graph.hasQ
+                } else if (graph.name == 'CharacterClass') {
+                    adjustFactor = 2.5
+                    adjust = true
+                }
+
+                if (node.kind == '+') {
+                    // x+ 匹配一个或多个
+                    name = '+'
+                    drawRect((graph.width + graphGap * 4), (graph.height + graphGap * 4), tsx)
+                    matchOneToN()
+
+                } else if (node.kind == '*') {
+                    // x* 匹配零个或多个
+                    name = '*'
+                    drawRect((graph.width + graphGap * 4), (graph.height + graphGap * 4), tsx)
+                    matchZeroToN()
+
+                } else if (node.kind == '?' && node.min == 0 && node.max == Infinity) {
+                    // x*? 零个或多个
+                    name = '*?' 
+                    drawRect((graph.width + graphGap * 4), (graph.height + graphGap * 4), tsx)
+                    matchZeroToN()
+
+                } else if (node.kind == '?' && node.min == 1 && node.max == Infinity) {
+                    // x+? 至少一个
+                    name = '+?'
+                    drawRect((graph.width + graphGap * 4), (graph.height + graphGap * 4), tsx)
+                    let path = elt('path', {
+                        d:
+                            `
+                            M ${width - graphGap * 2} ${height / 2}
+                            a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${graphGap}
+                            l ${0} ${adjust ? graph.height / 2 - graphGap * adjustFactor : graph.height / 2 - graphGap}
+                            a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${graphGap}
+                            l ${-graph.width} ${0}
+                            a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${-graphGap}
+                            l ${0} ${adjust ? -(graph.height / 2 - graphGap * adjustFactor) : -(graph.height / 2 - graphGap)}
+                            a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${-graphGap}
+                        `,
+                        "stroke-width": 2,
+                        "stroke": "black",
+                        fill: 'none',
+                    })
+                    path.setAttribute('title', 'Quantifier-path')
+                    g.append(path)
+
+                } else if (node.kind == '?') {
+                    // x? 匹配零个或一个
+                    name = '?'
+                    drawRect((graph.width + graphGap * 4), (graph.height + graphGap * 4), tsx)
+                    matchZeroToOne()
+
+                } else if (node.kind == '{}') {
+                    // x{}
+                    name = '{}'
+                    if (node.min >= 0 && node.max < Infinity && node.min != node.max) {
+                        // x{0,n} 匹配零个到N个 x{n,n}  匹配N个到N个
+                        if (node.min == 0) {
+                            // x{0,n} 匹配零个到N个
+                            let text = elt('text', {
+                                'alignment-baseline': 'text-before-edge', // 文本元素的定位点在其左上角
+                                'font-size': "smaller",
+                            }, `at most ${node.max}times`)
+                            text.setAttribute('title', 'Quantifier-text')
+                            let size = text.getBBox()
+
+                            let gWidth = graph.width + graphGap * 4
+
+                            drawAtMostRect((size.width > gWidth ? size.width : gWidth), (graph.height + graphGap * 6), tsx)
+                            g.append(text)
+
+                            let path = elt('path', {
+                                d:
+                                    `
+                                    M 0 ${height / 2}
+                                    a ${graphGap} ${graphGap} 0 0 0 ${graphGap} ${-graphGap}
+                                    l ${0} ${-(graph.height / 2 - graphGap)}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${-graphGap}
+                                    l ${graph.width} ${0}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${graphGap}
+                                    l ${0} ${graph.height / 2 - graphGap}
+                                    a ${graphGap} ${graphGap} 0 0 0 ${graphGap} ${graphGap}
+                                    M ${graph.width + graphGap * 2} ${height / 2}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${graphGap}
+                                    l ${0} ${adjust ? graph.height / 2 - graphGap * adjustFactor : graph.height / 2 - graphGap}
+                                    l ${-graphGap / 2} ${-graphGap / 2}
+                                    m ${graphGap / 2} ${graphGap / 2}
+                                    l ${graphGap / 2} ${-graphGap / 2}
+                                    m ${-graphGap / 2} ${graphGap / 2}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${graphGap}
+                                    l ${-graph.width} ${0}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${-graphGap}
+                                    l ${0} ${adjust ? -(graph.height / 2 - graphGap * adjustFactor) : -(graph.height / 2 - graphGap)}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${-graphGap}
+                                `,
+                                "stroke-width": 2,
+                                "stroke": "black",
+                                fill: 'none',
+                            })
+                            path.setAttribute('title', 'Quantifier-path')
+                            g.append(path)
+
+                        } else {
+                            // x{n,n} 匹配N个到N个
+                            let text = elt('text', {
+                                'alignment-baseline': 'text-before-edge', // 文本元素的定位点在其左上角
+                                'font-size': "smaller",
+                            }, `${node.min}-${node.max}times`)
+                            text.setAttribute('title', 'Quantifier-text')
+                            let size = text.getBBox()
+                            let w = (graph.width + graphGap * 4)
+                            if (size.width <= w) {
+                                drawRect(w, (graph.height + graphGap * 4), tsx)
+                            } else {
+                                drawTimesRect((size.width), (graph.height + graphGap * 4), tsx)
+                            }
+
+                            g.append(text)
+                            let path = elt('path', {
+                                d:
+                                    `
+                                    M ${graph.width + graphGap * 2} ${height / 2}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${graphGap}
+                                    l ${0} ${adjust ? graph.height / 2 - graphGap * adjustFactor : graph.height / 2 - graphGap}
+                                    l ${-graphGap / 2} ${-graphGap / 2}
+                                    m ${graphGap / 2} ${graphGap / 2}
+                                    l ${graphGap / 2} ${-graphGap / 2}
+                                    m ${-graphGap / 2} ${graphGap / 2}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${graphGap}
+                                    l ${-graph.width} ${0}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${-graphGap}
+                                    l ${0} ${adjust ? -(graph.height / 2 - graphGap * adjustFactor) : -(graph.height / 2 - graphGap)}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${-graphGap}
+                                `,
+                                "stroke-width": 2,
+                                "stroke": "black",
+                                fill: 'none',
+                            })
+                            path.setAttribute('title', 'Quantifier-path')
+                            g.append(path)
+                        }
+                    } else if (node.min >= 0 && node.max == Infinity) {
+                        // x{n,} x{0,}
+                        if (node.min == 0) {
+                            // x{0,} 匹配0个到无穷个
+                            drawRect((graph.width + graphGap * 4), (graph.height + graphGap * 4), tsx)
+                            matchZeroToN()
+
+                        } else {
+                            // x{n,} 匹配N个到无穷个
+                            let text = elt('text', {
+                                'alignment-baseline': 'text-before-edge', // 文本元素的定位点在其左上角
+                                'font-size': "smaller",
+                            }, `${node.min}+times`)
+                            text.setAttribute('title', 'Quantifier-text')
+                            let size = text.getBBox()
+                            let w = (graph.width + graphGap * 4)
+                            if (size.width <= w) {
+                                drawRect(w, (graph.height + graphGap * 4), tsx)
+                            } else {
+                                drawTimesRect((size.width), (graph.height + graphGap * 4), tsx)
+                            }
+                            g.append(text)
+
+                            let path = elt('path', {
+                                d:
+                                    `
+                                    M ${graph.width + graphGap * 2} ${height / 2}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${graphGap}
+                                    l ${0} ${adjust ? graph.height / 2 - graphGap * adjustFactor : graph.height / 2 - graphGap}
+                                    l ${-graphGap / 2} ${-graphGap / 2}
+                                    m ${graphGap / 2} ${graphGap / 2}
+                                    l ${graphGap / 2} ${-graphGap / 2}
+                                    m ${-graphGap / 2} ${graphGap / 2}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${graphGap}
+                                    l ${-graph.width} ${0}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${-graphGap}
+                                    l ${0} ${adjust ? -(graph.height / 2 - graphGap * adjustFactor) : -(graph.height / 2 - graphGap)}
+                                    a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${-graphGap}
+                                `,
+                                "stroke-width": 2,
+                                "stroke": "black",
+                                fill: 'none',
+                            })
+                            path.setAttribute('title', 'Quantifier-path')
+                            g.append(path)
+                        }
+
+                    } else if (node.min == node.max && node.min > 0) {
+                        // x{n} 匹配N个
+
+                        let text = elt('text', {
+                            'alignment-baseline': 'text-before-edge', // 文本元素的定位点在其左上角
+                            'font-size': "smaller",
+                        }, `${node.min}times`)
+                        text.setAttribute('title', 'Quantifier-path')
+                        let size = text.getBBox()
+                        let w = (graph.width + graphGap * 4)
+                        if (size.width <= w) {
+                            drawRect(w, (graph.height + graphGap * 4), tsx)
+                        } else {
+                            drawTimesRect((size.width), (graph.height + graphGap * 4), tsx)
+                        }
+                        g.append(text)
+
+                        let path = elt('path', {
+                            d:
+                                `
+                                M ${graph.width + graphGap * 2} ${height / 2}
+                                a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${graphGap}
+                                l ${0} ${adjust ? graph.height / 2 - graphGap * adjustFactor : graph.height / 2 - graphGap}
+                                l ${-graphGap / 2} ${-graphGap / 2}
+                                m ${graphGap / 2} ${graphGap / 2}
+                                l ${graphGap / 2} ${-graphGap / 2}
+                                m ${-graphGap / 2} ${graphGap / 2}
+                                a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${graphGap}
+                                l ${-graph.width} ${0}
+                                a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${-graphGap}
+                                l ${0} ${adjust ? -(graph.height / 2 - graphGap * adjustFactor) : -(graph.height / 2 - graphGap)}
+                                a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${-graphGap}
+                            `,
+                            "stroke-width": 2,
+                            "stroke": "black",
+                            fill: 'none',
+                        })
+                        path.setAttribute('title', 'Quantifier-path')
+                        g.append(path)
+
+                    } else if (node.min == node.max && node.min == 0) {
+                        // x{0} 匹配0个
+                        drawRect((graph.width + graphGap * 4), (graph.height + graphGap * 4), tsx)
+                        matchZeroToOne()
+                    }
+
+                }
+
+
+                var box = g.getBBox()
+
+                return {
+                    g,
+                    width: box.width,
+                    height: box.height,
+                    name,
+                    classN: 'Quantifier',
+                }
+
+
+                function drawRect(w, h, transX = (graphGap * 2), transY = (graphGap * 2)) {
+                    width = w
+                    height = h
+
+                    graph.g.setAttribute('transform', `translate(${transX},${transY})`)
+                    var rect = elt('rect', {
+                        width, height,
+                        fill: 'none'
+                    })
+                    rect.setAttribute('title', 'Quantifier-rect')
+                    g.append(rect, graph.g)
+                    var line = elt('path', {
+                        d:
+                            `
+                            M 0 ${height / 2}
+                            L ${graphGap * 2} ${height / 2}
+                            M ${width} ${height / 2}
+                            L ${width - graphGap * 2} ${height / 2}
+                        `,
+                        "stroke-width": 2,
+                        "stroke": "black",
+                        fill: 'none',
+                    })
+                    line.setAttribute('title', 'Quantifier-line')
+                    g.append(line)
+                }
+
+                function drawTimesRect(w, h, transX = (graphGap * 2), transY = (graphGap * 2)) {
+                    width = w
+                    height = h
+
+                    graph.g.setAttribute('transform', `translate(${transX},${transY})`)
+
+                    var rect = elt('rect', {
+                        width, height,
+                        fill: 'none'
+                    })
+                    rect.setAttribute('title', 'Quantifier-rect')
+                    g.append(rect, graph.g)
+
+                    var line = elt('path', {
+                        d:
+                            `
+                            M 0 ${height / 2}
+                            L ${graphGap * 2} ${height / 2}
+                            M ${width} ${height / 2}
+                            L ${graph.width + graphGap * 2} ${height / 2}
+                        `,
+                        "stroke-width": 2,
+                        "stroke": "black",
+                        fill: 'none',
+                    })
+                    line.setAttribute('title', 'Quantifier-line')
+                    g.append(line)
+                }
+
+                function drawAtMostRect(w, h, transX = (graphGap * 2), transY = (graphGap * 3)) {
+                    width = w
+                    height = h
+
+                    graph.g.setAttribute('transform', `translate(${transX},${transY})`)
+
+                    var rect = elt('rect', {
+                        width, height,
+                        fill: 'none'
+                    })
+                    rect.setAttribute('title', 'Quantifier-rect')
+
+                    g.append(rect, graph.g)
+                    var line = elt('path', {
+                        d:
+                            `
+                            M 0 ${height / 2}
+                            L ${graphGap * 2} ${height / 2}
+                            M ${width} ${height / 2}
+                            L ${graph.width + graphGap * 2} ${height / 2}
+                        `,
+                        "stroke-width": 2,
+                        "stroke": "black",
+                        fill: 'none',
+                    })
+                    line.setAttribute('title', 'Quantifier-line')
+                    g.append(line)
+                }
+
+                function matchOneToN() {
+                    let path = elt('path', {
+                        d:
+                            `
+                            M ${width - graphGap * 2} ${height / 2}
+                            a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${graphGap}
+                            l ${0} ${adjust ? graph.height / 2 - graphGap * adjustFactor : graph.height / 2 - graphGap}
+                            l ${-graphGap / 2} ${-graphGap / 2}
+                            m ${graphGap / 2} ${graphGap / 2}
+                            l ${graphGap / 2} ${-graphGap / 2}
+                            m ${-graphGap / 2} ${graphGap / 2}
+                            a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${graphGap}
+                            l ${-graph.width} ${0}
+                            a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${-graphGap}
+                            l ${0} ${adjust ? -(graph.height / 2 - graphGap * adjustFactor) : -(graph.height / 2 - graphGap)}
+                            a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${-graphGap}
+                        `,
+                        "stroke-width": 2,
+                        "stroke": "black",
+                        fill: 'none',
+                    })
+                    path.setAttribute('title', 'Quantifier-path')
+                    g.append(path)
+                }
+            
+                function matchZeroToOne() {
+                    let path = elt('path', {
+                        d:
+                            `
+                            M 0 ${height / 2}
+                            a ${graphGap} ${graphGap} 0 0 0 ${graphGap} ${-graphGap}
+                            l ${0} ${-(graph.height / 2 - graphGap)}
+                            a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${-graphGap}
+                            l ${graph.width} ${0}
+                            a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${graphGap}
+                            l ${0} ${graph.height / 2 - graphGap}
+                            a ${graphGap} ${graphGap} 0 0 0 ${graphGap} ${graphGap}
+                        `,
+                        "stroke-width": 2,
+                        "stroke": "black",
+                        fill: 'none',
+                    })
+                    path.setAttribute('title', 'Quantifier-path')
+                    g.append(path)
+                }
+            
+                function matchZeroToN() {
+                    let path = elt('path', {
+                        d:
+                            `
+                            M 0 ${height / 2}
+                            a ${graphGap} ${graphGap} 0 0 0 ${graphGap} ${-graphGap}
+                            l ${0} ${-(graph.height / 2 - graphGap)}
+                            a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${-graphGap}
+                            l ${graph.width} ${0}
+                            a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${graphGap}
+                            l ${0} ${graph.height / 2 - graphGap}
+                            a ${graphGap} ${graphGap} 0 0 0 ${graphGap} ${graphGap}
+                            M ${width - graphGap * 2} ${height / 2}
+                            a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${graphGap}
+                            l ${0} ${adjust ? graph.height / 2 - graphGap * adjustFactor : graph.height / 2 - graphGap}
+                            l ${-graphGap / 2} ${-graphGap / 2}
+                            m ${graphGap / 2} ${graphGap / 2}
+                            l ${graphGap / 2} ${-graphGap / 2}
+                            m ${-graphGap / 2} ${graphGap / 2}
+                            a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${graphGap}
+                            l ${-graph.width} ${0}
+                            a ${graphGap} ${graphGap} 0 0 1 ${-graphGap} ${-graphGap}
+                            l ${0} ${adjust ? -(graph.height / 2 - graphGap * adjustFactor) : -(graph.height / 2 - graphGap)}
+                            a ${graphGap} ${graphGap} 0 0 1 ${graphGap} ${-graphGap}
+                        `,
+                        "stroke-width": 2,
+                        "stroke": "black",
+                        fill: 'none',
+                    })
+                    path.setAttribute('title', 'Quantifier-path')
+                    g.append(path)
+                }
+
+            }
+
+            function drawCharacterClassGraph(node) {
+                var g = elt('g')
+                // 得到字符集中每个字符的图像
+                var characterGrapths = node.CharacterClasses.map(drawCharacterGraph)
+
+                var width = Math.max(...characterGrapths.map(it => it.width)) + graphGap * 2
+                var height = characterGrapths.map(it => it.height).reduce((a, b) => a + b) + graphGap * (characterGrapths.length + 1)
+
+                var text
+                if (node.invert) {
+                    text = elt('text', {
+                        'alignment-baseline': 'text-after-edge', // 文本元素的定位点在其左上角
+                        'font-size': "smaller",
+                        //y: -textGap,
+                    }, `none-of:`)
+                    if (width < text.getBBox().width) {
+                        width = text.getBBox().width
+                    }
+                } else {
+                    text = elt('text', {
+                        'alignment-baseline': 'text-after-edge', // 文本元素的定位点在其左上角
+                        'font-size': "smaller",
+                        //y: -textGap,
+                    }, `one-of:`)
+                }
+                text.setAttribute('title', 'CharacterClass-text')
+                g.append(text)
+                height += text.getBBox().height
+
+                var bg = elt('rect', {
+                    fill: '#cbcbba',
+                    rx: 3,
+                    ry: 3,
+                    width,
+                    height: height - text.getBBox().height,
+                })
+                bg.setAttribute('title', 'CharacterClass-bg')
+                g.append(bg)
+
+                var y = graphGap
+                for (var graph of characterGrapths) {
+                    // g标签没有x,y属性
+                    // graph.g.setAttribute('x', width - graph.width / 2)
+                    // graph.g.setAttribute('y',h)
+                    graph.g.setAttribute('transform', `translate(${(width - graph.width) / 2},${y})`)
+                    g.append(graph.g)
+                    y += graph.height + graphGap
+                }
+
+                var box = g.getBBox()
+
+                return {
+                    g,
+                    width: box.width,
+                    height: box.height,
+                    name: 'CharacterClass',
+                    textH: text.getBBox().height,
+                }
+            }
+
+            // 绘制一个节点的图形
+            function drawGraph(node) {
+
+                if (node.type == 'Character') {
+                    return drawCharacterGraph(node)
+                }
+                else if (node.type == 'CharacterClass') {
+                    return drawCharacterClassGraph(node)
+                }
+                else if (node.type == 'Quantifier') {
+                    return drawQuantifierGraph(node)
+                }
+                else if (node.type == 'Escape') {
+                    return drawEscapeGraph(node)
+                }
+                else if (node.type == 'Branch') {
+                    return drawBranchGraph(node)
+                }
+                else {
+                    return drawCaptureGroupGraph(node)
+                }
+
+            }
+
+        }
+    </script>
+</body>
+
+</html>
