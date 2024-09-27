@@ -727,28 +727,28 @@
                         text = elt('text', {
                             'alignment-baseline': 'text-before-edge',
                             'font-size': "12px",
-                            x: graphGap * 2,
+                            x: graphGap + 5,
                             y: 1,
                         }, `positive lookahead`)
                     } else if (node.lookahead && !node.positive) {
                         text = elt('text', {
                             'alignment-baseline': 'text-before-edge',
                             'font-size': "12px",
-                            x: graphGap * 2,
+                            x: graphGap + 5,
                             y: 1,
                         }, `negative lookahead`)
                     } else if (!node.lookahead && node.positive) {
                         text = elt('text', {
                             'alignment-baseline': 'text-before-edge',
                             'font-size': "12px",
-                            x: graphGap * 2,
+                            x: graphGap + 5,
                             y: 1,
                         }, `positive lookbehind`)
                     } else {
                         text = elt('text', {
                             'alignment-baseline': 'text-before-edge',
                             'font-size': "12px",
-                            x: graphGap * 2,
+                            x: graphGap + 5,
                             y: 1,
                         }, `negative lookbehind`)
                     }
@@ -805,7 +805,7 @@
 
                 // debugger
                 var path
-                if (graph.hasQ) {
+                if (graph.hasQ && !node.zeroAssertion) {
                     hasQ = true
                     path = elt('path', {
                         d:
